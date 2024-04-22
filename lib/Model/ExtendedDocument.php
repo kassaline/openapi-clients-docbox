@@ -60,13 +60,13 @@ class ExtendedDocument implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $openAPITypes = [
         'id' => 'int',
         'name' => 'string',
-        'num_pages' => 'int',
+        'numPages' => 'int',
         'mandator' => 'string',
-        'folder_id' => 'int',
-        'folder_path' => 'string',
-        'creation_date' => '\DateTime',
-        'creator_id' => 'int',
-        'creator_name' => 'string',
+        'folderId' => 'int',
+        'folderPath' => 'string',
+        'creationDate' => '\DateTime',
+        'creatorId' => 'int',
+        'creatorName' => 'string',
         'keywords' => 'string[]',
         'classification' => 'string[]',
         'external' => '\OpenAPI\Client\Docbox\Model\ExtendedDocumentExternal',
@@ -84,13 +84,13 @@ class ExtendedDocument implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $openAPIFormats = [
         'id' => 'int64',
         'name' => null,
-        'num_pages' => null,
+        'numPages' => null,
         'mandator' => null,
-        'folder_id' => 'int64',
-        'folder_path' => null,
-        'creation_date' => 'date-time',
-        'creator_id' => 'int64',
-        'creator_name' => null,
+        'folderId' => 'int64',
+        'folderPath' => null,
+        'creationDate' => 'date-time',
+        'creatorId' => 'int64',
+        'creatorName' => null,
         'keywords' => null,
         'classification' => null,
         'external' => null,
@@ -106,13 +106,13 @@ class ExtendedDocument implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static array $openAPINullables = [
         'id' => false,
         'name' => false,
-        'num_pages' => false,
+        'numPages' => false,
         'mandator' => false,
-        'folder_id' => false,
-        'folder_path' => false,
-        'creation_date' => false,
-        'creator_id' => false,
-        'creator_name' => false,
+        'folderId' => false,
+        'folderPath' => false,
+        'creationDate' => false,
+        'creatorId' => false,
+        'creatorName' => false,
         'keywords' => false,
         'classification' => false,
         'external' => false,
@@ -208,13 +208,13 @@ class ExtendedDocument implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $attributeMap = [
         'id' => 'id',
         'name' => 'name',
-        'num_pages' => 'numPages',
+        'numPages' => 'numPages',
         'mandator' => 'mandator',
-        'folder_id' => 'folderId',
-        'folder_path' => 'folderPath',
-        'creation_date' => 'creationDate',
-        'creator_id' => 'creatorId',
-        'creator_name' => 'creatorName',
+        'folderId' => 'folderId',
+        'folderPath' => 'folderPath',
+        'creationDate' => 'creationDate',
+        'creatorId' => 'creatorId',
+        'creatorName' => 'creatorName',
         'keywords' => 'keywords',
         'classification' => 'classification',
         'external' => 'external',
@@ -230,13 +230,13 @@ class ExtendedDocument implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $setters = [
         'id' => 'setId',
         'name' => 'setName',
-        'num_pages' => 'setNumPages',
+        'numPages' => 'setNumPages',
         'mandator' => 'setMandator',
-        'folder_id' => 'setFolderId',
-        'folder_path' => 'setFolderPath',
-        'creation_date' => 'setCreationDate',
-        'creator_id' => 'setCreatorId',
-        'creator_name' => 'setCreatorName',
+        'folderId' => 'setFolderId',
+        'folderPath' => 'setFolderPath',
+        'creationDate' => 'setCreationDate',
+        'creatorId' => 'setCreatorId',
+        'creatorName' => 'setCreatorName',
         'keywords' => 'setKeywords',
         'classification' => 'setClassification',
         'external' => 'setExternal',
@@ -252,13 +252,13 @@ class ExtendedDocument implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $getters = [
         'id' => 'getId',
         'name' => 'getName',
-        'num_pages' => 'getNumPages',
+        'numPages' => 'getNumPages',
         'mandator' => 'getMandator',
-        'folder_id' => 'getFolderId',
-        'folder_path' => 'getFolderPath',
-        'creation_date' => 'getCreationDate',
-        'creator_id' => 'getCreatorId',
-        'creator_name' => 'getCreatorName',
+        'folderId' => 'getFolderId',
+        'folderPath' => 'getFolderPath',
+        'creationDate' => 'getCreationDate',
+        'creatorId' => 'getCreatorId',
+        'creatorName' => 'getCreatorName',
         'keywords' => 'getKeywords',
         'classification' => 'getClassification',
         'external' => 'getExternal',
@@ -325,13 +325,13 @@ class ExtendedDocument implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         $this->setIfExists('id', $data ?? [], null);
         $this->setIfExists('name', $data ?? [], null);
-        $this->setIfExists('num_pages', $data ?? [], null);
+        $this->setIfExists('numPages', $data ?? [], null);
         $this->setIfExists('mandator', $data ?? [], null);
-        $this->setIfExists('folder_id', $data ?? [], null);
-        $this->setIfExists('folder_path', $data ?? [], null);
-        $this->setIfExists('creation_date', $data ?? [], null);
-        $this->setIfExists('creator_id', $data ?? [], null);
-        $this->setIfExists('creator_name', $data ?? [], null);
+        $this->setIfExists('folderId', $data ?? [], null);
+        $this->setIfExists('folderPath', $data ?? [], null);
+        $this->setIfExists('creationDate', $data ?? [], null);
+        $this->setIfExists('creatorId', $data ?? [], null);
+        $this->setIfExists('creatorName', $data ?? [], null);
         $this->setIfExists('keywords', $data ?? [], null);
         $this->setIfExists('classification', $data ?? [], null);
         $this->setIfExists('external', $data ?? [], null);
@@ -436,28 +436,28 @@ class ExtendedDocument implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
-     * Gets num_pages
+     * Gets numPages
      *
      * @return int|null
      */
     public function getNumPages()
     {
-        return $this->container['num_pages'];
+        return $this->container['numPages'];
     }
 
     /**
-     * Sets num_pages
+     * Sets numPages
      *
-     * @param int|null $num_pages num_pages
+     * @param int|null $numPages numPages
      *
      * @return self
      */
-    public function setNumPages($num_pages)
+    public function setNumPages($numPages)
     {
-        if (is_null($num_pages)) {
-            throw new \InvalidArgumentException('non-nullable num_pages cannot be null');
+        if (is_null($numPages)) {
+            throw new \InvalidArgumentException('non-nullable numPages cannot be null');
         }
-        $this->container['num_pages'] = $num_pages;
+        $this->container['numPages'] = $numPages;
 
         return $this;
     }
@@ -490,136 +490,136 @@ class ExtendedDocument implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
-     * Gets folder_id
+     * Gets folderId
      *
      * @return int|null
      */
     public function getFolderId()
     {
-        return $this->container['folder_id'];
+        return $this->container['folderId'];
     }
 
     /**
-     * Sets folder_id
+     * Sets folderId
      *
-     * @param int|null $folder_id folder_id
+     * @param int|null $folderId folderId
      *
      * @return self
      */
-    public function setFolderId($folder_id)
+    public function setFolderId($folderId)
     {
-        if (is_null($folder_id)) {
-            throw new \InvalidArgumentException('non-nullable folder_id cannot be null');
+        if (is_null($folderId)) {
+            throw new \InvalidArgumentException('non-nullable folderId cannot be null');
         }
-        $this->container['folder_id'] = $folder_id;
+        $this->container['folderId'] = $folderId;
 
         return $this;
     }
 
     /**
-     * Gets folder_path
+     * Gets folderPath
      *
      * @return string|null
      */
     public function getFolderPath()
     {
-        return $this->container['folder_path'];
+        return $this->container['folderPath'];
     }
 
     /**
-     * Sets folder_path
+     * Sets folderPath
      *
-     * @param string|null $folder_path folder_path
+     * @param string|null $folderPath folderPath
      *
      * @return self
      */
-    public function setFolderPath($folder_path)
+    public function setFolderPath($folderPath)
     {
-        if (is_null($folder_path)) {
-            throw new \InvalidArgumentException('non-nullable folder_path cannot be null');
+        if (is_null($folderPath)) {
+            throw new \InvalidArgumentException('non-nullable folderPath cannot be null');
         }
-        $this->container['folder_path'] = $folder_path;
+        $this->container['folderPath'] = $folderPath;
 
         return $this;
     }
 
     /**
-     * Gets creation_date
+     * Gets creationDate
      *
      * @return \DateTime|null
      */
     public function getCreationDate()
     {
-        return $this->container['creation_date'];
+        return $this->container['creationDate'];
     }
 
     /**
-     * Sets creation_date
+     * Sets creationDate
      *
-     * @param \DateTime|null $creation_date creation_date
+     * @param \DateTime|null $creationDate creationDate
      *
      * @return self
      */
-    public function setCreationDate($creation_date)
+    public function setCreationDate($creationDate)
     {
-        if (is_null($creation_date)) {
-            throw new \InvalidArgumentException('non-nullable creation_date cannot be null');
+        if (is_null($creationDate)) {
+            throw new \InvalidArgumentException('non-nullable creationDate cannot be null');
         }
-        $this->container['creation_date'] = $creation_date;
+        $this->container['creationDate'] = $creationDate;
 
         return $this;
     }
 
     /**
-     * Gets creator_id
+     * Gets creatorId
      *
      * @return int|null
      */
     public function getCreatorId()
     {
-        return $this->container['creator_id'];
+        return $this->container['creatorId'];
     }
 
     /**
-     * Sets creator_id
+     * Sets creatorId
      *
-     * @param int|null $creator_id creator_id
+     * @param int|null $creatorId creatorId
      *
      * @return self
      */
-    public function setCreatorId($creator_id)
+    public function setCreatorId($creatorId)
     {
-        if (is_null($creator_id)) {
-            throw new \InvalidArgumentException('non-nullable creator_id cannot be null');
+        if (is_null($creatorId)) {
+            throw new \InvalidArgumentException('non-nullable creatorId cannot be null');
         }
-        $this->container['creator_id'] = $creator_id;
+        $this->container['creatorId'] = $creatorId;
 
         return $this;
     }
 
     /**
-     * Gets creator_name
+     * Gets creatorName
      *
      * @return string|null
      */
     public function getCreatorName()
     {
-        return $this->container['creator_name'];
+        return $this->container['creatorName'];
     }
 
     /**
-     * Sets creator_name
+     * Sets creatorName
      *
-     * @param string|null $creator_name creator_name
+     * @param string|null $creatorName creatorName
      *
      * @return self
      */
-    public function setCreatorName($creator_name)
+    public function setCreatorName($creatorName)
     {
-        if (is_null($creator_name)) {
-            throw new \InvalidArgumentException('non-nullable creator_name cannot be null');
+        if (is_null($creatorName)) {
+            throw new \InvalidArgumentException('non-nullable creatorName cannot be null');
         }
-        $this->container['creator_name'] = $creator_name;
+        $this->container['creatorName'] = $creatorName;
 
         return $this;
     }

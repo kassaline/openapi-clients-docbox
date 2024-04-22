@@ -71,11 +71,11 @@ $apiInstance = new OpenAPI\Client\Docbox\Api\ArchiveApi(
     new GuzzleHttp\Client(),
     $config
 );
-$parent_folder_id = 56; // int | Parent folder id. If omitted the whole archive is returned.
+$parentFolderId = 56; // int | Parent folder id. If omitted the whole archive is returned.
 $lazy = false; // bool
 
 try {
-    $result = $apiInstance->archivestructure($parent_folder_id, $lazy);
+    $result = $apiInstance->archivestructure($parentFolderId, $lazy);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling ArchiveApi->archivestructure: ', $e->getMessage(), PHP_EOL;

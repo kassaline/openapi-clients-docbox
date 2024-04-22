@@ -58,7 +58,7 @@ class ExtendedDocumentExternal implements ModelInterface, ArrayAccess, \JsonSeri
       * @var string[]
       */
     protected static $openAPITypes = [
-        'external_id' => 'string',
+        'externalId' => 'string',
         'metadata' => 'array<string,string>'
     ];
 
@@ -70,7 +70,7 @@ class ExtendedDocumentExternal implements ModelInterface, ArrayAccess, \JsonSeri
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'external_id' => null,
+        'externalId' => null,
         'metadata' => null
     ];
 
@@ -80,7 +80,7 @@ class ExtendedDocumentExternal implements ModelInterface, ArrayAccess, \JsonSeri
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'external_id' => false,
+        'externalId' => false,
         'metadata' => false
     ];
 
@@ -170,7 +170,7 @@ class ExtendedDocumentExternal implements ModelInterface, ArrayAccess, \JsonSeri
      * @var string[]
      */
     protected static $attributeMap = [
-        'external_id' => 'externalId',
+        'externalId' => 'externalId',
         'metadata' => 'metadata'
     ];
 
@@ -180,7 +180,7 @@ class ExtendedDocumentExternal implements ModelInterface, ArrayAccess, \JsonSeri
      * @var string[]
      */
     protected static $setters = [
-        'external_id' => 'setExternalId',
+        'externalId' => 'setExternalId',
         'metadata' => 'setMetadata'
     ];
 
@@ -190,7 +190,7 @@ class ExtendedDocumentExternal implements ModelInterface, ArrayAccess, \JsonSeri
      * @var string[]
      */
     protected static $getters = [
-        'external_id' => 'getExternalId',
+        'externalId' => 'getExternalId',
         'metadata' => 'getMetadata'
     ];
 
@@ -251,7 +251,7 @@ class ExtendedDocumentExternal implements ModelInterface, ArrayAccess, \JsonSeri
      */
     public function __construct(array $data = null)
     {
-        $this->setIfExists('external_id', $data ?? [], null);
+        $this->setIfExists('externalId', $data ?? [], null);
         $this->setIfExists('metadata', $data ?? [], null);
     }
 
@@ -301,28 +301,28 @@ class ExtendedDocumentExternal implements ModelInterface, ArrayAccess, \JsonSeri
 
 
     /**
-     * Gets external_id
+     * Gets externalId
      *
      * @return string|null
      */
     public function getExternalId()
     {
-        return $this->container['external_id'];
+        return $this->container['externalId'];
     }
 
     /**
-     * Sets external_id
+     * Sets externalId
      *
-     * @param string|null $external_id external_id
+     * @param string|null $externalId externalId
      *
      * @return self
      */
-    public function setExternalId($external_id)
+    public function setExternalId($externalId)
     {
-        if (is_null($external_id)) {
-            throw new \InvalidArgumentException('non-nullable external_id cannot be null');
+        if (is_null($externalId)) {
+            throw new \InvalidArgumentException('non-nullable externalId cannot be null');
         }
-        $this->container['external_id'] = $external_id;
+        $this->container['externalId'] = $externalId;
 
         return $this;
     }

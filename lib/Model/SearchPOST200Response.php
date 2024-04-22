@@ -58,7 +58,7 @@ class SearchPOST200Response implements ModelInterface, ArrayAccess, \JsonSeriali
       * @var string[]
       */
     protected static $openAPITypes = [
-        'total_hit_documents' => 'int',
+        'totalHitDocuments' => 'int',
         'documents' => '\OpenAPI\Client\Docbox\Model\ExtendedDocument[]'
     ];
 
@@ -70,7 +70,7 @@ class SearchPOST200Response implements ModelInterface, ArrayAccess, \JsonSeriali
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'total_hit_documents' => null,
+        'totalHitDocuments' => null,
         'documents' => null
     ];
 
@@ -80,7 +80,7 @@ class SearchPOST200Response implements ModelInterface, ArrayAccess, \JsonSeriali
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'total_hit_documents' => false,
+        'totalHitDocuments' => false,
         'documents' => false
     ];
 
@@ -170,7 +170,7 @@ class SearchPOST200Response implements ModelInterface, ArrayAccess, \JsonSeriali
      * @var string[]
      */
     protected static $attributeMap = [
-        'total_hit_documents' => 'totalHitDocuments',
+        'totalHitDocuments' => 'totalHitDocuments',
         'documents' => 'documents'
     ];
 
@@ -180,7 +180,7 @@ class SearchPOST200Response implements ModelInterface, ArrayAccess, \JsonSeriali
      * @var string[]
      */
     protected static $setters = [
-        'total_hit_documents' => 'setTotalHitDocuments',
+        'totalHitDocuments' => 'setTotalHitDocuments',
         'documents' => 'setDocuments'
     ];
 
@@ -190,7 +190,7 @@ class SearchPOST200Response implements ModelInterface, ArrayAccess, \JsonSeriali
      * @var string[]
      */
     protected static $getters = [
-        'total_hit_documents' => 'getTotalHitDocuments',
+        'totalHitDocuments' => 'getTotalHitDocuments',
         'documents' => 'getDocuments'
     ];
 
@@ -251,7 +251,7 @@ class SearchPOST200Response implements ModelInterface, ArrayAccess, \JsonSeriali
      */
     public function __construct(array $data = null)
     {
-        $this->setIfExists('total_hit_documents', $data ?? [], null);
+        $this->setIfExists('totalHitDocuments', $data ?? [], null);
         $this->setIfExists('documents', $data ?? [], null);
     }
 
@@ -298,28 +298,28 @@ class SearchPOST200Response implements ModelInterface, ArrayAccess, \JsonSeriali
 
 
     /**
-     * Gets total_hit_documents
+     * Gets totalHitDocuments
      *
      * @return int|null
      */
     public function getTotalHitDocuments()
     {
-        return $this->container['total_hit_documents'];
+        return $this->container['totalHitDocuments'];
     }
 
     /**
-     * Sets total_hit_documents
+     * Sets totalHitDocuments
      *
-     * @param int|null $total_hit_documents total_hit_documents
+     * @param int|null $totalHitDocuments totalHitDocuments
      *
      * @return self
      */
-    public function setTotalHitDocuments($total_hit_documents)
+    public function setTotalHitDocuments($totalHitDocuments)
     {
-        if (is_null($total_hit_documents)) {
-            throw new \InvalidArgumentException('non-nullable total_hit_documents cannot be null');
+        if (is_null($totalHitDocuments)) {
+            throw new \InvalidArgumentException('non-nullable totalHitDocuments cannot be null');
         }
-        $this->container['total_hit_documents'] = $total_hit_documents;
+        $this->container['totalHitDocuments'] = $totalHitDocuments;
 
         return $this;
     }

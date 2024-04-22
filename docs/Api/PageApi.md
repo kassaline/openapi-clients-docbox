@@ -78,7 +78,7 @@ try {
 ## `pagePreview()`
 
 ```php
-pagePreview($id, $bbox_width, $bbox_height): \SplFileObject
+pagePreview($id, $bboxWidth, $bboxHeight): \SplFileObject
 ```
 
 Page preview
@@ -110,11 +110,11 @@ $apiInstance = new OpenAPI\Client\Docbox\Api\PageApi(
     $config
 );
 $id = 56; // int
-$bbox_width = 56; // int
-$bbox_height = 56; // int
+$bboxWidth = 56; // int
+$bboxHeight = 56; // int
 
 try {
-    $result = $apiInstance->pagePreview($id, $bbox_width, $bbox_height);
+    $result = $apiInstance->pagePreview($id, $bboxWidth, $bboxHeight);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling PageApi->pagePreview: ', $e->getMessage(), PHP_EOL;
@@ -126,8 +126,8 @@ try {
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
 | **id** | **int**|  | |
-| **bbox_width** | **int**|  | [optional] |
-| **bbox_height** | **int**|  | [optional] |
+| **bboxWidth** | **int**|  | [optional] |
+| **bboxHeight** | **int**|  | [optional] |
 
 ### Return type
 

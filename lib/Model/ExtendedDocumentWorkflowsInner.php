@@ -59,9 +59,9 @@ class ExtendedDocumentWorkflowsInner implements ModelInterface, ArrayAccess, \Js
       */
     protected static $openAPITypes = [
         'name' => 'string',
-        'start_date' => '\DateTime',
-        'finish_date' => '\DateTime',
-        'current_state' => 'string'
+        'startDate' => '\DateTime',
+        'finishDate' => '\DateTime',
+        'currentState' => 'string'
     ];
 
     /**
@@ -73,9 +73,9 @@ class ExtendedDocumentWorkflowsInner implements ModelInterface, ArrayAccess, \Js
       */
     protected static $openAPIFormats = [
         'name' => null,
-        'start_date' => 'date-time',
-        'finish_date' => 'date-time',
-        'current_state' => null
+        'startDate' => 'date-time',
+        'finishDate' => 'date-time',
+        'currentState' => null
     ];
 
     /**
@@ -85,9 +85,9 @@ class ExtendedDocumentWorkflowsInner implements ModelInterface, ArrayAccess, \Js
       */
     protected static array $openAPINullables = [
         'name' => false,
-        'start_date' => false,
-        'finish_date' => false,
-        'current_state' => false
+        'startDate' => false,
+        'finishDate' => false,
+        'currentState' => false
     ];
 
     /**
@@ -177,9 +177,9 @@ class ExtendedDocumentWorkflowsInner implements ModelInterface, ArrayAccess, \Js
      */
     protected static $attributeMap = [
         'name' => 'name',
-        'start_date' => 'startDate',
-        'finish_date' => 'finishDate',
-        'current_state' => 'currentState'
+        'startDate' => 'startDate',
+        'finishDate' => 'finishDate',
+        'currentState' => 'currentState'
     ];
 
     /**
@@ -189,9 +189,9 @@ class ExtendedDocumentWorkflowsInner implements ModelInterface, ArrayAccess, \Js
      */
     protected static $setters = [
         'name' => 'setName',
-        'start_date' => 'setStartDate',
-        'finish_date' => 'setFinishDate',
-        'current_state' => 'setCurrentState'
+        'startDate' => 'setStartDate',
+        'finishDate' => 'setFinishDate',
+        'currentState' => 'setCurrentState'
     ];
 
     /**
@@ -201,9 +201,9 @@ class ExtendedDocumentWorkflowsInner implements ModelInterface, ArrayAccess, \Js
      */
     protected static $getters = [
         'name' => 'getName',
-        'start_date' => 'getStartDate',
-        'finish_date' => 'getFinishDate',
-        'current_state' => 'getCurrentState'
+        'startDate' => 'getStartDate',
+        'finishDate' => 'getFinishDate',
+        'currentState' => 'getCurrentState'
     ];
 
     /**
@@ -264,9 +264,9 @@ class ExtendedDocumentWorkflowsInner implements ModelInterface, ArrayAccess, \Js
     public function __construct(array $data = null)
     {
         $this->setIfExists('name', $data ?? [], null);
-        $this->setIfExists('start_date', $data ?? [], null);
-        $this->setIfExists('finish_date', $data ?? [], null);
-        $this->setIfExists('current_state', $data ?? [], null);
+        $this->setIfExists('startDate', $data ?? [], null);
+        $this->setIfExists('finishDate', $data ?? [], null);
+        $this->setIfExists('currentState', $data ?? [], null);
     }
 
     /**
@@ -299,11 +299,11 @@ class ExtendedDocumentWorkflowsInner implements ModelInterface, ArrayAccess, \Js
         if ($this->container['name'] === null) {
             $invalidProperties[] = "'name' can't be null";
         }
-        if ($this->container['start_date'] === null) {
-            $invalidProperties[] = "'start_date' can't be null";
+        if ($this->container['startDate'] === null) {
+            $invalidProperties[] = "'startDate' can't be null";
         }
-        if ($this->container['current_state'] === null) {
-            $invalidProperties[] = "'current_state' can't be null";
+        if ($this->container['currentState'] === null) {
+            $invalidProperties[] = "'currentState' can't be null";
         }
         return $invalidProperties;
     }
@@ -348,82 +348,82 @@ class ExtendedDocumentWorkflowsInner implements ModelInterface, ArrayAccess, \Js
     }
 
     /**
-     * Gets start_date
+     * Gets startDate
      *
      * @return \DateTime
      */
     public function getStartDate()
     {
-        return $this->container['start_date'];
+        return $this->container['startDate'];
     }
 
     /**
-     * Sets start_date
+     * Sets startDate
      *
-     * @param \DateTime $start_date start_date
+     * @param \DateTime $startDate startDate
      *
      * @return self
      */
-    public function setStartDate($start_date)
+    public function setStartDate($startDate)
     {
-        if (is_null($start_date)) {
-            throw new \InvalidArgumentException('non-nullable start_date cannot be null');
+        if (is_null($startDate)) {
+            throw new \InvalidArgumentException('non-nullable startDate cannot be null');
         }
-        $this->container['start_date'] = $start_date;
+        $this->container['startDate'] = $startDate;
 
         return $this;
     }
 
     /**
-     * Gets finish_date
+     * Gets finishDate
      *
      * @return \DateTime|null
      */
     public function getFinishDate()
     {
-        return $this->container['finish_date'];
+        return $this->container['finishDate'];
     }
 
     /**
-     * Sets finish_date
+     * Sets finishDate
      *
-     * @param \DateTime|null $finish_date finish_date
+     * @param \DateTime|null $finishDate finishDate
      *
      * @return self
      */
-    public function setFinishDate($finish_date)
+    public function setFinishDate($finishDate)
     {
-        if (is_null($finish_date)) {
-            throw new \InvalidArgumentException('non-nullable finish_date cannot be null');
+        if (is_null($finishDate)) {
+            throw new \InvalidArgumentException('non-nullable finishDate cannot be null');
         }
-        $this->container['finish_date'] = $finish_date;
+        $this->container['finishDate'] = $finishDate;
 
         return $this;
     }
 
     /**
-     * Gets current_state
+     * Gets currentState
      *
      * @return string
      */
     public function getCurrentState()
     {
-        return $this->container['current_state'];
+        return $this->container['currentState'];
     }
 
     /**
-     * Sets current_state
+     * Sets currentState
      *
-     * @param string $current_state current_state
+     * @param string $currentState currentState
      *
      * @return self
      */
-    public function setCurrentState($current_state)
+    public function setCurrentState($currentState)
     {
-        if (is_null($current_state)) {
-            throw new \InvalidArgumentException('non-nullable current_state cannot be null');
+        if (is_null($currentState)) {
+            throw new \InvalidArgumentException('non-nullable currentState cannot be null');
         }
-        $this->container['current_state'] = $current_state;
+        $this->container['currentState'] = $currentState;
 
         return $this;
     }

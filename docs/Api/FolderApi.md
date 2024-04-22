@@ -10,7 +10,7 @@ All URIs are relative to https://localhost:8081/api/v2, except if the operation 
 ## `folderCreate()`
 
 ```php
-folderCreate($parent_folder_id, $folder_name): \OpenAPI\Client\Docbox\Model\FolderCreate
+folderCreate($parentFolderId, $folderName): \OpenAPI\Client\Docbox\Model\FolderCreate
 ```
 
 Create folder
@@ -41,11 +41,11 @@ $apiInstance = new OpenAPI\Client\Docbox\Api\FolderApi(
     new GuzzleHttp\Client(),
     $config
 );
-$parent_folder_id = 56; // int
-$folder_name = 'folder_name_example'; // string
+$parentFolderId = 56; // int
+$folderName = 'folderName_example'; // string
 
 try {
-    $result = $apiInstance->folderCreate($parent_folder_id, $folder_name);
+    $result = $apiInstance->folderCreate($parentFolderId, $folderName);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling FolderApi->folderCreate: ', $e->getMessage(), PHP_EOL;
@@ -56,8 +56,8 @@ try {
 
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
-| **parent_folder_id** | **int**|  | |
-| **folder_name** | **string**|  | |
+| **parentFolderId** | **int**|  | |
+| **folderName** | **string**|  | |
 
 ### Return type
 

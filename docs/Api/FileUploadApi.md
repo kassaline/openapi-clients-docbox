@@ -10,7 +10,7 @@ All URIs are relative to https://localhost:8081/api/v2, except if the operation 
 ## `fileUpload()`
 
 ```php
-fileUpload($target_mandator_name, $target_folder_path, $target_folder_id, $target_document_name, $upload_data, $upload_data_base64, $keywords, $document_types, $external_id, $external_metadatas, $email_import_order, $force_new_document): int
+fileUpload($targetMandatorName, $targetFolderPath, $targetFolderId, $targetDocumentName, $uploadData, $uploadDataBase64, $keywords, $documentTypes, $externalId, $externalMetadatas, $emailImportOrder, $forceNewDocument): int
 ```
 
 File upload
@@ -41,21 +41,21 @@ $apiInstance = new OpenAPI\Client\Docbox\Api\FileUploadApi(
     new GuzzleHttp\Client(),
     $config
 );
-$target_mandator_name = 'target_mandator_name_example'; // string | Name of the mandator where the document should be archived
-$target_folder_path = 'target_folder_path_example'; // string | Path to the target folder starting at the mandator. Either this or `target-folder-id` is required. Example: \\\"/Eingangsrechnungen/2018/\\\"
-$target_folder_id = 56; // int | Id of the target folder. Either this or `target-folder-path` is required.
-$target_document_name = 'target_document_name_example'; // string
-$upload_data = "/path/to/file.txt"; // \SplFileObject | The file to upload. Either this or `upload-data-base64` is required.
-$upload_data_base64 = 'upload_data_base64_example'; // string | Base64 encoded content of the upload-data. When using this parameter `target-document-name` is required. Either this or `upload-data` is required.
+$targetMandatorName = 'targetMandatorName_example'; // string | Name of the mandator where the document should be archived
+$targetFolderPath = 'targetFolderPath_example'; // string | Path to the target folder starting at the mandator. Either this or `target-folder-id` is required. Example: \\\"/Eingangsrechnungen/2018/\\\"
+$targetFolderId = 56; // int | Id of the target folder. Either this or `target-folder-path` is required.
+$targetDocumentName = 'targetDocumentName_example'; // string
+$uploadData = "/path/to/file.txt"; // \SplFileObject | The file to upload. Either this or `upload-data-base64` is required.
+$uploadDataBase64 = 'uploadDataBase64_example'; // string | Base64 encoded content of the upload-data. When using this parameter `target-document-name` is required. Either this or `upload-data` is required.
 $keywords = 'keywords_example'; // string | Comma separated list of keywords. Commas can be escaped by prepending \\\\\\\\.
-$document_types = 'document_types_example'; // string | Comma separated list of document types (or their alias). Commas can be escaped by prepending \\\\\\\\. Ignores values where no document-type was found.
-$external_id = 'external_id_example'; // string
-$external_metadatas = 'external_metadatas_example'; // string | Comma separated list of key=value pairs. Comma and equals signs can be escaped by prepending \\\\\\\\.
-$email_import_order = 'email_import_order_example'; // string
-$force_new_document = True; // bool
+$documentTypes = 'documentTypes_example'; // string | Comma separated list of document types (or their alias). Commas can be escaped by prepending \\\\\\\\. Ignores values where no document-type was found.
+$externalId = 'externalId_example'; // string
+$externalMetadatas = 'externalMetadatas_example'; // string | Comma separated list of key=value pairs. Comma and equals signs can be escaped by prepending \\\\\\\\.
+$emailImportOrder = 'emailImportOrder_example'; // string
+$forceNewDocument = True; // bool
 
 try {
-    $result = $apiInstance->fileUpload($target_mandator_name, $target_folder_path, $target_folder_id, $target_document_name, $upload_data, $upload_data_base64, $keywords, $document_types, $external_id, $external_metadatas, $email_import_order, $force_new_document);
+    $result = $apiInstance->fileUpload($targetMandatorName, $targetFolderPath, $targetFolderId, $targetDocumentName, $uploadData, $uploadDataBase64, $keywords, $documentTypes, $externalId, $externalMetadatas, $emailImportOrder, $forceNewDocument);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling FileUploadApi->fileUpload: ', $e->getMessage(), PHP_EOL;
@@ -66,18 +66,18 @@ try {
 
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
-| **target_mandator_name** | **string**| Name of the mandator where the document should be archived | [optional] |
-| **target_folder_path** | **string**| Path to the target folder starting at the mandator. Either this or &#x60;target-folder-id&#x60; is required. Example: \\\&quot;/Eingangsrechnungen/2018/\\\&quot; | [optional] |
-| **target_folder_id** | **int**| Id of the target folder. Either this or &#x60;target-folder-path&#x60; is required. | [optional] |
-| **target_document_name** | **string**|  | [optional] |
-| **upload_data** | **\SplFileObject****\SplFileObject**| The file to upload. Either this or &#x60;upload-data-base64&#x60; is required. | [optional] |
-| **upload_data_base64** | **string**| Base64 encoded content of the upload-data. When using this parameter &#x60;target-document-name&#x60; is required. Either this or &#x60;upload-data&#x60; is required. | [optional] |
+| **targetMandatorName** | **string**| Name of the mandator where the document should be archived | [optional] |
+| **targetFolderPath** | **string**| Path to the target folder starting at the mandator. Either this or &#x60;target-folder-id&#x60; is required. Example: \\\&quot;/Eingangsrechnungen/2018/\\\&quot; | [optional] |
+| **targetFolderId** | **int**| Id of the target folder. Either this or &#x60;target-folder-path&#x60; is required. | [optional] |
+| **targetDocumentName** | **string**|  | [optional] |
+| **uploadData** | **\SplFileObject****\SplFileObject**| The file to upload. Either this or &#x60;upload-data-base64&#x60; is required. | [optional] |
+| **uploadDataBase64** | **string**| Base64 encoded content of the upload-data. When using this parameter &#x60;target-document-name&#x60; is required. Either this or &#x60;upload-data&#x60; is required. | [optional] |
 | **keywords** | **string**| Comma separated list of keywords. Commas can be escaped by prepending \\\\\\\\. | [optional] |
-| **document_types** | **string**| Comma separated list of document types (or their alias). Commas can be escaped by prepending \\\\\\\\. Ignores values where no document-type was found. | [optional] |
-| **external_id** | **string**|  | [optional] |
-| **external_metadatas** | **string**| Comma separated list of key&#x3D;value pairs. Comma and equals signs can be escaped by prepending \\\\\\\\. | [optional] |
-| **email_import_order** | **string**|  | [optional] |
-| **force_new_document** | **bool**|  | [optional] |
+| **documentTypes** | **string**| Comma separated list of document types (or their alias). Commas can be escaped by prepending \\\\\\\\. Ignores values where no document-type was found. | [optional] |
+| **externalId** | **string**|  | [optional] |
+| **externalMetadatas** | **string**| Comma separated list of key&#x3D;value pairs. Comma and equals signs can be escaped by prepending \\\\\\\\. | [optional] |
+| **emailImportOrder** | **string**|  | [optional] |
+| **forceNewDocument** | **bool**|  | [optional] |
 
 ### Return type
 

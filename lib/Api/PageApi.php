@@ -449,17 +449,17 @@ class PageApi
      * Page preview
      *
      * @param  int $id id (required)
-     * @param  int $bbox_width bbox_width (optional)
-     * @param  int $bbox_height bbox_height (optional)
+     * @param  int $bboxWidth bboxWidth (optional)
+     * @param  int $bboxHeight bboxHeight (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pagePreview'] to see the possible values for this operation
      *
      * @throws \OpenAPI\Client\Docbox\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return \SplFileObject
      */
-    public function pagePreview($id, $bbox_width = null, $bbox_height = null, string $contentType = self::contentTypes['pagePreview'][0])
+    public function pagePreview($id, $bboxWidth = null, $bboxHeight = null, string $contentType = self::contentTypes['pagePreview'][0])
     {
-        list($response) = $this->pagePreviewWithHttpInfo($id, $bbox_width, $bbox_height, $contentType);
+        list($response) = $this->pagePreviewWithHttpInfo($id, $bboxWidth, $bboxHeight, $contentType);
         return $response;
     }
 
@@ -469,17 +469,17 @@ class PageApi
      * Page preview
      *
      * @param  int $id (required)
-     * @param  int $bbox_width (optional)
-     * @param  int $bbox_height (optional)
+     * @param  int $bboxWidth (optional)
+     * @param  int $bboxHeight (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pagePreview'] to see the possible values for this operation
      *
      * @throws \OpenAPI\Client\Docbox\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of \SplFileObject, HTTP status code, HTTP response headers (array of strings)
      */
-    public function pagePreviewWithHttpInfo($id, $bbox_width = null, $bbox_height = null, string $contentType = self::contentTypes['pagePreview'][0])
+    public function pagePreviewWithHttpInfo($id, $bboxWidth = null, $bboxHeight = null, string $contentType = self::contentTypes['pagePreview'][0])
     {
-        $request = $this->pagePreviewRequest($id, $bbox_width, $bbox_height, $contentType);
+        $request = $this->pagePreviewRequest($id, $bboxWidth, $bboxHeight, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -595,16 +595,16 @@ class PageApi
      * Page preview
      *
      * @param  int $id (required)
-     * @param  int $bbox_width (optional)
-     * @param  int $bbox_height (optional)
+     * @param  int $bboxWidth (optional)
+     * @param  int $bboxHeight (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pagePreview'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function pagePreviewAsync($id, $bbox_width = null, $bbox_height = null, string $contentType = self::contentTypes['pagePreview'][0])
+    public function pagePreviewAsync($id, $bboxWidth = null, $bboxHeight = null, string $contentType = self::contentTypes['pagePreview'][0])
     {
-        return $this->pagePreviewAsyncWithHttpInfo($id, $bbox_width, $bbox_height, $contentType)
+        return $this->pagePreviewAsyncWithHttpInfo($id, $bboxWidth, $bboxHeight, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -618,17 +618,17 @@ class PageApi
      * Page preview
      *
      * @param  int $id (required)
-     * @param  int $bbox_width (optional)
-     * @param  int $bbox_height (optional)
+     * @param  int $bboxWidth (optional)
+     * @param  int $bboxHeight (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pagePreview'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function pagePreviewAsyncWithHttpInfo($id, $bbox_width = null, $bbox_height = null, string $contentType = self::contentTypes['pagePreview'][0])
+    public function pagePreviewAsyncWithHttpInfo($id, $bboxWidth = null, $bboxHeight = null, string $contentType = self::contentTypes['pagePreview'][0])
     {
         $returnType = '\SplFileObject';
-        $request = $this->pagePreviewRequest($id, $bbox_width, $bbox_height, $contentType);
+        $request = $this->pagePreviewRequest($id, $bboxWidth, $bboxHeight, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -670,14 +670,14 @@ class PageApi
      * Create request for operation 'pagePreview'
      *
      * @param  int $id (required)
-     * @param  int $bbox_width (optional)
-     * @param  int $bbox_height (optional)
+     * @param  int $bboxWidth (optional)
+     * @param  int $bboxHeight (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pagePreview'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function pagePreviewRequest($id, $bbox_width = null, $bbox_height = null, string $contentType = self::contentTypes['pagePreview'][0])
+    public function pagePreviewRequest($id, $bboxWidth = null, $bboxHeight = null, string $contentType = self::contentTypes['pagePreview'][0])
     {
 
         // verify the required parameter 'id' is set
@@ -699,7 +699,7 @@ class PageApi
 
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $bbox_width,
+            $bboxWidth,
             'bbox-width', // param base name
             'integer', // openApiType
             'form', // style
@@ -708,7 +708,7 @@ class PageApi
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $bbox_height,
+            $bboxHeight,
             'bbox-height', // param base name
             'integer', // openApiType
             'form', // style

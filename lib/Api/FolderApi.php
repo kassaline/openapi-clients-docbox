@@ -128,17 +128,17 @@ class FolderApi
      *
      * Create folder
      *
-     * @param  int $parent_folder_id parent_folder_id (required)
-     * @param  string $folder_name folder_name (required)
+     * @param  int $parentFolderId parentFolderId (required)
+     * @param  string $folderName folderName (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['folderCreate'] to see the possible values for this operation
      *
      * @throws \OpenAPI\Client\Docbox\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return \OpenAPI\Client\Docbox\Model\FolderCreate
      */
-    public function folderCreate($parent_folder_id, $folder_name, string $contentType = self::contentTypes['folderCreate'][0])
+    public function folderCreate($parentFolderId, $folderName, string $contentType = self::contentTypes['folderCreate'][0])
     {
-        list($response) = $this->folderCreateWithHttpInfo($parent_folder_id, $folder_name, $contentType);
+        list($response) = $this->folderCreateWithHttpInfo($parentFolderId, $folderName, $contentType);
         return $response;
     }
 
@@ -147,17 +147,17 @@ class FolderApi
      *
      * Create folder
      *
-     * @param  int $parent_folder_id (required)
-     * @param  string $folder_name (required)
+     * @param  int $parentFolderId (required)
+     * @param  string $folderName (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['folderCreate'] to see the possible values for this operation
      *
      * @throws \OpenAPI\Client\Docbox\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of \OpenAPI\Client\Docbox\Model\FolderCreate, HTTP status code, HTTP response headers (array of strings)
      */
-    public function folderCreateWithHttpInfo($parent_folder_id, $folder_name, string $contentType = self::contentTypes['folderCreate'][0])
+    public function folderCreateWithHttpInfo($parentFolderId, $folderName, string $contentType = self::contentTypes['folderCreate'][0])
     {
-        $request = $this->folderCreateRequest($parent_folder_id, $folder_name, $contentType);
+        $request = $this->folderCreateRequest($parentFolderId, $folderName, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -272,16 +272,16 @@ class FolderApi
      *
      * Create folder
      *
-     * @param  int $parent_folder_id (required)
-     * @param  string $folder_name (required)
+     * @param  int $parentFolderId (required)
+     * @param  string $folderName (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['folderCreate'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function folderCreateAsync($parent_folder_id, $folder_name, string $contentType = self::contentTypes['folderCreate'][0])
+    public function folderCreateAsync($parentFolderId, $folderName, string $contentType = self::contentTypes['folderCreate'][0])
     {
-        return $this->folderCreateAsyncWithHttpInfo($parent_folder_id, $folder_name, $contentType)
+        return $this->folderCreateAsyncWithHttpInfo($parentFolderId, $folderName, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -294,17 +294,17 @@ class FolderApi
      *
      * Create folder
      *
-     * @param  int $parent_folder_id (required)
-     * @param  string $folder_name (required)
+     * @param  int $parentFolderId (required)
+     * @param  string $folderName (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['folderCreate'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function folderCreateAsyncWithHttpInfo($parent_folder_id, $folder_name, string $contentType = self::contentTypes['folderCreate'][0])
+    public function folderCreateAsyncWithHttpInfo($parentFolderId, $folderName, string $contentType = self::contentTypes['folderCreate'][0])
     {
         $returnType = '\OpenAPI\Client\Docbox\Model\FolderCreate';
-        $request = $this->folderCreateRequest($parent_folder_id, $folder_name, $contentType);
+        $request = $this->folderCreateRequest($parentFolderId, $folderName, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -345,27 +345,27 @@ class FolderApi
     /**
      * Create request for operation 'folderCreate'
      *
-     * @param  int $parent_folder_id (required)
-     * @param  string $folder_name (required)
+     * @param  int $parentFolderId (required)
+     * @param  string $folderName (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['folderCreate'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function folderCreateRequest($parent_folder_id, $folder_name, string $contentType = self::contentTypes['folderCreate'][0])
+    public function folderCreateRequest($parentFolderId, $folderName, string $contentType = self::contentTypes['folderCreate'][0])
     {
 
-        // verify the required parameter 'parent_folder_id' is set
-        if ($parent_folder_id === null || (is_array($parent_folder_id) && count($parent_folder_id) === 0)) {
+        // verify the required parameter 'parentFolderId' is set
+        if ($parentFolderId === null || (is_array($parentFolderId) && count($parentFolderId) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $parent_folder_id when calling folderCreate'
+                'Missing the required parameter $parentFolderId when calling folderCreate'
             );
         }
 
-        // verify the required parameter 'folder_name' is set
-        if ($folder_name === null || (is_array($folder_name) && count($folder_name) === 0)) {
+        // verify the required parameter 'folderName' is set
+        if ($folderName === null || (is_array($folderName) && count($folderName) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $folder_name when calling folderCreate'
+                'Missing the required parameter $folderName when calling folderCreate'
             );
         }
 
@@ -381,12 +381,12 @@ class FolderApi
 
 
         // form params
-        if ($parent_folder_id !== null) {
-            $formParams['parent-folder-id'] = ObjectSerializer::toFormValue($parent_folder_id);
+        if ($parentFolderId !== null) {
+            $formParams['parent-folder-id'] = ObjectSerializer::toFormValue($parentFolderId);
         }
         // form params
-        if ($folder_name !== null) {
-            $formParams['folder-name'] = ObjectSerializer::toFormValue($folder_name);
+        if ($folderName !== null) {
+            $formParams['folder-name'] = ObjectSerializer::toFormValue($folderName);
         }
 
         $headers = $this->headerSelector->selectHeaders(

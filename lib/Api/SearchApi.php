@@ -126,78 +126,78 @@ class SearchApi
     /**
      * Operation searchPOST
      *
-     * @param  int $pagination_size Anzahl der Dokumente die im Ergebnis maximal zurückgegeben werden sollen, d.h. dieser Parameter gibt die Größe des Ergbnisfensters für das Paging des Suchergebnisses an. (optional, default to 10)
-     * @param  int $pagination_page Gibt den Index des Ergebnisfensters an, welches angezeigt werden soll. Das erste Ergebnisfenster entspricht dabei dem Index 0. Durch Erhöhung des Index um 1 gelangt man zum nächsten Ergebnisfenster mit den nächsten Suchtreffern. Beispiel: Bei 27 gefundenen Dokumenten insgesamt und einer pagination-size von 10 liegt der Index des Ergebnisfensters zwischen 0 und 2 (optional, default to 0)
-     * @param  string $fulltext_all Liste mit Texten, die alle gemeinsam auf jeder Trefferseite vorkommen müssen. (optional)
-     * @param  string $fulltext_one Liste mit Texten, von denen mindestens einer auf jeder Trefferseite vorkommen muss. (optional)
-     * @param  string $fulltext_none Liste mit Texten, von denen keiner auf den Trefferseiten vorkommen darf. (optional)
-     * @param  string $from_date Sucht nur nach Seiten deren Erstelldatum nach diesem Zeitpunkt liegt. (optional)
-     * @param  string $to_date Sucht nur nach Seiten deren Erstelldatum vor diesem Zeitpunkt liegt. (optional)
-     * @param  string $followup_terms Liste mit Texten die alle gemeinsam in den Wiedervorlage-Texten einer Seite vorkommen müssen. (optional)
-     * @param  string $note_terms Liste mit Texten die alle gemeinsam in den Notiz-Texten einer Seite vorkommen müssen. (optional)
-     * @param  string $keyword_terms Liste von Texten die alle gemeinsam in den Schlagwörtern einer Seite vorkommen müssen. (optional)
-     * @param  string $stamps_inclusive Liste mit Namen aller Stempel, die gemeinsam auf einer Seite vorkommen müssen. (optional)
-     * @param  string $stamps_exclusive Liste mit Namen aller Stempel, von denen keiner auf einer Seite vorkommen darf. (optional)
-     * @param  string $document_name_terms Liste von Texten die alle im Dokumentennamen einer Seite vorkommen müssen. (optional)
-     * @param  string $folder_name_terms Liste von Texten die alle im Ordner-Pfad einer Seite vorkommen müssen. (optional)
+     * @param  int $paginationSize Anzahl der Dokumente die im Ergebnis maximal zurückgegeben werden sollen, d.h. dieser Parameter gibt die Größe des Ergbnisfensters für das Paging des Suchergebnisses an. (optional, default to 10)
+     * @param  int $paginationPage Gibt den Index des Ergebnisfensters an, welches angezeigt werden soll. Das erste Ergebnisfenster entspricht dabei dem Index 0. Durch Erhöhung des Index um 1 gelangt man zum nächsten Ergebnisfenster mit den nächsten Suchtreffern. Beispiel: Bei 27 gefundenen Dokumenten insgesamt und einer pagination-size von 10 liegt der Index des Ergebnisfensters zwischen 0 und 2 (optional, default to 0)
+     * @param  string $fulltextAll Liste mit Texten, die alle gemeinsam auf jeder Trefferseite vorkommen müssen. (optional)
+     * @param  string $fulltextOne Liste mit Texten, von denen mindestens einer auf jeder Trefferseite vorkommen muss. (optional)
+     * @param  string $fulltextNone Liste mit Texten, von denen keiner auf den Trefferseiten vorkommen darf. (optional)
+     * @param  string $fromDate Sucht nur nach Seiten deren Erstelldatum nach diesem Zeitpunkt liegt. (optional)
+     * @param  string $toDate Sucht nur nach Seiten deren Erstelldatum vor diesem Zeitpunkt liegt. (optional)
+     * @param  string $followupTerms Liste mit Texten die alle gemeinsam in den Wiedervorlage-Texten einer Seite vorkommen müssen. (optional)
+     * @param  string $noteTerms Liste mit Texten die alle gemeinsam in den Notiz-Texten einer Seite vorkommen müssen. (optional)
+     * @param  string $keywordTerms Liste von Texten die alle gemeinsam in den Schlagwörtern einer Seite vorkommen müssen. (optional)
+     * @param  string $stampsInclusive Liste mit Namen aller Stempel, die gemeinsam auf einer Seite vorkommen müssen. (optional)
+     * @param  string $stampsExclusive Liste mit Namen aller Stempel, von denen keiner auf einer Seite vorkommen darf. (optional)
+     * @param  string $documentNameTerms Liste von Texten die alle im Dokumentennamen einer Seite vorkommen müssen. (optional)
+     * @param  string $folderNameTerms Liste von Texten die alle im Ordner-Pfad einer Seite vorkommen müssen. (optional)
      * @param  string $location Pfad zu einem Ordner, auf den die Suche beschränkt werden soll (z. B. „/Muster GmbH/Rechnungen/“, „INBOX/Administrator“). Es wird auch in allen Unterordnern dieses Pfades gesucht (außer recursive ist auf false gesetzt). (optional)
-     * @param  int $location_folder_id Ordner-Id, auf den die Suche beschränkt werden soll. Es wird auch in allen Unterordnern dieses Pfades gesucht (außer recursive ist auf false gesetzt). (optional)
+     * @param  int $locationFolderId Ordner-Id, auf den die Suche beschränkt werden soll. Es wird auch in allen Unterordnern dieses Pfades gesucht (außer recursive ist auf false gesetzt). (optional)
      * @param  bool $recursive Bestimmt ob auch in Unterordner bei location gesucht wird. (optional, default to true)
-     * @param  int $archiver_id ID des Users der die zu suchenden Seiten archiviert haben muss. (optional)
-     * @param  string $workflow_name Name des Workflows in dem sich die zu suchenden Seiten aktuell befinden müssen. Durch Angabe von „*“ wird in allen Workflows gesucht. (optional)
-     * @param  string $workflow_state Name des Workflow-Knotens, in dem sich die zu suchenden Seiten aktuell befinden müssen. (optional)
-     * @param  string $document_type Name oder Alias-Name eines Dokumenten-Typs, der allen zu suchenden Dokumenten zugewiesen sein muss. (optional)
-     * @param  bool $include_trash Gibt an, ob auch Dokumente im Papierkorb mit durchsucht werden sollen. (optional, default to false)
-     * @param  string $external_id Text der in einer externen ID eines Dokuments vorkommen muss, damit es gefunden wird. (optional)
-     * @param  string $external_metadata Sucht Dokumente anhand ihrer externen Metadaten. Für jedes Metadatum in der Liste muss einem Dokument, damit es gefunden wird, ebenfalls ein Metadatum mit genau diesem Key zugeordnet sein und dessen Value den zu suchenden Value enthalten (optional)
+     * @param  int $archiverId ID des Users der die zu suchenden Seiten archiviert haben muss. (optional)
+     * @param  string $workflowName Name des Workflows in dem sich die zu suchenden Seiten aktuell befinden müssen. Durch Angabe von „*“ wird in allen Workflows gesucht. (optional)
+     * @param  string $workflowState Name des Workflow-Knotens, in dem sich die zu suchenden Seiten aktuell befinden müssen. (optional)
+     * @param  string $documentType Name oder Alias-Name eines Dokumenten-Typs, der allen zu suchenden Dokumenten zugewiesen sein muss. (optional)
+     * @param  bool $includeTrash Gibt an, ob auch Dokumente im Papierkorb mit durchsucht werden sollen. (optional, default to false)
+     * @param  string $externalId Text der in einer externen ID eines Dokuments vorkommen muss, damit es gefunden wird. (optional)
+     * @param  string $externalMetadata Sucht Dokumente anhand ihrer externen Metadaten. Für jedes Metadatum in der Liste muss einem Dokument, damit es gefunden wird, ebenfalls ein Metadatum mit genau diesem Key zugeordnet sein und dessen Value den zu suchenden Value enthalten (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['searchPOST'] to see the possible values for this operation
      *
      * @throws \OpenAPI\Client\Docbox\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return \OpenAPI\Client\Docbox\Model\SearchPOST200Response
      */
-    public function searchPOST($pagination_size = 10, $pagination_page = 0, $fulltext_all = null, $fulltext_one = null, $fulltext_none = null, $from_date = null, $to_date = null, $followup_terms = null, $note_terms = null, $keyword_terms = null, $stamps_inclusive = null, $stamps_exclusive = null, $document_name_terms = null, $folder_name_terms = null, $location = null, $location_folder_id = null, $recursive = true, $archiver_id = null, $workflow_name = null, $workflow_state = null, $document_type = null, $include_trash = false, $external_id = null, $external_metadata = null, string $contentType = self::contentTypes['searchPOST'][0])
+    public function searchPOST($paginationSize = 10, $paginationPage = 0, $fulltextAll = null, $fulltextOne = null, $fulltextNone = null, $fromDate = null, $toDate = null, $followupTerms = null, $noteTerms = null, $keywordTerms = null, $stampsInclusive = null, $stampsExclusive = null, $documentNameTerms = null, $folderNameTerms = null, $location = null, $locationFolderId = null, $recursive = true, $archiverId = null, $workflowName = null, $workflowState = null, $documentType = null, $includeTrash = false, $externalId = null, $externalMetadata = null, string $contentType = self::contentTypes['searchPOST'][0])
     {
-        list($response) = $this->searchPOSTWithHttpInfo($pagination_size, $pagination_page, $fulltext_all, $fulltext_one, $fulltext_none, $from_date, $to_date, $followup_terms, $note_terms, $keyword_terms, $stamps_inclusive, $stamps_exclusive, $document_name_terms, $folder_name_terms, $location, $location_folder_id, $recursive, $archiver_id, $workflow_name, $workflow_state, $document_type, $include_trash, $external_id, $external_metadata, $contentType);
+        list($response) = $this->searchPOSTWithHttpInfo($paginationSize, $paginationPage, $fulltextAll, $fulltextOne, $fulltextNone, $fromDate, $toDate, $followupTerms, $noteTerms, $keywordTerms, $stampsInclusive, $stampsExclusive, $documentNameTerms, $folderNameTerms, $location, $locationFolderId, $recursive, $archiverId, $workflowName, $workflowState, $documentType, $includeTrash, $externalId, $externalMetadata, $contentType);
         return $response;
     }
 
     /**
      * Operation searchPOSTWithHttpInfo
      *
-     * @param  int $pagination_size Anzahl der Dokumente die im Ergebnis maximal zurückgegeben werden sollen, d.h. dieser Parameter gibt die Größe des Ergbnisfensters für das Paging des Suchergebnisses an. (optional, default to 10)
-     * @param  int $pagination_page Gibt den Index des Ergebnisfensters an, welches angezeigt werden soll. Das erste Ergebnisfenster entspricht dabei dem Index 0. Durch Erhöhung des Index um 1 gelangt man zum nächsten Ergebnisfenster mit den nächsten Suchtreffern. Beispiel: Bei 27 gefundenen Dokumenten insgesamt und einer pagination-size von 10 liegt der Index des Ergebnisfensters zwischen 0 und 2 (optional, default to 0)
-     * @param  string $fulltext_all Liste mit Texten, die alle gemeinsam auf jeder Trefferseite vorkommen müssen. (optional)
-     * @param  string $fulltext_one Liste mit Texten, von denen mindestens einer auf jeder Trefferseite vorkommen muss. (optional)
-     * @param  string $fulltext_none Liste mit Texten, von denen keiner auf den Trefferseiten vorkommen darf. (optional)
-     * @param  string $from_date Sucht nur nach Seiten deren Erstelldatum nach diesem Zeitpunkt liegt. (optional)
-     * @param  string $to_date Sucht nur nach Seiten deren Erstelldatum vor diesem Zeitpunkt liegt. (optional)
-     * @param  string $followup_terms Liste mit Texten die alle gemeinsam in den Wiedervorlage-Texten einer Seite vorkommen müssen. (optional)
-     * @param  string $note_terms Liste mit Texten die alle gemeinsam in den Notiz-Texten einer Seite vorkommen müssen. (optional)
-     * @param  string $keyword_terms Liste von Texten die alle gemeinsam in den Schlagwörtern einer Seite vorkommen müssen. (optional)
-     * @param  string $stamps_inclusive Liste mit Namen aller Stempel, die gemeinsam auf einer Seite vorkommen müssen. (optional)
-     * @param  string $stamps_exclusive Liste mit Namen aller Stempel, von denen keiner auf einer Seite vorkommen darf. (optional)
-     * @param  string $document_name_terms Liste von Texten die alle im Dokumentennamen einer Seite vorkommen müssen. (optional)
-     * @param  string $folder_name_terms Liste von Texten die alle im Ordner-Pfad einer Seite vorkommen müssen. (optional)
+     * @param  int $paginationSize Anzahl der Dokumente die im Ergebnis maximal zurückgegeben werden sollen, d.h. dieser Parameter gibt die Größe des Ergbnisfensters für das Paging des Suchergebnisses an. (optional, default to 10)
+     * @param  int $paginationPage Gibt den Index des Ergebnisfensters an, welches angezeigt werden soll. Das erste Ergebnisfenster entspricht dabei dem Index 0. Durch Erhöhung des Index um 1 gelangt man zum nächsten Ergebnisfenster mit den nächsten Suchtreffern. Beispiel: Bei 27 gefundenen Dokumenten insgesamt und einer pagination-size von 10 liegt der Index des Ergebnisfensters zwischen 0 und 2 (optional, default to 0)
+     * @param  string $fulltextAll Liste mit Texten, die alle gemeinsam auf jeder Trefferseite vorkommen müssen. (optional)
+     * @param  string $fulltextOne Liste mit Texten, von denen mindestens einer auf jeder Trefferseite vorkommen muss. (optional)
+     * @param  string $fulltextNone Liste mit Texten, von denen keiner auf den Trefferseiten vorkommen darf. (optional)
+     * @param  string $fromDate Sucht nur nach Seiten deren Erstelldatum nach diesem Zeitpunkt liegt. (optional)
+     * @param  string $toDate Sucht nur nach Seiten deren Erstelldatum vor diesem Zeitpunkt liegt. (optional)
+     * @param  string $followupTerms Liste mit Texten die alle gemeinsam in den Wiedervorlage-Texten einer Seite vorkommen müssen. (optional)
+     * @param  string $noteTerms Liste mit Texten die alle gemeinsam in den Notiz-Texten einer Seite vorkommen müssen. (optional)
+     * @param  string $keywordTerms Liste von Texten die alle gemeinsam in den Schlagwörtern einer Seite vorkommen müssen. (optional)
+     * @param  string $stampsInclusive Liste mit Namen aller Stempel, die gemeinsam auf einer Seite vorkommen müssen. (optional)
+     * @param  string $stampsExclusive Liste mit Namen aller Stempel, von denen keiner auf einer Seite vorkommen darf. (optional)
+     * @param  string $documentNameTerms Liste von Texten die alle im Dokumentennamen einer Seite vorkommen müssen. (optional)
+     * @param  string $folderNameTerms Liste von Texten die alle im Ordner-Pfad einer Seite vorkommen müssen. (optional)
      * @param  string $location Pfad zu einem Ordner, auf den die Suche beschränkt werden soll (z. B. „/Muster GmbH/Rechnungen/“, „INBOX/Administrator“). Es wird auch in allen Unterordnern dieses Pfades gesucht (außer recursive ist auf false gesetzt). (optional)
-     * @param  int $location_folder_id Ordner-Id, auf den die Suche beschränkt werden soll. Es wird auch in allen Unterordnern dieses Pfades gesucht (außer recursive ist auf false gesetzt). (optional)
+     * @param  int $locationFolderId Ordner-Id, auf den die Suche beschränkt werden soll. Es wird auch in allen Unterordnern dieses Pfades gesucht (außer recursive ist auf false gesetzt). (optional)
      * @param  bool $recursive Bestimmt ob auch in Unterordner bei location gesucht wird. (optional, default to true)
-     * @param  int $archiver_id ID des Users der die zu suchenden Seiten archiviert haben muss. (optional)
-     * @param  string $workflow_name Name des Workflows in dem sich die zu suchenden Seiten aktuell befinden müssen. Durch Angabe von „*“ wird in allen Workflows gesucht. (optional)
-     * @param  string $workflow_state Name des Workflow-Knotens, in dem sich die zu suchenden Seiten aktuell befinden müssen. (optional)
-     * @param  string $document_type Name oder Alias-Name eines Dokumenten-Typs, der allen zu suchenden Dokumenten zugewiesen sein muss. (optional)
-     * @param  bool $include_trash Gibt an, ob auch Dokumente im Papierkorb mit durchsucht werden sollen. (optional, default to false)
-     * @param  string $external_id Text der in einer externen ID eines Dokuments vorkommen muss, damit es gefunden wird. (optional)
-     * @param  string $external_metadata Sucht Dokumente anhand ihrer externen Metadaten. Für jedes Metadatum in der Liste muss einem Dokument, damit es gefunden wird, ebenfalls ein Metadatum mit genau diesem Key zugeordnet sein und dessen Value den zu suchenden Value enthalten (optional)
+     * @param  int $archiverId ID des Users der die zu suchenden Seiten archiviert haben muss. (optional)
+     * @param  string $workflowName Name des Workflows in dem sich die zu suchenden Seiten aktuell befinden müssen. Durch Angabe von „*“ wird in allen Workflows gesucht. (optional)
+     * @param  string $workflowState Name des Workflow-Knotens, in dem sich die zu suchenden Seiten aktuell befinden müssen. (optional)
+     * @param  string $documentType Name oder Alias-Name eines Dokumenten-Typs, der allen zu suchenden Dokumenten zugewiesen sein muss. (optional)
+     * @param  bool $includeTrash Gibt an, ob auch Dokumente im Papierkorb mit durchsucht werden sollen. (optional, default to false)
+     * @param  string $externalId Text der in einer externen ID eines Dokuments vorkommen muss, damit es gefunden wird. (optional)
+     * @param  string $externalMetadata Sucht Dokumente anhand ihrer externen Metadaten. Für jedes Metadatum in der Liste muss einem Dokument, damit es gefunden wird, ebenfalls ein Metadatum mit genau diesem Key zugeordnet sein und dessen Value den zu suchenden Value enthalten (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['searchPOST'] to see the possible values for this operation
      *
      * @throws \OpenAPI\Client\Docbox\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of \OpenAPI\Client\Docbox\Model\SearchPOST200Response, HTTP status code, HTTP response headers (array of strings)
      */
-    public function searchPOSTWithHttpInfo($pagination_size = 10, $pagination_page = 0, $fulltext_all = null, $fulltext_one = null, $fulltext_none = null, $from_date = null, $to_date = null, $followup_terms = null, $note_terms = null, $keyword_terms = null, $stamps_inclusive = null, $stamps_exclusive = null, $document_name_terms = null, $folder_name_terms = null, $location = null, $location_folder_id = null, $recursive = true, $archiver_id = null, $workflow_name = null, $workflow_state = null, $document_type = null, $include_trash = false, $external_id = null, $external_metadata = null, string $contentType = self::contentTypes['searchPOST'][0])
+    public function searchPOSTWithHttpInfo($paginationSize = 10, $paginationPage = 0, $fulltextAll = null, $fulltextOne = null, $fulltextNone = null, $fromDate = null, $toDate = null, $followupTerms = null, $noteTerms = null, $keywordTerms = null, $stampsInclusive = null, $stampsExclusive = null, $documentNameTerms = null, $folderNameTerms = null, $location = null, $locationFolderId = null, $recursive = true, $archiverId = null, $workflowName = null, $workflowState = null, $documentType = null, $includeTrash = false, $externalId = null, $externalMetadata = null, string $contentType = self::contentTypes['searchPOST'][0])
     {
-        $request = $this->searchPOSTRequest($pagination_size, $pagination_page, $fulltext_all, $fulltext_one, $fulltext_none, $from_date, $to_date, $followup_terms, $note_terms, $keyword_terms, $stamps_inclusive, $stamps_exclusive, $document_name_terms, $folder_name_terms, $location, $location_folder_id, $recursive, $archiver_id, $workflow_name, $workflow_state, $document_type, $include_trash, $external_id, $external_metadata, $contentType);
+        $request = $this->searchPOSTRequest($paginationSize, $paginationPage, $fulltextAll, $fulltextOne, $fulltextNone, $fromDate, $toDate, $followupTerms, $noteTerms, $keywordTerms, $stampsInclusive, $stampsExclusive, $documentNameTerms, $folderNameTerms, $location, $locationFolderId, $recursive, $archiverId, $workflowName, $workflowState, $documentType, $includeTrash, $externalId, $externalMetadata, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -310,38 +310,38 @@ class SearchApi
     /**
      * Operation searchPOSTAsync
      *
-     * @param  int $pagination_size Anzahl der Dokumente die im Ergebnis maximal zurückgegeben werden sollen, d.h. dieser Parameter gibt die Größe des Ergbnisfensters für das Paging des Suchergebnisses an. (optional, default to 10)
-     * @param  int $pagination_page Gibt den Index des Ergebnisfensters an, welches angezeigt werden soll. Das erste Ergebnisfenster entspricht dabei dem Index 0. Durch Erhöhung des Index um 1 gelangt man zum nächsten Ergebnisfenster mit den nächsten Suchtreffern. Beispiel: Bei 27 gefundenen Dokumenten insgesamt und einer pagination-size von 10 liegt der Index des Ergebnisfensters zwischen 0 und 2 (optional, default to 0)
-     * @param  string $fulltext_all Liste mit Texten, die alle gemeinsam auf jeder Trefferseite vorkommen müssen. (optional)
-     * @param  string $fulltext_one Liste mit Texten, von denen mindestens einer auf jeder Trefferseite vorkommen muss. (optional)
-     * @param  string $fulltext_none Liste mit Texten, von denen keiner auf den Trefferseiten vorkommen darf. (optional)
-     * @param  string $from_date Sucht nur nach Seiten deren Erstelldatum nach diesem Zeitpunkt liegt. (optional)
-     * @param  string $to_date Sucht nur nach Seiten deren Erstelldatum vor diesem Zeitpunkt liegt. (optional)
-     * @param  string $followup_terms Liste mit Texten die alle gemeinsam in den Wiedervorlage-Texten einer Seite vorkommen müssen. (optional)
-     * @param  string $note_terms Liste mit Texten die alle gemeinsam in den Notiz-Texten einer Seite vorkommen müssen. (optional)
-     * @param  string $keyword_terms Liste von Texten die alle gemeinsam in den Schlagwörtern einer Seite vorkommen müssen. (optional)
-     * @param  string $stamps_inclusive Liste mit Namen aller Stempel, die gemeinsam auf einer Seite vorkommen müssen. (optional)
-     * @param  string $stamps_exclusive Liste mit Namen aller Stempel, von denen keiner auf einer Seite vorkommen darf. (optional)
-     * @param  string $document_name_terms Liste von Texten die alle im Dokumentennamen einer Seite vorkommen müssen. (optional)
-     * @param  string $folder_name_terms Liste von Texten die alle im Ordner-Pfad einer Seite vorkommen müssen. (optional)
+     * @param  int $paginationSize Anzahl der Dokumente die im Ergebnis maximal zurückgegeben werden sollen, d.h. dieser Parameter gibt die Größe des Ergbnisfensters für das Paging des Suchergebnisses an. (optional, default to 10)
+     * @param  int $paginationPage Gibt den Index des Ergebnisfensters an, welches angezeigt werden soll. Das erste Ergebnisfenster entspricht dabei dem Index 0. Durch Erhöhung des Index um 1 gelangt man zum nächsten Ergebnisfenster mit den nächsten Suchtreffern. Beispiel: Bei 27 gefundenen Dokumenten insgesamt und einer pagination-size von 10 liegt der Index des Ergebnisfensters zwischen 0 und 2 (optional, default to 0)
+     * @param  string $fulltextAll Liste mit Texten, die alle gemeinsam auf jeder Trefferseite vorkommen müssen. (optional)
+     * @param  string $fulltextOne Liste mit Texten, von denen mindestens einer auf jeder Trefferseite vorkommen muss. (optional)
+     * @param  string $fulltextNone Liste mit Texten, von denen keiner auf den Trefferseiten vorkommen darf. (optional)
+     * @param  string $fromDate Sucht nur nach Seiten deren Erstelldatum nach diesem Zeitpunkt liegt. (optional)
+     * @param  string $toDate Sucht nur nach Seiten deren Erstelldatum vor diesem Zeitpunkt liegt. (optional)
+     * @param  string $followupTerms Liste mit Texten die alle gemeinsam in den Wiedervorlage-Texten einer Seite vorkommen müssen. (optional)
+     * @param  string $noteTerms Liste mit Texten die alle gemeinsam in den Notiz-Texten einer Seite vorkommen müssen. (optional)
+     * @param  string $keywordTerms Liste von Texten die alle gemeinsam in den Schlagwörtern einer Seite vorkommen müssen. (optional)
+     * @param  string $stampsInclusive Liste mit Namen aller Stempel, die gemeinsam auf einer Seite vorkommen müssen. (optional)
+     * @param  string $stampsExclusive Liste mit Namen aller Stempel, von denen keiner auf einer Seite vorkommen darf. (optional)
+     * @param  string $documentNameTerms Liste von Texten die alle im Dokumentennamen einer Seite vorkommen müssen. (optional)
+     * @param  string $folderNameTerms Liste von Texten die alle im Ordner-Pfad einer Seite vorkommen müssen. (optional)
      * @param  string $location Pfad zu einem Ordner, auf den die Suche beschränkt werden soll (z. B. „/Muster GmbH/Rechnungen/“, „INBOX/Administrator“). Es wird auch in allen Unterordnern dieses Pfades gesucht (außer recursive ist auf false gesetzt). (optional)
-     * @param  int $location_folder_id Ordner-Id, auf den die Suche beschränkt werden soll. Es wird auch in allen Unterordnern dieses Pfades gesucht (außer recursive ist auf false gesetzt). (optional)
+     * @param  int $locationFolderId Ordner-Id, auf den die Suche beschränkt werden soll. Es wird auch in allen Unterordnern dieses Pfades gesucht (außer recursive ist auf false gesetzt). (optional)
      * @param  bool $recursive Bestimmt ob auch in Unterordner bei location gesucht wird. (optional, default to true)
-     * @param  int $archiver_id ID des Users der die zu suchenden Seiten archiviert haben muss. (optional)
-     * @param  string $workflow_name Name des Workflows in dem sich die zu suchenden Seiten aktuell befinden müssen. Durch Angabe von „*“ wird in allen Workflows gesucht. (optional)
-     * @param  string $workflow_state Name des Workflow-Knotens, in dem sich die zu suchenden Seiten aktuell befinden müssen. (optional)
-     * @param  string $document_type Name oder Alias-Name eines Dokumenten-Typs, der allen zu suchenden Dokumenten zugewiesen sein muss. (optional)
-     * @param  bool $include_trash Gibt an, ob auch Dokumente im Papierkorb mit durchsucht werden sollen. (optional, default to false)
-     * @param  string $external_id Text der in einer externen ID eines Dokuments vorkommen muss, damit es gefunden wird. (optional)
-     * @param  string $external_metadata Sucht Dokumente anhand ihrer externen Metadaten. Für jedes Metadatum in der Liste muss einem Dokument, damit es gefunden wird, ebenfalls ein Metadatum mit genau diesem Key zugeordnet sein und dessen Value den zu suchenden Value enthalten (optional)
+     * @param  int $archiverId ID des Users der die zu suchenden Seiten archiviert haben muss. (optional)
+     * @param  string $workflowName Name des Workflows in dem sich die zu suchenden Seiten aktuell befinden müssen. Durch Angabe von „*“ wird in allen Workflows gesucht. (optional)
+     * @param  string $workflowState Name des Workflow-Knotens, in dem sich die zu suchenden Seiten aktuell befinden müssen. (optional)
+     * @param  string $documentType Name oder Alias-Name eines Dokumenten-Typs, der allen zu suchenden Dokumenten zugewiesen sein muss. (optional)
+     * @param  bool $includeTrash Gibt an, ob auch Dokumente im Papierkorb mit durchsucht werden sollen. (optional, default to false)
+     * @param  string $externalId Text der in einer externen ID eines Dokuments vorkommen muss, damit es gefunden wird. (optional)
+     * @param  string $externalMetadata Sucht Dokumente anhand ihrer externen Metadaten. Für jedes Metadatum in der Liste muss einem Dokument, damit es gefunden wird, ebenfalls ein Metadatum mit genau diesem Key zugeordnet sein und dessen Value den zu suchenden Value enthalten (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['searchPOST'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function searchPOSTAsync($pagination_size = 10, $pagination_page = 0, $fulltext_all = null, $fulltext_one = null, $fulltext_none = null, $from_date = null, $to_date = null, $followup_terms = null, $note_terms = null, $keyword_terms = null, $stamps_inclusive = null, $stamps_exclusive = null, $document_name_terms = null, $folder_name_terms = null, $location = null, $location_folder_id = null, $recursive = true, $archiver_id = null, $workflow_name = null, $workflow_state = null, $document_type = null, $include_trash = false, $external_id = null, $external_metadata = null, string $contentType = self::contentTypes['searchPOST'][0])
+    public function searchPOSTAsync($paginationSize = 10, $paginationPage = 0, $fulltextAll = null, $fulltextOne = null, $fulltextNone = null, $fromDate = null, $toDate = null, $followupTerms = null, $noteTerms = null, $keywordTerms = null, $stampsInclusive = null, $stampsExclusive = null, $documentNameTerms = null, $folderNameTerms = null, $location = null, $locationFolderId = null, $recursive = true, $archiverId = null, $workflowName = null, $workflowState = null, $documentType = null, $includeTrash = false, $externalId = null, $externalMetadata = null, string $contentType = self::contentTypes['searchPOST'][0])
     {
-        return $this->searchPOSTAsyncWithHttpInfo($pagination_size, $pagination_page, $fulltext_all, $fulltext_one, $fulltext_none, $from_date, $to_date, $followup_terms, $note_terms, $keyword_terms, $stamps_inclusive, $stamps_exclusive, $document_name_terms, $folder_name_terms, $location, $location_folder_id, $recursive, $archiver_id, $workflow_name, $workflow_state, $document_type, $include_trash, $external_id, $external_metadata, $contentType)
+        return $this->searchPOSTAsyncWithHttpInfo($paginationSize, $paginationPage, $fulltextAll, $fulltextOne, $fulltextNone, $fromDate, $toDate, $followupTerms, $noteTerms, $keywordTerms, $stampsInclusive, $stampsExclusive, $documentNameTerms, $folderNameTerms, $location, $locationFolderId, $recursive, $archiverId, $workflowName, $workflowState, $documentType, $includeTrash, $externalId, $externalMetadata, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -352,39 +352,39 @@ class SearchApi
     /**
      * Operation searchPOSTAsyncWithHttpInfo
      *
-     * @param  int $pagination_size Anzahl der Dokumente die im Ergebnis maximal zurückgegeben werden sollen, d.h. dieser Parameter gibt die Größe des Ergbnisfensters für das Paging des Suchergebnisses an. (optional, default to 10)
-     * @param  int $pagination_page Gibt den Index des Ergebnisfensters an, welches angezeigt werden soll. Das erste Ergebnisfenster entspricht dabei dem Index 0. Durch Erhöhung des Index um 1 gelangt man zum nächsten Ergebnisfenster mit den nächsten Suchtreffern. Beispiel: Bei 27 gefundenen Dokumenten insgesamt und einer pagination-size von 10 liegt der Index des Ergebnisfensters zwischen 0 und 2 (optional, default to 0)
-     * @param  string $fulltext_all Liste mit Texten, die alle gemeinsam auf jeder Trefferseite vorkommen müssen. (optional)
-     * @param  string $fulltext_one Liste mit Texten, von denen mindestens einer auf jeder Trefferseite vorkommen muss. (optional)
-     * @param  string $fulltext_none Liste mit Texten, von denen keiner auf den Trefferseiten vorkommen darf. (optional)
-     * @param  string $from_date Sucht nur nach Seiten deren Erstelldatum nach diesem Zeitpunkt liegt. (optional)
-     * @param  string $to_date Sucht nur nach Seiten deren Erstelldatum vor diesem Zeitpunkt liegt. (optional)
-     * @param  string $followup_terms Liste mit Texten die alle gemeinsam in den Wiedervorlage-Texten einer Seite vorkommen müssen. (optional)
-     * @param  string $note_terms Liste mit Texten die alle gemeinsam in den Notiz-Texten einer Seite vorkommen müssen. (optional)
-     * @param  string $keyword_terms Liste von Texten die alle gemeinsam in den Schlagwörtern einer Seite vorkommen müssen. (optional)
-     * @param  string $stamps_inclusive Liste mit Namen aller Stempel, die gemeinsam auf einer Seite vorkommen müssen. (optional)
-     * @param  string $stamps_exclusive Liste mit Namen aller Stempel, von denen keiner auf einer Seite vorkommen darf. (optional)
-     * @param  string $document_name_terms Liste von Texten die alle im Dokumentennamen einer Seite vorkommen müssen. (optional)
-     * @param  string $folder_name_terms Liste von Texten die alle im Ordner-Pfad einer Seite vorkommen müssen. (optional)
+     * @param  int $paginationSize Anzahl der Dokumente die im Ergebnis maximal zurückgegeben werden sollen, d.h. dieser Parameter gibt die Größe des Ergbnisfensters für das Paging des Suchergebnisses an. (optional, default to 10)
+     * @param  int $paginationPage Gibt den Index des Ergebnisfensters an, welches angezeigt werden soll. Das erste Ergebnisfenster entspricht dabei dem Index 0. Durch Erhöhung des Index um 1 gelangt man zum nächsten Ergebnisfenster mit den nächsten Suchtreffern. Beispiel: Bei 27 gefundenen Dokumenten insgesamt und einer pagination-size von 10 liegt der Index des Ergebnisfensters zwischen 0 und 2 (optional, default to 0)
+     * @param  string $fulltextAll Liste mit Texten, die alle gemeinsam auf jeder Trefferseite vorkommen müssen. (optional)
+     * @param  string $fulltextOne Liste mit Texten, von denen mindestens einer auf jeder Trefferseite vorkommen muss. (optional)
+     * @param  string $fulltextNone Liste mit Texten, von denen keiner auf den Trefferseiten vorkommen darf. (optional)
+     * @param  string $fromDate Sucht nur nach Seiten deren Erstelldatum nach diesem Zeitpunkt liegt. (optional)
+     * @param  string $toDate Sucht nur nach Seiten deren Erstelldatum vor diesem Zeitpunkt liegt. (optional)
+     * @param  string $followupTerms Liste mit Texten die alle gemeinsam in den Wiedervorlage-Texten einer Seite vorkommen müssen. (optional)
+     * @param  string $noteTerms Liste mit Texten die alle gemeinsam in den Notiz-Texten einer Seite vorkommen müssen. (optional)
+     * @param  string $keywordTerms Liste von Texten die alle gemeinsam in den Schlagwörtern einer Seite vorkommen müssen. (optional)
+     * @param  string $stampsInclusive Liste mit Namen aller Stempel, die gemeinsam auf einer Seite vorkommen müssen. (optional)
+     * @param  string $stampsExclusive Liste mit Namen aller Stempel, von denen keiner auf einer Seite vorkommen darf. (optional)
+     * @param  string $documentNameTerms Liste von Texten die alle im Dokumentennamen einer Seite vorkommen müssen. (optional)
+     * @param  string $folderNameTerms Liste von Texten die alle im Ordner-Pfad einer Seite vorkommen müssen. (optional)
      * @param  string $location Pfad zu einem Ordner, auf den die Suche beschränkt werden soll (z. B. „/Muster GmbH/Rechnungen/“, „INBOX/Administrator“). Es wird auch in allen Unterordnern dieses Pfades gesucht (außer recursive ist auf false gesetzt). (optional)
-     * @param  int $location_folder_id Ordner-Id, auf den die Suche beschränkt werden soll. Es wird auch in allen Unterordnern dieses Pfades gesucht (außer recursive ist auf false gesetzt). (optional)
+     * @param  int $locationFolderId Ordner-Id, auf den die Suche beschränkt werden soll. Es wird auch in allen Unterordnern dieses Pfades gesucht (außer recursive ist auf false gesetzt). (optional)
      * @param  bool $recursive Bestimmt ob auch in Unterordner bei location gesucht wird. (optional, default to true)
-     * @param  int $archiver_id ID des Users der die zu suchenden Seiten archiviert haben muss. (optional)
-     * @param  string $workflow_name Name des Workflows in dem sich die zu suchenden Seiten aktuell befinden müssen. Durch Angabe von „*“ wird in allen Workflows gesucht. (optional)
-     * @param  string $workflow_state Name des Workflow-Knotens, in dem sich die zu suchenden Seiten aktuell befinden müssen. (optional)
-     * @param  string $document_type Name oder Alias-Name eines Dokumenten-Typs, der allen zu suchenden Dokumenten zugewiesen sein muss. (optional)
-     * @param  bool $include_trash Gibt an, ob auch Dokumente im Papierkorb mit durchsucht werden sollen. (optional, default to false)
-     * @param  string $external_id Text der in einer externen ID eines Dokuments vorkommen muss, damit es gefunden wird. (optional)
-     * @param  string $external_metadata Sucht Dokumente anhand ihrer externen Metadaten. Für jedes Metadatum in der Liste muss einem Dokument, damit es gefunden wird, ebenfalls ein Metadatum mit genau diesem Key zugeordnet sein und dessen Value den zu suchenden Value enthalten (optional)
+     * @param  int $archiverId ID des Users der die zu suchenden Seiten archiviert haben muss. (optional)
+     * @param  string $workflowName Name des Workflows in dem sich die zu suchenden Seiten aktuell befinden müssen. Durch Angabe von „*“ wird in allen Workflows gesucht. (optional)
+     * @param  string $workflowState Name des Workflow-Knotens, in dem sich die zu suchenden Seiten aktuell befinden müssen. (optional)
+     * @param  string $documentType Name oder Alias-Name eines Dokumenten-Typs, der allen zu suchenden Dokumenten zugewiesen sein muss. (optional)
+     * @param  bool $includeTrash Gibt an, ob auch Dokumente im Papierkorb mit durchsucht werden sollen. (optional, default to false)
+     * @param  string $externalId Text der in einer externen ID eines Dokuments vorkommen muss, damit es gefunden wird. (optional)
+     * @param  string $externalMetadata Sucht Dokumente anhand ihrer externen Metadaten. Für jedes Metadatum in der Liste muss einem Dokument, damit es gefunden wird, ebenfalls ein Metadatum mit genau diesem Key zugeordnet sein und dessen Value den zu suchenden Value enthalten (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['searchPOST'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function searchPOSTAsyncWithHttpInfo($pagination_size = 10, $pagination_page = 0, $fulltext_all = null, $fulltext_one = null, $fulltext_none = null, $from_date = null, $to_date = null, $followup_terms = null, $note_terms = null, $keyword_terms = null, $stamps_inclusive = null, $stamps_exclusive = null, $document_name_terms = null, $folder_name_terms = null, $location = null, $location_folder_id = null, $recursive = true, $archiver_id = null, $workflow_name = null, $workflow_state = null, $document_type = null, $include_trash = false, $external_id = null, $external_metadata = null, string $contentType = self::contentTypes['searchPOST'][0])
+    public function searchPOSTAsyncWithHttpInfo($paginationSize = 10, $paginationPage = 0, $fulltextAll = null, $fulltextOne = null, $fulltextNone = null, $fromDate = null, $toDate = null, $followupTerms = null, $noteTerms = null, $keywordTerms = null, $stampsInclusive = null, $stampsExclusive = null, $documentNameTerms = null, $folderNameTerms = null, $location = null, $locationFolderId = null, $recursive = true, $archiverId = null, $workflowName = null, $workflowState = null, $documentType = null, $includeTrash = false, $externalId = null, $externalMetadata = null, string $contentType = self::contentTypes['searchPOST'][0])
     {
         $returnType = '\OpenAPI\Client\Docbox\Model\SearchPOST200Response';
-        $request = $this->searchPOSTRequest($pagination_size, $pagination_page, $fulltext_all, $fulltext_one, $fulltext_none, $from_date, $to_date, $followup_terms, $note_terms, $keyword_terms, $stamps_inclusive, $stamps_exclusive, $document_name_terms, $folder_name_terms, $location, $location_folder_id, $recursive, $archiver_id, $workflow_name, $workflow_state, $document_type, $include_trash, $external_id, $external_metadata, $contentType);
+        $request = $this->searchPOSTRequest($paginationSize, $paginationPage, $fulltextAll, $fulltextOne, $fulltextNone, $fromDate, $toDate, $followupTerms, $noteTerms, $keywordTerms, $stampsInclusive, $stampsExclusive, $documentNameTerms, $folderNameTerms, $location, $locationFolderId, $recursive, $archiverId, $workflowName, $workflowState, $documentType, $includeTrash, $externalId, $externalMetadata, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -425,47 +425,47 @@ class SearchApi
     /**
      * Create request for operation 'searchPOST'
      *
-     * @param  int $pagination_size Anzahl der Dokumente die im Ergebnis maximal zurückgegeben werden sollen, d.h. dieser Parameter gibt die Größe des Ergbnisfensters für das Paging des Suchergebnisses an. (optional, default to 10)
-     * @param  int $pagination_page Gibt den Index des Ergebnisfensters an, welches angezeigt werden soll. Das erste Ergebnisfenster entspricht dabei dem Index 0. Durch Erhöhung des Index um 1 gelangt man zum nächsten Ergebnisfenster mit den nächsten Suchtreffern. Beispiel: Bei 27 gefundenen Dokumenten insgesamt und einer pagination-size von 10 liegt der Index des Ergebnisfensters zwischen 0 und 2 (optional, default to 0)
-     * @param  string $fulltext_all Liste mit Texten, die alle gemeinsam auf jeder Trefferseite vorkommen müssen. (optional)
-     * @param  string $fulltext_one Liste mit Texten, von denen mindestens einer auf jeder Trefferseite vorkommen muss. (optional)
-     * @param  string $fulltext_none Liste mit Texten, von denen keiner auf den Trefferseiten vorkommen darf. (optional)
-     * @param  string $from_date Sucht nur nach Seiten deren Erstelldatum nach diesem Zeitpunkt liegt. (optional)
-     * @param  string $to_date Sucht nur nach Seiten deren Erstelldatum vor diesem Zeitpunkt liegt. (optional)
-     * @param  string $followup_terms Liste mit Texten die alle gemeinsam in den Wiedervorlage-Texten einer Seite vorkommen müssen. (optional)
-     * @param  string $note_terms Liste mit Texten die alle gemeinsam in den Notiz-Texten einer Seite vorkommen müssen. (optional)
-     * @param  string $keyword_terms Liste von Texten die alle gemeinsam in den Schlagwörtern einer Seite vorkommen müssen. (optional)
-     * @param  string $stamps_inclusive Liste mit Namen aller Stempel, die gemeinsam auf einer Seite vorkommen müssen. (optional)
-     * @param  string $stamps_exclusive Liste mit Namen aller Stempel, von denen keiner auf einer Seite vorkommen darf. (optional)
-     * @param  string $document_name_terms Liste von Texten die alle im Dokumentennamen einer Seite vorkommen müssen. (optional)
-     * @param  string $folder_name_terms Liste von Texten die alle im Ordner-Pfad einer Seite vorkommen müssen. (optional)
+     * @param  int $paginationSize Anzahl der Dokumente die im Ergebnis maximal zurückgegeben werden sollen, d.h. dieser Parameter gibt die Größe des Ergbnisfensters für das Paging des Suchergebnisses an. (optional, default to 10)
+     * @param  int $paginationPage Gibt den Index des Ergebnisfensters an, welches angezeigt werden soll. Das erste Ergebnisfenster entspricht dabei dem Index 0. Durch Erhöhung des Index um 1 gelangt man zum nächsten Ergebnisfenster mit den nächsten Suchtreffern. Beispiel: Bei 27 gefundenen Dokumenten insgesamt und einer pagination-size von 10 liegt der Index des Ergebnisfensters zwischen 0 und 2 (optional, default to 0)
+     * @param  string $fulltextAll Liste mit Texten, die alle gemeinsam auf jeder Trefferseite vorkommen müssen. (optional)
+     * @param  string $fulltextOne Liste mit Texten, von denen mindestens einer auf jeder Trefferseite vorkommen muss. (optional)
+     * @param  string $fulltextNone Liste mit Texten, von denen keiner auf den Trefferseiten vorkommen darf. (optional)
+     * @param  string $fromDate Sucht nur nach Seiten deren Erstelldatum nach diesem Zeitpunkt liegt. (optional)
+     * @param  string $toDate Sucht nur nach Seiten deren Erstelldatum vor diesem Zeitpunkt liegt. (optional)
+     * @param  string $followupTerms Liste mit Texten die alle gemeinsam in den Wiedervorlage-Texten einer Seite vorkommen müssen. (optional)
+     * @param  string $noteTerms Liste mit Texten die alle gemeinsam in den Notiz-Texten einer Seite vorkommen müssen. (optional)
+     * @param  string $keywordTerms Liste von Texten die alle gemeinsam in den Schlagwörtern einer Seite vorkommen müssen. (optional)
+     * @param  string $stampsInclusive Liste mit Namen aller Stempel, die gemeinsam auf einer Seite vorkommen müssen. (optional)
+     * @param  string $stampsExclusive Liste mit Namen aller Stempel, von denen keiner auf einer Seite vorkommen darf. (optional)
+     * @param  string $documentNameTerms Liste von Texten die alle im Dokumentennamen einer Seite vorkommen müssen. (optional)
+     * @param  string $folderNameTerms Liste von Texten die alle im Ordner-Pfad einer Seite vorkommen müssen. (optional)
      * @param  string $location Pfad zu einem Ordner, auf den die Suche beschränkt werden soll (z. B. „/Muster GmbH/Rechnungen/“, „INBOX/Administrator“). Es wird auch in allen Unterordnern dieses Pfades gesucht (außer recursive ist auf false gesetzt). (optional)
-     * @param  int $location_folder_id Ordner-Id, auf den die Suche beschränkt werden soll. Es wird auch in allen Unterordnern dieses Pfades gesucht (außer recursive ist auf false gesetzt). (optional)
+     * @param  int $locationFolderId Ordner-Id, auf den die Suche beschränkt werden soll. Es wird auch in allen Unterordnern dieses Pfades gesucht (außer recursive ist auf false gesetzt). (optional)
      * @param  bool $recursive Bestimmt ob auch in Unterordner bei location gesucht wird. (optional, default to true)
-     * @param  int $archiver_id ID des Users der die zu suchenden Seiten archiviert haben muss. (optional)
-     * @param  string $workflow_name Name des Workflows in dem sich die zu suchenden Seiten aktuell befinden müssen. Durch Angabe von „*“ wird in allen Workflows gesucht. (optional)
-     * @param  string $workflow_state Name des Workflow-Knotens, in dem sich die zu suchenden Seiten aktuell befinden müssen. (optional)
-     * @param  string $document_type Name oder Alias-Name eines Dokumenten-Typs, der allen zu suchenden Dokumenten zugewiesen sein muss. (optional)
-     * @param  bool $include_trash Gibt an, ob auch Dokumente im Papierkorb mit durchsucht werden sollen. (optional, default to false)
-     * @param  string $external_id Text der in einer externen ID eines Dokuments vorkommen muss, damit es gefunden wird. (optional)
-     * @param  string $external_metadata Sucht Dokumente anhand ihrer externen Metadaten. Für jedes Metadatum in der Liste muss einem Dokument, damit es gefunden wird, ebenfalls ein Metadatum mit genau diesem Key zugeordnet sein und dessen Value den zu suchenden Value enthalten (optional)
+     * @param  int $archiverId ID des Users der die zu suchenden Seiten archiviert haben muss. (optional)
+     * @param  string $workflowName Name des Workflows in dem sich die zu suchenden Seiten aktuell befinden müssen. Durch Angabe von „*“ wird in allen Workflows gesucht. (optional)
+     * @param  string $workflowState Name des Workflow-Knotens, in dem sich die zu suchenden Seiten aktuell befinden müssen. (optional)
+     * @param  string $documentType Name oder Alias-Name eines Dokumenten-Typs, der allen zu suchenden Dokumenten zugewiesen sein muss. (optional)
+     * @param  bool $includeTrash Gibt an, ob auch Dokumente im Papierkorb mit durchsucht werden sollen. (optional, default to false)
+     * @param  string $externalId Text der in einer externen ID eines Dokuments vorkommen muss, damit es gefunden wird. (optional)
+     * @param  string $externalMetadata Sucht Dokumente anhand ihrer externen Metadaten. Für jedes Metadatum in der Liste muss einem Dokument, damit es gefunden wird, ebenfalls ein Metadatum mit genau diesem Key zugeordnet sein und dessen Value den zu suchenden Value enthalten (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['searchPOST'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function searchPOSTRequest($pagination_size = 10, $pagination_page = 0, $fulltext_all = null, $fulltext_one = null, $fulltext_none = null, $from_date = null, $to_date = null, $followup_terms = null, $note_terms = null, $keyword_terms = null, $stamps_inclusive = null, $stamps_exclusive = null, $document_name_terms = null, $folder_name_terms = null, $location = null, $location_folder_id = null, $recursive = true, $archiver_id = null, $workflow_name = null, $workflow_state = null, $document_type = null, $include_trash = false, $external_id = null, $external_metadata = null, string $contentType = self::contentTypes['searchPOST'][0])
+    public function searchPOSTRequest($paginationSize = 10, $paginationPage = 0, $fulltextAll = null, $fulltextOne = null, $fulltextNone = null, $fromDate = null, $toDate = null, $followupTerms = null, $noteTerms = null, $keywordTerms = null, $stampsInclusive = null, $stampsExclusive = null, $documentNameTerms = null, $folderNameTerms = null, $location = null, $locationFolderId = null, $recursive = true, $archiverId = null, $workflowName = null, $workflowState = null, $documentType = null, $includeTrash = false, $externalId = null, $externalMetadata = null, string $contentType = self::contentTypes['searchPOST'][0])
     {
 
-        if ($pagination_size !== null && $pagination_size > 100) {
-            throw new \InvalidArgumentException('invalid value for "$pagination_size" when calling SearchApi.searchPOST, must be smaller than or equal to 100.');
+        if ($paginationSize !== null && $paginationSize > 100) {
+            throw new \InvalidArgumentException('invalid value for "$paginationSize" when calling SearchApi.searchPOST, must be smaller than or equal to 100.');
         }
-        if ($pagination_size !== null && $pagination_size < 1) {
-            throw new \InvalidArgumentException('invalid value for "$pagination_size" when calling SearchApi.searchPOST, must be bigger than or equal to 1.');
+        if ($paginationSize !== null && $paginationSize < 1) {
+            throw new \InvalidArgumentException('invalid value for "$paginationSize" when calling SearchApi.searchPOST, must be bigger than or equal to 1.');
         }
         
-        if ($pagination_page !== null && $pagination_page < 0) {
-            throw new \InvalidArgumentException('invalid value for "$pagination_page" when calling SearchApi.searchPOST, must be bigger than or equal to 0.');
+        if ($paginationPage !== null && $paginationPage < 0) {
+            throw new \InvalidArgumentException('invalid value for "$paginationPage" when calling SearchApi.searchPOST, must be bigger than or equal to 0.');
         }
         
 
@@ -500,7 +500,7 @@ class SearchApi
 
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $pagination_size,
+            $paginationSize,
             'pagination-size', // param base name
             'integer', // openApiType
             'form', // style
@@ -509,7 +509,7 @@ class SearchApi
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $pagination_page,
+            $paginationPage,
             'pagination-page', // param base name
             'integer', // openApiType
             'form', // style
@@ -518,7 +518,7 @@ class SearchApi
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $fulltext_all,
+            $fulltextAll,
             'fulltext-all', // param base name
             'string', // openApiType
             'form', // style
@@ -527,7 +527,7 @@ class SearchApi
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $fulltext_one,
+            $fulltextOne,
             'fulltext-one', // param base name
             'string', // openApiType
             'form', // style
@@ -536,7 +536,7 @@ class SearchApi
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $fulltext_none,
+            $fulltextNone,
             'fulltext-none', // param base name
             'string', // openApiType
             'form', // style
@@ -545,7 +545,7 @@ class SearchApi
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $from_date,
+            $fromDate,
             'from-date', // param base name
             'string', // openApiType
             'form', // style
@@ -554,7 +554,7 @@ class SearchApi
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $to_date,
+            $toDate,
             'to-date', // param base name
             'string', // openApiType
             'form', // style
@@ -563,7 +563,7 @@ class SearchApi
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $followup_terms,
+            $followupTerms,
             'followup-terms', // param base name
             'string', // openApiType
             'form', // style
@@ -572,7 +572,7 @@ class SearchApi
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $note_terms,
+            $noteTerms,
             'note-terms', // param base name
             'string', // openApiType
             'form', // style
@@ -581,7 +581,7 @@ class SearchApi
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $keyword_terms,
+            $keywordTerms,
             'keyword-terms', // param base name
             'string', // openApiType
             'form', // style
@@ -590,7 +590,7 @@ class SearchApi
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $stamps_inclusive,
+            $stampsInclusive,
             'stamps-inclusive', // param base name
             'string', // openApiType
             'form', // style
@@ -599,7 +599,7 @@ class SearchApi
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $stamps_exclusive,
+            $stampsExclusive,
             'stamps-exclusive', // param base name
             'string', // openApiType
             'form', // style
@@ -608,7 +608,7 @@ class SearchApi
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $document_name_terms,
+            $documentNameTerms,
             'document-name-terms', // param base name
             'string', // openApiType
             'form', // style
@@ -617,7 +617,7 @@ class SearchApi
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $folder_name_terms,
+            $folderNameTerms,
             'folder-name-terms', // param base name
             'string', // openApiType
             'form', // style
@@ -635,7 +635,7 @@ class SearchApi
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $location_folder_id,
+            $locationFolderId,
             'location-folder-id', // param base name
             'integer', // openApiType
             'form', // style
@@ -653,7 +653,7 @@ class SearchApi
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $archiver_id,
+            $archiverId,
             'archiver-id', // param base name
             'integer', // openApiType
             'form', // style
@@ -662,7 +662,7 @@ class SearchApi
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $workflow_name,
+            $workflowName,
             'workflow-name', // param base name
             'string', // openApiType
             'form', // style
@@ -671,7 +671,7 @@ class SearchApi
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $workflow_state,
+            $workflowState,
             'workflow-state', // param base name
             'string', // openApiType
             'form', // style
@@ -680,7 +680,7 @@ class SearchApi
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $document_type,
+            $documentType,
             'document-type', // param base name
             'string', // openApiType
             'form', // style
@@ -689,7 +689,7 @@ class SearchApi
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $include_trash,
+            $includeTrash,
             'include-trash', // param base name
             'boolean', // openApiType
             'form', // style
@@ -698,7 +698,7 @@ class SearchApi
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $external_id,
+            $externalId,
             'external-id', // param base name
             'string', // openApiType
             'form', // style
@@ -707,7 +707,7 @@ class SearchApi
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $external_metadata,
+            $externalMetadata,
             'external-metadata', // param base name
             'string', // openApiType
             'form', // style

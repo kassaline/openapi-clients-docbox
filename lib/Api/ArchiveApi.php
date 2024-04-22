@@ -128,7 +128,7 @@ class ArchiveApi
      *
      * Archive structure
      *
-     * @param  int $parent_folder_id Parent folder id. If omitted the whole archive is returned. (optional)
+     * @param  int $parentFolderId Parent folder id. If omitted the whole archive is returned. (optional)
      * @param  bool $lazy lazy (optional, default to false)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['archivestructure'] to see the possible values for this operation
      *
@@ -136,9 +136,9 @@ class ArchiveApi
      * @throws \InvalidArgumentException
      * @return \OpenAPI\Client\Docbox\Model\DocboxArchive
      */
-    public function archivestructure($parent_folder_id = null, $lazy = false, string $contentType = self::contentTypes['archivestructure'][0])
+    public function archivestructure($parentFolderId = null, $lazy = false, string $contentType = self::contentTypes['archivestructure'][0])
     {
-        list($response) = $this->archivestructureWithHttpInfo($parent_folder_id, $lazy, $contentType);
+        list($response) = $this->archivestructureWithHttpInfo($parentFolderId, $lazy, $contentType);
         return $response;
     }
 
@@ -147,7 +147,7 @@ class ArchiveApi
      *
      * Archive structure
      *
-     * @param  int $parent_folder_id Parent folder id. If omitted the whole archive is returned. (optional)
+     * @param  int $parentFolderId Parent folder id. If omitted the whole archive is returned. (optional)
      * @param  bool $lazy (optional, default to false)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['archivestructure'] to see the possible values for this operation
      *
@@ -155,9 +155,9 @@ class ArchiveApi
      * @throws \InvalidArgumentException
      * @return array of \OpenAPI\Client\Docbox\Model\DocboxArchive, HTTP status code, HTTP response headers (array of strings)
      */
-    public function archivestructureWithHttpInfo($parent_folder_id = null, $lazy = false, string $contentType = self::contentTypes['archivestructure'][0])
+    public function archivestructureWithHttpInfo($parentFolderId = null, $lazy = false, string $contentType = self::contentTypes['archivestructure'][0])
     {
-        $request = $this->archivestructureRequest($parent_folder_id, $lazy, $contentType);
+        $request = $this->archivestructureRequest($parentFolderId, $lazy, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -272,16 +272,16 @@ class ArchiveApi
      *
      * Archive structure
      *
-     * @param  int $parent_folder_id Parent folder id. If omitted the whole archive is returned. (optional)
+     * @param  int $parentFolderId Parent folder id. If omitted the whole archive is returned. (optional)
      * @param  bool $lazy (optional, default to false)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['archivestructure'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function archivestructureAsync($parent_folder_id = null, $lazy = false, string $contentType = self::contentTypes['archivestructure'][0])
+    public function archivestructureAsync($parentFolderId = null, $lazy = false, string $contentType = self::contentTypes['archivestructure'][0])
     {
-        return $this->archivestructureAsyncWithHttpInfo($parent_folder_id, $lazy, $contentType)
+        return $this->archivestructureAsyncWithHttpInfo($parentFolderId, $lazy, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -294,17 +294,17 @@ class ArchiveApi
      *
      * Archive structure
      *
-     * @param  int $parent_folder_id Parent folder id. If omitted the whole archive is returned. (optional)
+     * @param  int $parentFolderId Parent folder id. If omitted the whole archive is returned. (optional)
      * @param  bool $lazy (optional, default to false)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['archivestructure'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function archivestructureAsyncWithHttpInfo($parent_folder_id = null, $lazy = false, string $contentType = self::contentTypes['archivestructure'][0])
+    public function archivestructureAsyncWithHttpInfo($parentFolderId = null, $lazy = false, string $contentType = self::contentTypes['archivestructure'][0])
     {
         $returnType = '\OpenAPI\Client\Docbox\Model\DocboxArchive';
-        $request = $this->archivestructureRequest($parent_folder_id, $lazy, $contentType);
+        $request = $this->archivestructureRequest($parentFolderId, $lazy, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -345,14 +345,14 @@ class ArchiveApi
     /**
      * Create request for operation 'archivestructure'
      *
-     * @param  int $parent_folder_id Parent folder id. If omitted the whole archive is returned. (optional)
+     * @param  int $parentFolderId Parent folder id. If omitted the whole archive is returned. (optional)
      * @param  bool $lazy (optional, default to false)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['archivestructure'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function archivestructureRequest($parent_folder_id = null, $lazy = false, string $contentType = self::contentTypes['archivestructure'][0])
+    public function archivestructureRequest($parentFolderId = null, $lazy = false, string $contentType = self::contentTypes['archivestructure'][0])
     {
 
 
@@ -367,7 +367,7 @@ class ArchiveApi
 
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $parent_folder_id,
+            $parentFolderId,
             'parent-folder-id', // param base name
             'integer', // openApiType
             'form', // style

@@ -60,12 +60,12 @@ class Document implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $openAPITypes = [
         'id' => 'int',
         'name' => 'string',
-        'num_pages' => 'int',
-        'creation_date' => '\DateTime',
-        'archiving_date' => '\DateTime',
-        'archiving_user_id' => 'int',
-        'folder_id' => 'int',
-        'external_metadata' => '\OpenAPI\Client\Docbox\Model\ExternalMetadata[]'
+        'numPages' => 'int',
+        'creationDate' => '\DateTime',
+        'archivingDate' => '\DateTime',
+        'archivingUserId' => 'int',
+        'folderId' => 'int',
+        'externalMetadata' => '\OpenAPI\Client\Docbox\Model\ExternalMetadata[]'
     ];
 
     /**
@@ -78,12 +78,12 @@ class Document implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $openAPIFormats = [
         'id' => 'int64',
         'name' => null,
-        'num_pages' => 'int32',
-        'creation_date' => 'date-time',
-        'archiving_date' => 'date-time',
-        'archiving_user_id' => 'int64',
-        'folder_id' => 'int64',
-        'external_metadata' => null
+        'numPages' => 'int32',
+        'creationDate' => 'date-time',
+        'archivingDate' => 'date-time',
+        'archivingUserId' => 'int64',
+        'folderId' => 'int64',
+        'externalMetadata' => null
     ];
 
     /**
@@ -94,12 +94,12 @@ class Document implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static array $openAPINullables = [
         'id' => false,
         'name' => false,
-        'num_pages' => false,
-        'creation_date' => false,
-        'archiving_date' => true,
-        'archiving_user_id' => true,
-        'folder_id' => true,
-        'external_metadata' => false
+        'numPages' => false,
+        'creationDate' => false,
+        'archivingDate' => true,
+        'archivingUserId' => true,
+        'folderId' => true,
+        'externalMetadata' => false
     ];
 
     /**
@@ -190,12 +190,12 @@ class Document implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $attributeMap = [
         'id' => 'id',
         'name' => 'name',
-        'num_pages' => 'num-pages',
-        'creation_date' => 'creation-date',
-        'archiving_date' => 'archiving-date',
-        'archiving_user_id' => 'archiving-user-id',
-        'folder_id' => 'folder-id',
-        'external_metadata' => 'external-metadata'
+        'numPages' => 'num-pages',
+        'creationDate' => 'creation-date',
+        'archivingDate' => 'archiving-date',
+        'archivingUserId' => 'archiving-user-id',
+        'folderId' => 'folder-id',
+        'externalMetadata' => 'external-metadata'
     ];
 
     /**
@@ -206,12 +206,12 @@ class Document implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $setters = [
         'id' => 'setId',
         'name' => 'setName',
-        'num_pages' => 'setNumPages',
-        'creation_date' => 'setCreationDate',
-        'archiving_date' => 'setArchivingDate',
-        'archiving_user_id' => 'setArchivingUserId',
-        'folder_id' => 'setFolderId',
-        'external_metadata' => 'setExternalMetadata'
+        'numPages' => 'setNumPages',
+        'creationDate' => 'setCreationDate',
+        'archivingDate' => 'setArchivingDate',
+        'archivingUserId' => 'setArchivingUserId',
+        'folderId' => 'setFolderId',
+        'externalMetadata' => 'setExternalMetadata'
     ];
 
     /**
@@ -222,12 +222,12 @@ class Document implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $getters = [
         'id' => 'getId',
         'name' => 'getName',
-        'num_pages' => 'getNumPages',
-        'creation_date' => 'getCreationDate',
-        'archiving_date' => 'getArchivingDate',
-        'archiving_user_id' => 'getArchivingUserId',
-        'folder_id' => 'getFolderId',
-        'external_metadata' => 'getExternalMetadata'
+        'numPages' => 'getNumPages',
+        'creationDate' => 'getCreationDate',
+        'archivingDate' => 'getArchivingDate',
+        'archivingUserId' => 'getArchivingUserId',
+        'folderId' => 'getFolderId',
+        'externalMetadata' => 'getExternalMetadata'
     ];
 
     /**
@@ -289,12 +289,12 @@ class Document implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         $this->setIfExists('id', $data ?? [], null);
         $this->setIfExists('name', $data ?? [], null);
-        $this->setIfExists('num_pages', $data ?? [], null);
-        $this->setIfExists('creation_date', $data ?? [], null);
-        $this->setIfExists('archiving_date', $data ?? [], null);
-        $this->setIfExists('archiving_user_id', $data ?? [], null);
-        $this->setIfExists('folder_id', $data ?? [], null);
-        $this->setIfExists('external_metadata', $data ?? [], null);
+        $this->setIfExists('numPages', $data ?? [], null);
+        $this->setIfExists('creationDate', $data ?? [], null);
+        $this->setIfExists('archivingDate', $data ?? [], null);
+        $this->setIfExists('archivingUserId', $data ?? [], null);
+        $this->setIfExists('folderId', $data ?? [], null);
+        $this->setIfExists('externalMetadata', $data ?? [], null);
     }
 
     /**
@@ -394,184 +394,184 @@ class Document implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
-     * Gets num_pages
+     * Gets numPages
      *
      * @return int|null
      */
     public function getNumPages()
     {
-        return $this->container['num_pages'];
+        return $this->container['numPages'];
     }
 
     /**
-     * Sets num_pages
+     * Sets numPages
      *
-     * @param int|null $num_pages num_pages
+     * @param int|null $numPages numPages
      *
      * @return self
      */
-    public function setNumPages($num_pages)
+    public function setNumPages($numPages)
     {
-        if (is_null($num_pages)) {
-            throw new \InvalidArgumentException('non-nullable num_pages cannot be null');
+        if (is_null($numPages)) {
+            throw new \InvalidArgumentException('non-nullable numPages cannot be null');
         }
-        $this->container['num_pages'] = $num_pages;
+        $this->container['numPages'] = $numPages;
 
         return $this;
     }
 
     /**
-     * Gets creation_date
+     * Gets creationDate
      *
      * @return \DateTime|null
      */
     public function getCreationDate()
     {
-        return $this->container['creation_date'];
+        return $this->container['creationDate'];
     }
 
     /**
-     * Sets creation_date
+     * Sets creationDate
      *
-     * @param \DateTime|null $creation_date creation_date
+     * @param \DateTime|null $creationDate creationDate
      *
      * @return self
      */
-    public function setCreationDate($creation_date)
+    public function setCreationDate($creationDate)
     {
-        if (is_null($creation_date)) {
-            throw new \InvalidArgumentException('non-nullable creation_date cannot be null');
+        if (is_null($creationDate)) {
+            throw new \InvalidArgumentException('non-nullable creationDate cannot be null');
         }
-        $this->container['creation_date'] = $creation_date;
+        $this->container['creationDate'] = $creationDate;
 
         return $this;
     }
 
     /**
-     * Gets archiving_date
+     * Gets archivingDate
      *
      * @return \DateTime|null
      */
     public function getArchivingDate()
     {
-        return $this->container['archiving_date'];
+        return $this->container['archivingDate'];
     }
 
     /**
-     * Sets archiving_date
+     * Sets archivingDate
      *
-     * @param \DateTime|null $archiving_date archiving_date
+     * @param \DateTime|null $archivingDate archivingDate
      *
      * @return self
      */
-    public function setArchivingDate($archiving_date)
+    public function setArchivingDate($archivingDate)
     {
-        if (is_null($archiving_date)) {
-            array_push($this->openAPINullablesSetToNull, 'archiving_date');
+        if (is_null($archivingDate)) {
+            array_push($this->openAPINullablesSetToNull, 'archivingDate');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('archiving_date', $nullablesSetToNull);
+            $index = array_search('archivingDate', $nullablesSetToNull);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $this->container['archiving_date'] = $archiving_date;
+        $this->container['archivingDate'] = $archivingDate;
 
         return $this;
     }
 
     /**
-     * Gets archiving_user_id
+     * Gets archivingUserId
      *
      * @return int|null
      */
     public function getArchivingUserId()
     {
-        return $this->container['archiving_user_id'];
+        return $this->container['archivingUserId'];
     }
 
     /**
-     * Sets archiving_user_id
+     * Sets archivingUserId
      *
-     * @param int|null $archiving_user_id archiving_user_id
+     * @param int|null $archivingUserId archivingUserId
      *
      * @return self
      */
-    public function setArchivingUserId($archiving_user_id)
+    public function setArchivingUserId($archivingUserId)
     {
-        if (is_null($archiving_user_id)) {
-            array_push($this->openAPINullablesSetToNull, 'archiving_user_id');
+        if (is_null($archivingUserId)) {
+            array_push($this->openAPINullablesSetToNull, 'archivingUserId');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('archiving_user_id', $nullablesSetToNull);
+            $index = array_search('archivingUserId', $nullablesSetToNull);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $this->container['archiving_user_id'] = $archiving_user_id;
+        $this->container['archivingUserId'] = $archivingUserId;
 
         return $this;
     }
 
     /**
-     * Gets folder_id
+     * Gets folderId
      *
      * @return int|null
      */
     public function getFolderId()
     {
-        return $this->container['folder_id'];
+        return $this->container['folderId'];
     }
 
     /**
-     * Sets folder_id
+     * Sets folderId
      *
-     * @param int|null $folder_id folder_id
+     * @param int|null $folderId folderId
      *
      * @return self
      */
-    public function setFolderId($folder_id)
+    public function setFolderId($folderId)
     {
-        if (is_null($folder_id)) {
-            array_push($this->openAPINullablesSetToNull, 'folder_id');
+        if (is_null($folderId)) {
+            array_push($this->openAPINullablesSetToNull, 'folderId');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('folder_id', $nullablesSetToNull);
+            $index = array_search('folderId', $nullablesSetToNull);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $this->container['folder_id'] = $folder_id;
+        $this->container['folderId'] = $folderId;
 
         return $this;
     }
 
     /**
-     * Gets external_metadata
+     * Gets externalMetadata
      *
      * @return \OpenAPI\Client\Docbox\Model\ExternalMetadata[]|null
      */
     public function getExternalMetadata()
     {
-        return $this->container['external_metadata'];
+        return $this->container['externalMetadata'];
     }
 
     /**
-     * Sets external_metadata
+     * Sets externalMetadata
      *
-     * @param \OpenAPI\Client\Docbox\Model\ExternalMetadata[]|null $external_metadata external_metadata
+     * @param \OpenAPI\Client\Docbox\Model\ExternalMetadata[]|null $externalMetadata externalMetadata
      *
      * @return self
      */
-    public function setExternalMetadata($external_metadata)
+    public function setExternalMetadata($externalMetadata)
     {
-        if (is_null($external_metadata)) {
-            throw new \InvalidArgumentException('non-nullable external_metadata cannot be null');
+        if (is_null($externalMetadata)) {
+            throw new \InvalidArgumentException('non-nullable externalMetadata cannot be null');
         }
-        $this->container['external_metadata'] = $external_metadata;
+        $this->container['externalMetadata'] = $externalMetadata;
 
         return $this;
     }

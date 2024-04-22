@@ -61,8 +61,8 @@ class DocumentPageStampsInner implements ModelInterface, ArrayAccess, \JsonSeria
         'title' => 'string',
         'text' => 'string',
         'date' => '\DateTime',
-        'creator_id' => 'int',
-        'creator_name' => 'string'
+        'creatorId' => 'int',
+        'creatorName' => 'string'
     ];
 
     /**
@@ -76,8 +76,8 @@ class DocumentPageStampsInner implements ModelInterface, ArrayAccess, \JsonSeria
         'title' => null,
         'text' => null,
         'date' => 'date-time',
-        'creator_id' => 'int64',
-        'creator_name' => null
+        'creatorId' => 'int64',
+        'creatorName' => null
     ];
 
     /**
@@ -89,8 +89,8 @@ class DocumentPageStampsInner implements ModelInterface, ArrayAccess, \JsonSeria
         'title' => false,
         'text' => false,
         'date' => false,
-        'creator_id' => false,
-        'creator_name' => false
+        'creatorId' => false,
+        'creatorName' => false
     ];
 
     /**
@@ -182,8 +182,8 @@ class DocumentPageStampsInner implements ModelInterface, ArrayAccess, \JsonSeria
         'title' => 'title',
         'text' => 'text',
         'date' => 'date',
-        'creator_id' => 'creatorId',
-        'creator_name' => 'creatorName'
+        'creatorId' => 'creatorId',
+        'creatorName' => 'creatorName'
     ];
 
     /**
@@ -195,8 +195,8 @@ class DocumentPageStampsInner implements ModelInterface, ArrayAccess, \JsonSeria
         'title' => 'setTitle',
         'text' => 'setText',
         'date' => 'setDate',
-        'creator_id' => 'setCreatorId',
-        'creator_name' => 'setCreatorName'
+        'creatorId' => 'setCreatorId',
+        'creatorName' => 'setCreatorName'
     ];
 
     /**
@@ -208,8 +208,8 @@ class DocumentPageStampsInner implements ModelInterface, ArrayAccess, \JsonSeria
         'title' => 'getTitle',
         'text' => 'getText',
         'date' => 'getDate',
-        'creator_id' => 'getCreatorId',
-        'creator_name' => 'getCreatorName'
+        'creatorId' => 'getCreatorId',
+        'creatorName' => 'getCreatorName'
     ];
 
     /**
@@ -272,8 +272,8 @@ class DocumentPageStampsInner implements ModelInterface, ArrayAccess, \JsonSeria
         $this->setIfExists('title', $data ?? [], null);
         $this->setIfExists('text', $data ?? [], null);
         $this->setIfExists('date', $data ?? [], null);
-        $this->setIfExists('creator_id', $data ?? [], null);
-        $this->setIfExists('creator_name', $data ?? [], null);
+        $this->setIfExists('creatorId', $data ?? [], null);
+        $this->setIfExists('creatorName', $data ?? [], null);
     }
 
     /**
@@ -306,11 +306,11 @@ class DocumentPageStampsInner implements ModelInterface, ArrayAccess, \JsonSeria
         if ($this->container['title'] === null) {
             $invalidProperties[] = "'title' can't be null";
         }
-        if ($this->container['creator_id'] === null) {
-            $invalidProperties[] = "'creator_id' can't be null";
+        if ($this->container['creatorId'] === null) {
+            $invalidProperties[] = "'creatorId' can't be null";
         }
-        if ($this->container['creator_name'] === null) {
-            $invalidProperties[] = "'creator_name' can't be null";
+        if ($this->container['creatorName'] === null) {
+            $invalidProperties[] = "'creatorName' can't be null";
         }
         return $invalidProperties;
     }
@@ -409,55 +409,55 @@ class DocumentPageStampsInner implements ModelInterface, ArrayAccess, \JsonSeria
     }
 
     /**
-     * Gets creator_id
+     * Gets creatorId
      *
      * @return int
      */
     public function getCreatorId()
     {
-        return $this->container['creator_id'];
+        return $this->container['creatorId'];
     }
 
     /**
-     * Sets creator_id
+     * Sets creatorId
      *
-     * @param int $creator_id creator_id
+     * @param int $creatorId creatorId
      *
      * @return self
      */
-    public function setCreatorId($creator_id)
+    public function setCreatorId($creatorId)
     {
-        if (is_null($creator_id)) {
-            throw new \InvalidArgumentException('non-nullable creator_id cannot be null');
+        if (is_null($creatorId)) {
+            throw new \InvalidArgumentException('non-nullable creatorId cannot be null');
         }
-        $this->container['creator_id'] = $creator_id;
+        $this->container['creatorId'] = $creatorId;
 
         return $this;
     }
 
     /**
-     * Gets creator_name
+     * Gets creatorName
      *
      * @return string
      */
     public function getCreatorName()
     {
-        return $this->container['creator_name'];
+        return $this->container['creatorName'];
     }
 
     /**
-     * Sets creator_name
+     * Sets creatorName
      *
-     * @param string $creator_name creator_name
+     * @param string $creatorName creatorName
      *
      * @return self
      */
-    public function setCreatorName($creator_name)
+    public function setCreatorName($creatorName)
     {
-        if (is_null($creator_name)) {
-            throw new \InvalidArgumentException('non-nullable creator_name cannot be null');
+        if (is_null($creatorName)) {
+            throw new \InvalidArgumentException('non-nullable creatorName cannot be null');
         }
-        $this->container['creator_name'] = $creator_name;
+        $this->container['creatorName'] = $creatorName;
 
         return $this;
     }

@@ -58,7 +58,7 @@ class DocboxArchive implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var string[]
       */
     protected static $openAPITypes = [
-        'free_archive_structure' => 'bool',
+        'freeArchiveStructure' => 'bool',
         'folders' => '\OpenAPI\Client\Docbox\Model\Folder[]'
     ];
 
@@ -70,7 +70,7 @@ class DocboxArchive implements ModelInterface, ArrayAccess, \JsonSerializable
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'free_archive_structure' => null,
+        'freeArchiveStructure' => null,
         'folders' => null
     ];
 
@@ -80,7 +80,7 @@ class DocboxArchive implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'free_archive_structure' => false,
+        'freeArchiveStructure' => false,
         'folders' => false
     ];
 
@@ -170,7 +170,7 @@ class DocboxArchive implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $attributeMap = [
-        'free_archive_structure' => 'free-archive-structure',
+        'freeArchiveStructure' => 'free-archive-structure',
         'folders' => 'folders'
     ];
 
@@ -180,7 +180,7 @@ class DocboxArchive implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $setters = [
-        'free_archive_structure' => 'setFreeArchiveStructure',
+        'freeArchiveStructure' => 'setFreeArchiveStructure',
         'folders' => 'setFolders'
     ];
 
@@ -190,7 +190,7 @@ class DocboxArchive implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $getters = [
-        'free_archive_structure' => 'getFreeArchiveStructure',
+        'freeArchiveStructure' => 'getFreeArchiveStructure',
         'folders' => 'getFolders'
     ];
 
@@ -251,7 +251,7 @@ class DocboxArchive implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function __construct(array $data = null)
     {
-        $this->setIfExists('free_archive_structure', $data ?? [], null);
+        $this->setIfExists('freeArchiveStructure', $data ?? [], null);
         $this->setIfExists('folders', $data ?? [], null);
     }
 
@@ -298,28 +298,28 @@ class DocboxArchive implements ModelInterface, ArrayAccess, \JsonSerializable
 
 
     /**
-     * Gets free_archive_structure
+     * Gets freeArchiveStructure
      *
      * @return bool|null
      */
     public function getFreeArchiveStructure()
     {
-        return $this->container['free_archive_structure'];
+        return $this->container['freeArchiveStructure'];
     }
 
     /**
-     * Sets free_archive_structure
+     * Sets freeArchiveStructure
      *
-     * @param bool|null $free_archive_structure free_archive_structure
+     * @param bool|null $freeArchiveStructure freeArchiveStructure
      *
      * @return self
      */
-    public function setFreeArchiveStructure($free_archive_structure)
+    public function setFreeArchiveStructure($freeArchiveStructure)
     {
-        if (is_null($free_archive_structure)) {
-            throw new \InvalidArgumentException('non-nullable free_archive_structure cannot be null');
+        if (is_null($freeArchiveStructure)) {
+            throw new \InvalidArgumentException('non-nullable freeArchiveStructure cannot be null');
         }
-        $this->container['free_archive_structure'] = $free_archive_structure;
+        $this->container['freeArchiveStructure'] = $freeArchiveStructure;
 
         return $this;
     }

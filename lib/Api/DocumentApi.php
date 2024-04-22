@@ -165,10 +165,10 @@ class DocumentApi
      * Archives a INBOX-document
      *
      * @param  int $id Document id (required)
-     * @param  int $target_folder_id Id of the target folder. Either this or &#x60;target-folder-path&#x60; is required. (optional)
-     * @param  string $target_mandator_name Name of the mandator where the document should be archived (optional)
-     * @param  string $target_folder_path Path to the target folder starting at the mandator. Either this or &#x60;target-folder-id&#x60; is required. Example: \\\&quot;/Eingangsrechnungen/2018/\\\&quot; (optional)
-     * @param  string $target_document_name Name of the new created archive-document. If not present, the current name of the document is used. (optional)
+     * @param  int $targetFolderId Id of the target folder. Either this or &#x60;target-folder-path&#x60; is required. (optional)
+     * @param  string $targetMandatorName Name of the mandator where the document should be archived (optional)
+     * @param  string $targetFolderPath Path to the target folder starting at the mandator. Either this or &#x60;target-folder-id&#x60; is required. Example: \\\&quot;/Eingangsrechnungen/2018/\\\&quot; (optional)
+     * @param  string $targetDocumentName Name of the new created archive-document. If not present, the current name of the document is used. (optional)
      * @param  string $keywords Comma separated list of keywords, which get added to the document. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentArchive'] to see the possible values for this operation
      *
@@ -176,9 +176,9 @@ class DocumentApi
      * @throws \InvalidArgumentException
      * @return void
      */
-    public function documentArchive($id, $target_folder_id = null, $target_mandator_name = null, $target_folder_path = null, $target_document_name = null, $keywords = null, string $contentType = self::contentTypes['documentArchive'][0])
+    public function documentArchive($id, $targetFolderId = null, $targetMandatorName = null, $targetFolderPath = null, $targetDocumentName = null, $keywords = null, string $contentType = self::contentTypes['documentArchive'][0])
     {
-        $this->documentArchiveWithHttpInfo($id, $target_folder_id, $target_mandator_name, $target_folder_path, $target_document_name, $keywords, $contentType);
+        $this->documentArchiveWithHttpInfo($id, $targetFolderId, $targetMandatorName, $targetFolderPath, $targetDocumentName, $keywords, $contentType);
     }
 
     /**
@@ -187,10 +187,10 @@ class DocumentApi
      * Archives a INBOX-document
      *
      * @param  int $id Document id (required)
-     * @param  int $target_folder_id Id of the target folder. Either this or &#x60;target-folder-path&#x60; is required. (optional)
-     * @param  string $target_mandator_name Name of the mandator where the document should be archived (optional)
-     * @param  string $target_folder_path Path to the target folder starting at the mandator. Either this or &#x60;target-folder-id&#x60; is required. Example: \\\&quot;/Eingangsrechnungen/2018/\\\&quot; (optional)
-     * @param  string $target_document_name Name of the new created archive-document. If not present, the current name of the document is used. (optional)
+     * @param  int $targetFolderId Id of the target folder. Either this or &#x60;target-folder-path&#x60; is required. (optional)
+     * @param  string $targetMandatorName Name of the mandator where the document should be archived (optional)
+     * @param  string $targetFolderPath Path to the target folder starting at the mandator. Either this or &#x60;target-folder-id&#x60; is required. Example: \\\&quot;/Eingangsrechnungen/2018/\\\&quot; (optional)
+     * @param  string $targetDocumentName Name of the new created archive-document. If not present, the current name of the document is used. (optional)
      * @param  string $keywords Comma separated list of keywords, which get added to the document. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentArchive'] to see the possible values for this operation
      *
@@ -198,9 +198,9 @@ class DocumentApi
      * @throws \InvalidArgumentException
      * @return array of null, HTTP status code, HTTP response headers (array of strings)
      */
-    public function documentArchiveWithHttpInfo($id, $target_folder_id = null, $target_mandator_name = null, $target_folder_path = null, $target_document_name = null, $keywords = null, string $contentType = self::contentTypes['documentArchive'][0])
+    public function documentArchiveWithHttpInfo($id, $targetFolderId = null, $targetMandatorName = null, $targetFolderPath = null, $targetDocumentName = null, $keywords = null, string $contentType = self::contentTypes['documentArchive'][0])
     {
-        $request = $this->documentArchiveRequest($id, $target_folder_id, $target_mandator_name, $target_folder_path, $target_document_name, $keywords, $contentType);
+        $request = $this->documentArchiveRequest($id, $targetFolderId, $targetMandatorName, $targetFolderPath, $targetDocumentName, $keywords, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -252,19 +252,19 @@ class DocumentApi
      * Archives a INBOX-document
      *
      * @param  int $id Document id (required)
-     * @param  int $target_folder_id Id of the target folder. Either this or &#x60;target-folder-path&#x60; is required. (optional)
-     * @param  string $target_mandator_name Name of the mandator where the document should be archived (optional)
-     * @param  string $target_folder_path Path to the target folder starting at the mandator. Either this or &#x60;target-folder-id&#x60; is required. Example: \\\&quot;/Eingangsrechnungen/2018/\\\&quot; (optional)
-     * @param  string $target_document_name Name of the new created archive-document. If not present, the current name of the document is used. (optional)
+     * @param  int $targetFolderId Id of the target folder. Either this or &#x60;target-folder-path&#x60; is required. (optional)
+     * @param  string $targetMandatorName Name of the mandator where the document should be archived (optional)
+     * @param  string $targetFolderPath Path to the target folder starting at the mandator. Either this or &#x60;target-folder-id&#x60; is required. Example: \\\&quot;/Eingangsrechnungen/2018/\\\&quot; (optional)
+     * @param  string $targetDocumentName Name of the new created archive-document. If not present, the current name of the document is used. (optional)
      * @param  string $keywords Comma separated list of keywords, which get added to the document. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentArchive'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function documentArchiveAsync($id, $target_folder_id = null, $target_mandator_name = null, $target_folder_path = null, $target_document_name = null, $keywords = null, string $contentType = self::contentTypes['documentArchive'][0])
+    public function documentArchiveAsync($id, $targetFolderId = null, $targetMandatorName = null, $targetFolderPath = null, $targetDocumentName = null, $keywords = null, string $contentType = self::contentTypes['documentArchive'][0])
     {
-        return $this->documentArchiveAsyncWithHttpInfo($id, $target_folder_id, $target_mandator_name, $target_folder_path, $target_document_name, $keywords, $contentType)
+        return $this->documentArchiveAsyncWithHttpInfo($id, $targetFolderId, $targetMandatorName, $targetFolderPath, $targetDocumentName, $keywords, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -278,20 +278,20 @@ class DocumentApi
      * Archives a INBOX-document
      *
      * @param  int $id Document id (required)
-     * @param  int $target_folder_id Id of the target folder. Either this or &#x60;target-folder-path&#x60; is required. (optional)
-     * @param  string $target_mandator_name Name of the mandator where the document should be archived (optional)
-     * @param  string $target_folder_path Path to the target folder starting at the mandator. Either this or &#x60;target-folder-id&#x60; is required. Example: \\\&quot;/Eingangsrechnungen/2018/\\\&quot; (optional)
-     * @param  string $target_document_name Name of the new created archive-document. If not present, the current name of the document is used. (optional)
+     * @param  int $targetFolderId Id of the target folder. Either this or &#x60;target-folder-path&#x60; is required. (optional)
+     * @param  string $targetMandatorName Name of the mandator where the document should be archived (optional)
+     * @param  string $targetFolderPath Path to the target folder starting at the mandator. Either this or &#x60;target-folder-id&#x60; is required. Example: \\\&quot;/Eingangsrechnungen/2018/\\\&quot; (optional)
+     * @param  string $targetDocumentName Name of the new created archive-document. If not present, the current name of the document is used. (optional)
      * @param  string $keywords Comma separated list of keywords, which get added to the document. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentArchive'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function documentArchiveAsyncWithHttpInfo($id, $target_folder_id = null, $target_mandator_name = null, $target_folder_path = null, $target_document_name = null, $keywords = null, string $contentType = self::contentTypes['documentArchive'][0])
+    public function documentArchiveAsyncWithHttpInfo($id, $targetFolderId = null, $targetMandatorName = null, $targetFolderPath = null, $targetDocumentName = null, $keywords = null, string $contentType = self::contentTypes['documentArchive'][0])
     {
         $returnType = '';
-        $request = $this->documentArchiveRequest($id, $target_folder_id, $target_mandator_name, $target_folder_path, $target_document_name, $keywords, $contentType);
+        $request = $this->documentArchiveRequest($id, $targetFolderId, $targetMandatorName, $targetFolderPath, $targetDocumentName, $keywords, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -320,17 +320,17 @@ class DocumentApi
      * Create request for operation 'documentArchive'
      *
      * @param  int $id Document id (required)
-     * @param  int $target_folder_id Id of the target folder. Either this or &#x60;target-folder-path&#x60; is required. (optional)
-     * @param  string $target_mandator_name Name of the mandator where the document should be archived (optional)
-     * @param  string $target_folder_path Path to the target folder starting at the mandator. Either this or &#x60;target-folder-id&#x60; is required. Example: \\\&quot;/Eingangsrechnungen/2018/\\\&quot; (optional)
-     * @param  string $target_document_name Name of the new created archive-document. If not present, the current name of the document is used. (optional)
+     * @param  int $targetFolderId Id of the target folder. Either this or &#x60;target-folder-path&#x60; is required. (optional)
+     * @param  string $targetMandatorName Name of the mandator where the document should be archived (optional)
+     * @param  string $targetFolderPath Path to the target folder starting at the mandator. Either this or &#x60;target-folder-id&#x60; is required. Example: \\\&quot;/Eingangsrechnungen/2018/\\\&quot; (optional)
+     * @param  string $targetDocumentName Name of the new created archive-document. If not present, the current name of the document is used. (optional)
      * @param  string $keywords Comma separated list of keywords, which get added to the document. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentArchive'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function documentArchiveRequest($id, $target_folder_id = null, $target_mandator_name = null, $target_folder_path = null, $target_document_name = null, $keywords = null, string $contentType = self::contentTypes['documentArchive'][0])
+    public function documentArchiveRequest($id, $targetFolderId = null, $targetMandatorName = null, $targetFolderPath = null, $targetDocumentName = null, $keywords = null, string $contentType = self::contentTypes['documentArchive'][0])
     {
 
         // verify the required parameter 'id' is set
@@ -365,20 +365,20 @@ class DocumentApi
         }
 
         // form params
-        if ($target_folder_id !== null) {
-            $formParams['target-folder-id'] = ObjectSerializer::toFormValue($target_folder_id);
+        if ($targetFolderId !== null) {
+            $formParams['target-folder-id'] = ObjectSerializer::toFormValue($targetFolderId);
         }
         // form params
-        if ($target_mandator_name !== null) {
-            $formParams['target-mandator-name'] = ObjectSerializer::toFormValue($target_mandator_name);
+        if ($targetMandatorName !== null) {
+            $formParams['target-mandator-name'] = ObjectSerializer::toFormValue($targetMandatorName);
         }
         // form params
-        if ($target_folder_path !== null) {
-            $formParams['target-folder-path'] = ObjectSerializer::toFormValue($target_folder_path);
+        if ($targetFolderPath !== null) {
+            $formParams['target-folder-path'] = ObjectSerializer::toFormValue($targetFolderPath);
         }
         // form params
-        if ($target_document_name !== null) {
-            $formParams['target-document-name'] = ObjectSerializer::toFormValue($target_document_name);
+        if ($targetDocumentName !== null) {
+            $formParams['target-document-name'] = ObjectSerializer::toFormValue($targetDocumentName);
         }
         // form params
         if ($keywords !== null) {
@@ -453,17 +453,17 @@ class DocumentApi
      *
      * Set auto export status
      *
-     * @param  int $document_id document_id (required)
-     * @param  bool $autoexport_status autoexport_status (required)
+     * @param  int $documentId documentId (required)
+     * @param  bool $autoexportStatus autoexportStatus (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentAutoExportStatus'] to see the possible values for this operation
      *
      * @throws \OpenAPI\Client\Docbox\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return void
      */
-    public function documentAutoExportStatus($document_id, $autoexport_status, string $contentType = self::contentTypes['documentAutoExportStatus'][0])
+    public function documentAutoExportStatus($documentId, $autoexportStatus, string $contentType = self::contentTypes['documentAutoExportStatus'][0])
     {
-        $this->documentAutoExportStatusWithHttpInfo($document_id, $autoexport_status, $contentType);
+        $this->documentAutoExportStatusWithHttpInfo($documentId, $autoexportStatus, $contentType);
     }
 
     /**
@@ -471,17 +471,17 @@ class DocumentApi
      *
      * Set auto export status
      *
-     * @param  int $document_id (required)
-     * @param  bool $autoexport_status (required)
+     * @param  int $documentId (required)
+     * @param  bool $autoexportStatus (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentAutoExportStatus'] to see the possible values for this operation
      *
      * @throws \OpenAPI\Client\Docbox\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of null, HTTP status code, HTTP response headers (array of strings)
      */
-    public function documentAutoExportStatusWithHttpInfo($document_id, $autoexport_status, string $contentType = self::contentTypes['documentAutoExportStatus'][0])
+    public function documentAutoExportStatusWithHttpInfo($documentId, $autoexportStatus, string $contentType = self::contentTypes['documentAutoExportStatus'][0])
     {
-        $request = $this->documentAutoExportStatusRequest($document_id, $autoexport_status, $contentType);
+        $request = $this->documentAutoExportStatusRequest($documentId, $autoexportStatus, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -532,16 +532,16 @@ class DocumentApi
      *
      * Set auto export status
      *
-     * @param  int $document_id (required)
-     * @param  bool $autoexport_status (required)
+     * @param  int $documentId (required)
+     * @param  bool $autoexportStatus (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentAutoExportStatus'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function documentAutoExportStatusAsync($document_id, $autoexport_status, string $contentType = self::contentTypes['documentAutoExportStatus'][0])
+    public function documentAutoExportStatusAsync($documentId, $autoexportStatus, string $contentType = self::contentTypes['documentAutoExportStatus'][0])
     {
-        return $this->documentAutoExportStatusAsyncWithHttpInfo($document_id, $autoexport_status, $contentType)
+        return $this->documentAutoExportStatusAsyncWithHttpInfo($documentId, $autoexportStatus, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -554,17 +554,17 @@ class DocumentApi
      *
      * Set auto export status
      *
-     * @param  int $document_id (required)
-     * @param  bool $autoexport_status (required)
+     * @param  int $documentId (required)
+     * @param  bool $autoexportStatus (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentAutoExportStatus'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function documentAutoExportStatusAsyncWithHttpInfo($document_id, $autoexport_status, string $contentType = self::contentTypes['documentAutoExportStatus'][0])
+    public function documentAutoExportStatusAsyncWithHttpInfo($documentId, $autoexportStatus, string $contentType = self::contentTypes['documentAutoExportStatus'][0])
     {
         $returnType = '';
-        $request = $this->documentAutoExportStatusRequest($document_id, $autoexport_status, $contentType);
+        $request = $this->documentAutoExportStatusRequest($documentId, $autoexportStatus, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -592,27 +592,27 @@ class DocumentApi
     /**
      * Create request for operation 'documentAutoExportStatus'
      *
-     * @param  int $document_id (required)
-     * @param  bool $autoexport_status (required)
+     * @param  int $documentId (required)
+     * @param  bool $autoexportStatus (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentAutoExportStatus'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function documentAutoExportStatusRequest($document_id, $autoexport_status, string $contentType = self::contentTypes['documentAutoExportStatus'][0])
+    public function documentAutoExportStatusRequest($documentId, $autoexportStatus, string $contentType = self::contentTypes['documentAutoExportStatus'][0])
     {
 
-        // verify the required parameter 'document_id' is set
-        if ($document_id === null || (is_array($document_id) && count($document_id) === 0)) {
+        // verify the required parameter 'documentId' is set
+        if ($documentId === null || (is_array($documentId) && count($documentId) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $document_id when calling documentAutoExportStatus'
+                'Missing the required parameter $documentId when calling documentAutoExportStatus'
             );
         }
 
-        // verify the required parameter 'autoexport_status' is set
-        if ($autoexport_status === null || (is_array($autoexport_status) && count($autoexport_status) === 0)) {
+        // verify the required parameter 'autoexportStatus' is set
+        if ($autoexportStatus === null || (is_array($autoexportStatus) && count($autoexportStatus) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $autoexport_status when calling documentAutoExportStatus'
+                'Missing the required parameter $autoexportStatus when calling documentAutoExportStatus'
             );
         }
 
@@ -628,12 +628,12 @@ class DocumentApi
 
 
         // form params
-        if ($document_id !== null) {
-            $formParams['document-id'] = ObjectSerializer::toFormValue($document_id);
+        if ($documentId !== null) {
+            $formParams['document-id'] = ObjectSerializer::toFormValue($documentId);
         }
         // form params
-        if ($autoexport_status !== null) {
-            $formParams['autoexport-status'] = ObjectSerializer::toFormValue($autoexport_status);
+        if ($autoexportStatus !== null) {
+            $formParams['autoexport-status'] = ObjectSerializer::toFormValue($autoexportStatus);
         }
 
         $headers = $this->headerSelector->selectHeaders(
@@ -1254,17 +1254,17 @@ class DocumentApi
      *
      * @param  int $id Document id (required)
      * @param  string $keywords Comma separated list of keywords to set for the new document. Commas can be escaped by prepending \\\\. (optional)
-     * @param  \SplFileObject $upload_data The file to upload. Either this or &#x60;upload-data-base64&#x60; is required. (optional)
-     * @param  string $upload_data_base64 Base64 encoded content of the upload-data. When using this parameter &#x60;target-document-name&#x60; is required. Either this or &#x60;upload-data&#x60; is required. (optional)
+     * @param  \SplFileObject $uploadData The file to upload. Either this or &#x60;upload-data-base64&#x60; is required. (optional)
+     * @param  string $uploadDataBase64 Base64 encoded content of the upload-data. When using this parameter &#x60;target-document-name&#x60; is required. Either this or &#x60;upload-data&#x60; is required. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentIdReplacePost'] to see the possible values for this operation
      *
      * @throws \OpenAPI\Client\Docbox\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return void
      */
-    public function documentIdReplacePost($id, $keywords = null, $upload_data = null, $upload_data_base64 = null, string $contentType = self::contentTypes['documentIdReplacePost'][0])
+    public function documentIdReplacePost($id, $keywords = null, $uploadData = null, $uploadDataBase64 = null, string $contentType = self::contentTypes['documentIdReplacePost'][0])
     {
-        $this->documentIdReplacePostWithHttpInfo($id, $keywords, $upload_data, $upload_data_base64, $contentType);
+        $this->documentIdReplacePostWithHttpInfo($id, $keywords, $uploadData, $uploadDataBase64, $contentType);
     }
 
     /**
@@ -1274,17 +1274,17 @@ class DocumentApi
      *
      * @param  int $id Document id (required)
      * @param  string $keywords Comma separated list of keywords to set for the new document. Commas can be escaped by prepending \\\\. (optional)
-     * @param  \SplFileObject $upload_data The file to upload. Either this or &#x60;upload-data-base64&#x60; is required. (optional)
-     * @param  string $upload_data_base64 Base64 encoded content of the upload-data. When using this parameter &#x60;target-document-name&#x60; is required. Either this or &#x60;upload-data&#x60; is required. (optional)
+     * @param  \SplFileObject $uploadData The file to upload. Either this or &#x60;upload-data-base64&#x60; is required. (optional)
+     * @param  string $uploadDataBase64 Base64 encoded content of the upload-data. When using this parameter &#x60;target-document-name&#x60; is required. Either this or &#x60;upload-data&#x60; is required. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentIdReplacePost'] to see the possible values for this operation
      *
      * @throws \OpenAPI\Client\Docbox\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of null, HTTP status code, HTTP response headers (array of strings)
      */
-    public function documentIdReplacePostWithHttpInfo($id, $keywords = null, $upload_data = null, $upload_data_base64 = null, string $contentType = self::contentTypes['documentIdReplacePost'][0])
+    public function documentIdReplacePostWithHttpInfo($id, $keywords = null, $uploadData = null, $uploadDataBase64 = null, string $contentType = self::contentTypes['documentIdReplacePost'][0])
     {
-        $request = $this->documentIdReplacePostRequest($id, $keywords, $upload_data, $upload_data_base64, $contentType);
+        $request = $this->documentIdReplacePostRequest($id, $keywords, $uploadData, $uploadDataBase64, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1337,16 +1337,16 @@ class DocumentApi
      *
      * @param  int $id Document id (required)
      * @param  string $keywords Comma separated list of keywords to set for the new document. Commas can be escaped by prepending \\\\. (optional)
-     * @param  \SplFileObject $upload_data The file to upload. Either this or &#x60;upload-data-base64&#x60; is required. (optional)
-     * @param  string $upload_data_base64 Base64 encoded content of the upload-data. When using this parameter &#x60;target-document-name&#x60; is required. Either this or &#x60;upload-data&#x60; is required. (optional)
+     * @param  \SplFileObject $uploadData The file to upload. Either this or &#x60;upload-data-base64&#x60; is required. (optional)
+     * @param  string $uploadDataBase64 Base64 encoded content of the upload-data. When using this parameter &#x60;target-document-name&#x60; is required. Either this or &#x60;upload-data&#x60; is required. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentIdReplacePost'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function documentIdReplacePostAsync($id, $keywords = null, $upload_data = null, $upload_data_base64 = null, string $contentType = self::contentTypes['documentIdReplacePost'][0])
+    public function documentIdReplacePostAsync($id, $keywords = null, $uploadData = null, $uploadDataBase64 = null, string $contentType = self::contentTypes['documentIdReplacePost'][0])
     {
-        return $this->documentIdReplacePostAsyncWithHttpInfo($id, $keywords, $upload_data, $upload_data_base64, $contentType)
+        return $this->documentIdReplacePostAsyncWithHttpInfo($id, $keywords, $uploadData, $uploadDataBase64, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1361,17 +1361,17 @@ class DocumentApi
      *
      * @param  int $id Document id (required)
      * @param  string $keywords Comma separated list of keywords to set for the new document. Commas can be escaped by prepending \\\\. (optional)
-     * @param  \SplFileObject $upload_data The file to upload. Either this or &#x60;upload-data-base64&#x60; is required. (optional)
-     * @param  string $upload_data_base64 Base64 encoded content of the upload-data. When using this parameter &#x60;target-document-name&#x60; is required. Either this or &#x60;upload-data&#x60; is required. (optional)
+     * @param  \SplFileObject $uploadData The file to upload. Either this or &#x60;upload-data-base64&#x60; is required. (optional)
+     * @param  string $uploadDataBase64 Base64 encoded content of the upload-data. When using this parameter &#x60;target-document-name&#x60; is required. Either this or &#x60;upload-data&#x60; is required. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentIdReplacePost'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function documentIdReplacePostAsyncWithHttpInfo($id, $keywords = null, $upload_data = null, $upload_data_base64 = null, string $contentType = self::contentTypes['documentIdReplacePost'][0])
+    public function documentIdReplacePostAsyncWithHttpInfo($id, $keywords = null, $uploadData = null, $uploadDataBase64 = null, string $contentType = self::contentTypes['documentIdReplacePost'][0])
     {
         $returnType = '';
-        $request = $this->documentIdReplacePostRequest($id, $keywords, $upload_data, $upload_data_base64, $contentType);
+        $request = $this->documentIdReplacePostRequest($id, $keywords, $uploadData, $uploadDataBase64, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1401,14 +1401,14 @@ class DocumentApi
      *
      * @param  int $id Document id (required)
      * @param  string $keywords Comma separated list of keywords to set for the new document. Commas can be escaped by prepending \\\\. (optional)
-     * @param  \SplFileObject $upload_data The file to upload. Either this or &#x60;upload-data-base64&#x60; is required. (optional)
-     * @param  string $upload_data_base64 Base64 encoded content of the upload-data. When using this parameter &#x60;target-document-name&#x60; is required. Either this or &#x60;upload-data&#x60; is required. (optional)
+     * @param  \SplFileObject $uploadData The file to upload. Either this or &#x60;upload-data-base64&#x60; is required. (optional)
+     * @param  string $uploadDataBase64 Base64 encoded content of the upload-data. When using this parameter &#x60;target-document-name&#x60; is required. Either this or &#x60;upload-data&#x60; is required. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentIdReplacePost'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function documentIdReplacePostRequest($id, $keywords = null, $upload_data = null, $upload_data_base64 = null, string $contentType = self::contentTypes['documentIdReplacePost'][0])
+    public function documentIdReplacePostRequest($id, $keywords = null, $uploadData = null, $uploadDataBase64 = null, string $contentType = self::contentTypes['documentIdReplacePost'][0])
     {
 
         // verify the required parameter 'id' is set
@@ -1450,10 +1450,10 @@ class DocumentApi
         }
 
         // form params
-        if ($upload_data !== null) {
+        if ($uploadData !== null) {
             $multipart = true;
             $formParams['upload-data'] = [];
-            $paramFiles = is_array($upload_data) ? $upload_data : [$upload_data];
+            $paramFiles = is_array($uploadData) ? $uploadData : [$uploadData];
             foreach ($paramFiles as $paramFile) {
                 $formParams['upload-data'][] = \GuzzleHttp\Psr7\Utils::tryFopen(
                     ObjectSerializer::toFormValue($paramFile),
@@ -1462,8 +1462,8 @@ class DocumentApi
             }
         }
         // form params
-        if ($upload_data_base64 !== null) {
-            $formParams['upload-data-base64'] = ObjectSerializer::toFormValue($upload_data_base64);
+        if ($uploadDataBase64 !== null) {
+            $formParams['upload-data-base64'] = ObjectSerializer::toFormValue($uploadDataBase64);
         }
 
         $headers = $this->headerSelector->selectHeaders(
@@ -1533,32 +1533,32 @@ class DocumentApi
      * Operation documentKeywordsPost
      *
      * @param  int $id Document id (required)
-     * @param  string[] $request_body request_body (required)
+     * @param  string[] $requestBody requestBody (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentKeywordsPost'] to see the possible values for this operation
      *
      * @throws \OpenAPI\Client\Docbox\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return void
      */
-    public function documentKeywordsPost($id, $request_body, string $contentType = self::contentTypes['documentKeywordsPost'][0])
+    public function documentKeywordsPost($id, $requestBody, string $contentType = self::contentTypes['documentKeywordsPost'][0])
     {
-        $this->documentKeywordsPostWithHttpInfo($id, $request_body, $contentType);
+        $this->documentKeywordsPostWithHttpInfo($id, $requestBody, $contentType);
     }
 
     /**
      * Operation documentKeywordsPostWithHttpInfo
      *
      * @param  int $id Document id (required)
-     * @param  string[] $request_body (required)
+     * @param  string[] $requestBody (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentKeywordsPost'] to see the possible values for this operation
      *
      * @throws \OpenAPI\Client\Docbox\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of null, HTTP status code, HTTP response headers (array of strings)
      */
-    public function documentKeywordsPostWithHttpInfo($id, $request_body, string $contentType = self::contentTypes['documentKeywordsPost'][0])
+    public function documentKeywordsPostWithHttpInfo($id, $requestBody, string $contentType = self::contentTypes['documentKeywordsPost'][0])
     {
-        $request = $this->documentKeywordsPostRequest($id, $request_body, $contentType);
+        $request = $this->documentKeywordsPostRequest($id, $requestBody, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1608,15 +1608,15 @@ class DocumentApi
      * Operation documentKeywordsPostAsync
      *
      * @param  int $id Document id (required)
-     * @param  string[] $request_body (required)
+     * @param  string[] $requestBody (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentKeywordsPost'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function documentKeywordsPostAsync($id, $request_body, string $contentType = self::contentTypes['documentKeywordsPost'][0])
+    public function documentKeywordsPostAsync($id, $requestBody, string $contentType = self::contentTypes['documentKeywordsPost'][0])
     {
-        return $this->documentKeywordsPostAsyncWithHttpInfo($id, $request_body, $contentType)
+        return $this->documentKeywordsPostAsyncWithHttpInfo($id, $requestBody, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1628,16 +1628,16 @@ class DocumentApi
      * Operation documentKeywordsPostAsyncWithHttpInfo
      *
      * @param  int $id Document id (required)
-     * @param  string[] $request_body (required)
+     * @param  string[] $requestBody (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentKeywordsPost'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function documentKeywordsPostAsyncWithHttpInfo($id, $request_body, string $contentType = self::contentTypes['documentKeywordsPost'][0])
+    public function documentKeywordsPostAsyncWithHttpInfo($id, $requestBody, string $contentType = self::contentTypes['documentKeywordsPost'][0])
     {
         $returnType = '';
-        $request = $this->documentKeywordsPostRequest($id, $request_body, $contentType);
+        $request = $this->documentKeywordsPostRequest($id, $requestBody, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1666,13 +1666,13 @@ class DocumentApi
      * Create request for operation 'documentKeywordsPost'
      *
      * @param  int $id Document id (required)
-     * @param  string[] $request_body (required)
+     * @param  string[] $requestBody (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentKeywordsPost'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function documentKeywordsPostRequest($id, $request_body, string $contentType = self::contentTypes['documentKeywordsPost'][0])
+    public function documentKeywordsPostRequest($id, $requestBody, string $contentType = self::contentTypes['documentKeywordsPost'][0])
     {
 
         // verify the required parameter 'id' is set
@@ -1682,10 +1682,10 @@ class DocumentApi
             );
         }
 
-        // verify the required parameter 'request_body' is set
-        if ($request_body === null || (is_array($request_body) && count($request_body) === 0)) {
+        // verify the required parameter 'requestBody' is set
+        if ($requestBody === null || (is_array($requestBody) && count($requestBody) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $request_body when calling documentKeywordsPost'
+                'Missing the required parameter $requestBody when calling documentKeywordsPost'
             );
         }
 
@@ -1716,12 +1716,12 @@ class DocumentApi
         );
 
         // for model (json/xml)
-        if (isset($request_body)) {
+        if (isset($requestBody)) {
             if (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the body
-                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($request_body));
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($requestBody));
             } else {
-                $httpBody = $request_body;
+                $httpBody = $requestBody;
             }
         } elseif (count($formParams) > 0) {
             if ($multipart) {
@@ -1784,21 +1784,21 @@ class DocumentApi
      *
      * Document list
      *
-     * @param  int $folder_id folder_id (required)
-     * @param  string $included_metadata_keys included_metadata_keys (optional)
-     * @param  string $excluded_matadata_keys excluded_matadata_keys (optional)
-     * @param  bool $with_autoexport_status with_autoexport_status (optional)
-     * @param  \DateTime $filter_date_created_after filter_date_created_after (optional)
-     * @param  bool $subfolders_recursive subfolders_recursive (optional, default to false)
+     * @param  int $folderId folderId (required)
+     * @param  string $includedMetadataKeys includedMetadataKeys (optional)
+     * @param  string $excludedMatadataKeys excludedMatadataKeys (optional)
+     * @param  bool $withAutoexportStatus withAutoexportStatus (optional)
+     * @param  \DateTime $filterDateCreatedAfter filterDateCreatedAfter (optional)
+     * @param  bool $subfoldersRecursive subfoldersRecursive (optional, default to false)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentList'] to see the possible values for this operation
      *
      * @throws \OpenAPI\Client\Docbox\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return \OpenAPI\Client\Docbox\Model\Document[]
      */
-    public function documentList($folder_id, $included_metadata_keys = null, $excluded_matadata_keys = null, $with_autoexport_status = null, $filter_date_created_after = null, $subfolders_recursive = false, string $contentType = self::contentTypes['documentList'][0])
+    public function documentList($folderId, $includedMetadataKeys = null, $excludedMatadataKeys = null, $withAutoexportStatus = null, $filterDateCreatedAfter = null, $subfoldersRecursive = false, string $contentType = self::contentTypes['documentList'][0])
     {
-        list($response) = $this->documentListWithHttpInfo($folder_id, $included_metadata_keys, $excluded_matadata_keys, $with_autoexport_status, $filter_date_created_after, $subfolders_recursive, $contentType);
+        list($response) = $this->documentListWithHttpInfo($folderId, $includedMetadataKeys, $excludedMatadataKeys, $withAutoexportStatus, $filterDateCreatedAfter, $subfoldersRecursive, $contentType);
         return $response;
     }
 
@@ -1807,21 +1807,21 @@ class DocumentApi
      *
      * Document list
      *
-     * @param  int $folder_id (required)
-     * @param  string $included_metadata_keys (optional)
-     * @param  string $excluded_matadata_keys (optional)
-     * @param  bool $with_autoexport_status (optional)
-     * @param  \DateTime $filter_date_created_after (optional)
-     * @param  bool $subfolders_recursive (optional, default to false)
+     * @param  int $folderId (required)
+     * @param  string $includedMetadataKeys (optional)
+     * @param  string $excludedMatadataKeys (optional)
+     * @param  bool $withAutoexportStatus (optional)
+     * @param  \DateTime $filterDateCreatedAfter (optional)
+     * @param  bool $subfoldersRecursive (optional, default to false)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentList'] to see the possible values for this operation
      *
      * @throws \OpenAPI\Client\Docbox\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of \OpenAPI\Client\Docbox\Model\Document[], HTTP status code, HTTP response headers (array of strings)
      */
-    public function documentListWithHttpInfo($folder_id, $included_metadata_keys = null, $excluded_matadata_keys = null, $with_autoexport_status = null, $filter_date_created_after = null, $subfolders_recursive = false, string $contentType = self::contentTypes['documentList'][0])
+    public function documentListWithHttpInfo($folderId, $includedMetadataKeys = null, $excludedMatadataKeys = null, $withAutoexportStatus = null, $filterDateCreatedAfter = null, $subfoldersRecursive = false, string $contentType = self::contentTypes['documentList'][0])
     {
-        $request = $this->documentListRequest($folder_id, $included_metadata_keys, $excluded_matadata_keys, $with_autoexport_status, $filter_date_created_after, $subfolders_recursive, $contentType);
+        $request = $this->documentListRequest($folderId, $includedMetadataKeys, $excludedMatadataKeys, $withAutoexportStatus, $filterDateCreatedAfter, $subfoldersRecursive, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1936,20 +1936,20 @@ class DocumentApi
      *
      * Document list
      *
-     * @param  int $folder_id (required)
-     * @param  string $included_metadata_keys (optional)
-     * @param  string $excluded_matadata_keys (optional)
-     * @param  bool $with_autoexport_status (optional)
-     * @param  \DateTime $filter_date_created_after (optional)
-     * @param  bool $subfolders_recursive (optional, default to false)
+     * @param  int $folderId (required)
+     * @param  string $includedMetadataKeys (optional)
+     * @param  string $excludedMatadataKeys (optional)
+     * @param  bool $withAutoexportStatus (optional)
+     * @param  \DateTime $filterDateCreatedAfter (optional)
+     * @param  bool $subfoldersRecursive (optional, default to false)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentList'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function documentListAsync($folder_id, $included_metadata_keys = null, $excluded_matadata_keys = null, $with_autoexport_status = null, $filter_date_created_after = null, $subfolders_recursive = false, string $contentType = self::contentTypes['documentList'][0])
+    public function documentListAsync($folderId, $includedMetadataKeys = null, $excludedMatadataKeys = null, $withAutoexportStatus = null, $filterDateCreatedAfter = null, $subfoldersRecursive = false, string $contentType = self::contentTypes['documentList'][0])
     {
-        return $this->documentListAsyncWithHttpInfo($folder_id, $included_metadata_keys, $excluded_matadata_keys, $with_autoexport_status, $filter_date_created_after, $subfolders_recursive, $contentType)
+        return $this->documentListAsyncWithHttpInfo($folderId, $includedMetadataKeys, $excludedMatadataKeys, $withAutoexportStatus, $filterDateCreatedAfter, $subfoldersRecursive, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1962,21 +1962,21 @@ class DocumentApi
      *
      * Document list
      *
-     * @param  int $folder_id (required)
-     * @param  string $included_metadata_keys (optional)
-     * @param  string $excluded_matadata_keys (optional)
-     * @param  bool $with_autoexport_status (optional)
-     * @param  \DateTime $filter_date_created_after (optional)
-     * @param  bool $subfolders_recursive (optional, default to false)
+     * @param  int $folderId (required)
+     * @param  string $includedMetadataKeys (optional)
+     * @param  string $excludedMatadataKeys (optional)
+     * @param  bool $withAutoexportStatus (optional)
+     * @param  \DateTime $filterDateCreatedAfter (optional)
+     * @param  bool $subfoldersRecursive (optional, default to false)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentList'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function documentListAsyncWithHttpInfo($folder_id, $included_metadata_keys = null, $excluded_matadata_keys = null, $with_autoexport_status = null, $filter_date_created_after = null, $subfolders_recursive = false, string $contentType = self::contentTypes['documentList'][0])
+    public function documentListAsyncWithHttpInfo($folderId, $includedMetadataKeys = null, $excludedMatadataKeys = null, $withAutoexportStatus = null, $filterDateCreatedAfter = null, $subfoldersRecursive = false, string $contentType = self::contentTypes['documentList'][0])
     {
         $returnType = '\OpenAPI\Client\Docbox\Model\Document[]';
-        $request = $this->documentListRequest($folder_id, $included_metadata_keys, $excluded_matadata_keys, $with_autoexport_status, $filter_date_created_after, $subfolders_recursive, $contentType);
+        $request = $this->documentListRequest($folderId, $includedMetadataKeys, $excludedMatadataKeys, $withAutoexportStatus, $filterDateCreatedAfter, $subfoldersRecursive, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -2017,24 +2017,24 @@ class DocumentApi
     /**
      * Create request for operation 'documentList'
      *
-     * @param  int $folder_id (required)
-     * @param  string $included_metadata_keys (optional)
-     * @param  string $excluded_matadata_keys (optional)
-     * @param  bool $with_autoexport_status (optional)
-     * @param  \DateTime $filter_date_created_after (optional)
-     * @param  bool $subfolders_recursive (optional, default to false)
+     * @param  int $folderId (required)
+     * @param  string $includedMetadataKeys (optional)
+     * @param  string $excludedMatadataKeys (optional)
+     * @param  bool $withAutoexportStatus (optional)
+     * @param  \DateTime $filterDateCreatedAfter (optional)
+     * @param  bool $subfoldersRecursive (optional, default to false)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentList'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function documentListRequest($folder_id, $included_metadata_keys = null, $excluded_matadata_keys = null, $with_autoexport_status = null, $filter_date_created_after = null, $subfolders_recursive = false, string $contentType = self::contentTypes['documentList'][0])
+    public function documentListRequest($folderId, $includedMetadataKeys = null, $excludedMatadataKeys = null, $withAutoexportStatus = null, $filterDateCreatedAfter = null, $subfoldersRecursive = false, string $contentType = self::contentTypes['documentList'][0])
     {
 
-        // verify the required parameter 'folder_id' is set
-        if ($folder_id === null || (is_array($folder_id) && count($folder_id) === 0)) {
+        // verify the required parameter 'folderId' is set
+        if ($folderId === null || (is_array($folderId) && count($folderId) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $folder_id when calling documentList'
+                'Missing the required parameter $folderId when calling documentList'
             );
         }
 
@@ -2053,7 +2053,7 @@ class DocumentApi
 
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $folder_id,
+            $folderId,
             'folder-id', // param base name
             'integer', // openApiType
             'form', // style
@@ -2062,7 +2062,7 @@ class DocumentApi
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $included_metadata_keys,
+            $includedMetadataKeys,
             'included-metadata-keys', // param base name
             'string', // openApiType
             'form', // style
@@ -2071,7 +2071,7 @@ class DocumentApi
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $excluded_matadata_keys,
+            $excludedMatadataKeys,
             'excluded-matadata-keys', // param base name
             'string', // openApiType
             'form', // style
@@ -2080,7 +2080,7 @@ class DocumentApi
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $with_autoexport_status,
+            $withAutoexportStatus,
             'with-autoexport-status', // param base name
             'boolean', // openApiType
             'form', // style
@@ -2089,7 +2089,7 @@ class DocumentApi
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $filter_date_created_after,
+            $filterDateCreatedAfter,
             'filter-date-created-after', // param base name
             'string', // openApiType
             'form', // style
@@ -2098,7 +2098,7 @@ class DocumentApi
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $subfolders_recursive,
+            $subfoldersRecursive,
             'subfolders-recursive', // param base name
             'boolean', // openApiType
             'form', // style
@@ -2485,32 +2485,32 @@ class DocumentApi
      * Operation documentMetadataPost
      *
      * @param  int $id Document id (required)
-     * @param  array<string,string> $request_body request_body (required)
+     * @param  array<string,string> $requestBody requestBody (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentMetadataPost'] to see the possible values for this operation
      *
      * @throws \OpenAPI\Client\Docbox\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return void
      */
-    public function documentMetadataPost($id, $request_body, string $contentType = self::contentTypes['documentMetadataPost'][0])
+    public function documentMetadataPost($id, $requestBody, string $contentType = self::contentTypes['documentMetadataPost'][0])
     {
-        $this->documentMetadataPostWithHttpInfo($id, $request_body, $contentType);
+        $this->documentMetadataPostWithHttpInfo($id, $requestBody, $contentType);
     }
 
     /**
      * Operation documentMetadataPostWithHttpInfo
      *
      * @param  int $id Document id (required)
-     * @param  array<string,string> $request_body (required)
+     * @param  array<string,string> $requestBody (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentMetadataPost'] to see the possible values for this operation
      *
      * @throws \OpenAPI\Client\Docbox\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of null, HTTP status code, HTTP response headers (array of strings)
      */
-    public function documentMetadataPostWithHttpInfo($id, $request_body, string $contentType = self::contentTypes['documentMetadataPost'][0])
+    public function documentMetadataPostWithHttpInfo($id, $requestBody, string $contentType = self::contentTypes['documentMetadataPost'][0])
     {
-        $request = $this->documentMetadataPostRequest($id, $request_body, $contentType);
+        $request = $this->documentMetadataPostRequest($id, $requestBody, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -2560,15 +2560,15 @@ class DocumentApi
      * Operation documentMetadataPostAsync
      *
      * @param  int $id Document id (required)
-     * @param  array<string,string> $request_body (required)
+     * @param  array<string,string> $requestBody (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentMetadataPost'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function documentMetadataPostAsync($id, $request_body, string $contentType = self::contentTypes['documentMetadataPost'][0])
+    public function documentMetadataPostAsync($id, $requestBody, string $contentType = self::contentTypes['documentMetadataPost'][0])
     {
-        return $this->documentMetadataPostAsyncWithHttpInfo($id, $request_body, $contentType)
+        return $this->documentMetadataPostAsyncWithHttpInfo($id, $requestBody, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -2580,16 +2580,16 @@ class DocumentApi
      * Operation documentMetadataPostAsyncWithHttpInfo
      *
      * @param  int $id Document id (required)
-     * @param  array<string,string> $request_body (required)
+     * @param  array<string,string> $requestBody (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentMetadataPost'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function documentMetadataPostAsyncWithHttpInfo($id, $request_body, string $contentType = self::contentTypes['documentMetadataPost'][0])
+    public function documentMetadataPostAsyncWithHttpInfo($id, $requestBody, string $contentType = self::contentTypes['documentMetadataPost'][0])
     {
         $returnType = '';
-        $request = $this->documentMetadataPostRequest($id, $request_body, $contentType);
+        $request = $this->documentMetadataPostRequest($id, $requestBody, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -2618,13 +2618,13 @@ class DocumentApi
      * Create request for operation 'documentMetadataPost'
      *
      * @param  int $id Document id (required)
-     * @param  array<string,string> $request_body (required)
+     * @param  array<string,string> $requestBody (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentMetadataPost'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function documentMetadataPostRequest($id, $request_body, string $contentType = self::contentTypes['documentMetadataPost'][0])
+    public function documentMetadataPostRequest($id, $requestBody, string $contentType = self::contentTypes['documentMetadataPost'][0])
     {
 
         // verify the required parameter 'id' is set
@@ -2634,10 +2634,10 @@ class DocumentApi
             );
         }
 
-        // verify the required parameter 'request_body' is set
-        if ($request_body === null || (is_array($request_body) && count($request_body) === 0)) {
+        // verify the required parameter 'requestBody' is set
+        if ($requestBody === null || (is_array($requestBody) && count($requestBody) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $request_body when calling documentMetadataPost'
+                'Missing the required parameter $requestBody when calling documentMetadataPost'
             );
         }
 
@@ -2668,12 +2668,12 @@ class DocumentApi
         );
 
         // for model (json/xml)
-        if (isset($request_body)) {
+        if (isset($requestBody)) {
             if (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the body
-                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($request_body));
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($requestBody));
             } else {
-                $httpBody = $request_body;
+                $httpBody = $requestBody;
             }
         } elseif (count($formParams) > 0) {
             if ($multipart) {
@@ -3399,32 +3399,32 @@ class DocumentApi
      * Operation documentRename
      *
      * @param  int $id Document id (required)
-     * @param  string $new_name new_name (required)
+     * @param  string $newName newName (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentRename'] to see the possible values for this operation
      *
      * @throws \OpenAPI\Client\Docbox\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return void
      */
-    public function documentRename($id, $new_name, string $contentType = self::contentTypes['documentRename'][0])
+    public function documentRename($id, $newName, string $contentType = self::contentTypes['documentRename'][0])
     {
-        $this->documentRenameWithHttpInfo($id, $new_name, $contentType);
+        $this->documentRenameWithHttpInfo($id, $newName, $contentType);
     }
 
     /**
      * Operation documentRenameWithHttpInfo
      *
      * @param  int $id Document id (required)
-     * @param  string $new_name (required)
+     * @param  string $newName (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentRename'] to see the possible values for this operation
      *
      * @throws \OpenAPI\Client\Docbox\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of null, HTTP status code, HTTP response headers (array of strings)
      */
-    public function documentRenameWithHttpInfo($id, $new_name, string $contentType = self::contentTypes['documentRename'][0])
+    public function documentRenameWithHttpInfo($id, $newName, string $contentType = self::contentTypes['documentRename'][0])
     {
-        $request = $this->documentRenameRequest($id, $new_name, $contentType);
+        $request = $this->documentRenameRequest($id, $newName, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -3474,15 +3474,15 @@ class DocumentApi
      * Operation documentRenameAsync
      *
      * @param  int $id Document id (required)
-     * @param  string $new_name (required)
+     * @param  string $newName (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentRename'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function documentRenameAsync($id, $new_name, string $contentType = self::contentTypes['documentRename'][0])
+    public function documentRenameAsync($id, $newName, string $contentType = self::contentTypes['documentRename'][0])
     {
-        return $this->documentRenameAsyncWithHttpInfo($id, $new_name, $contentType)
+        return $this->documentRenameAsyncWithHttpInfo($id, $newName, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -3494,16 +3494,16 @@ class DocumentApi
      * Operation documentRenameAsyncWithHttpInfo
      *
      * @param  int $id Document id (required)
-     * @param  string $new_name (required)
+     * @param  string $newName (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentRename'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function documentRenameAsyncWithHttpInfo($id, $new_name, string $contentType = self::contentTypes['documentRename'][0])
+    public function documentRenameAsyncWithHttpInfo($id, $newName, string $contentType = self::contentTypes['documentRename'][0])
     {
         $returnType = '';
-        $request = $this->documentRenameRequest($id, $new_name, $contentType);
+        $request = $this->documentRenameRequest($id, $newName, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -3532,13 +3532,13 @@ class DocumentApi
      * Create request for operation 'documentRename'
      *
      * @param  int $id Document id (required)
-     * @param  string $new_name (required)
+     * @param  string $newName (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentRename'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function documentRenameRequest($id, $new_name, string $contentType = self::contentTypes['documentRename'][0])
+    public function documentRenameRequest($id, $newName, string $contentType = self::contentTypes['documentRename'][0])
     {
 
         // verify the required parameter 'id' is set
@@ -3548,10 +3548,10 @@ class DocumentApi
             );
         }
 
-        // verify the required parameter 'new_name' is set
-        if ($new_name === null || (is_array($new_name) && count($new_name) === 0)) {
+        // verify the required parameter 'newName' is set
+        if ($newName === null || (is_array($newName) && count($newName) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $new_name when calling documentRename'
+                'Missing the required parameter $newName when calling documentRename'
             );
         }
 
@@ -3575,8 +3575,8 @@ class DocumentApi
         }
 
         // form params
-        if ($new_name !== null) {
-            $formParams['new-name'] = ObjectSerializer::toFormValue($new_name);
+        if ($newName !== null) {
+            $formParams['new-name'] = ObjectSerializer::toFormValue($newName);
         }
 
         $headers = $this->headerSelector->selectHeaders(

@@ -58,7 +58,7 @@ class InboxStructure implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var string[]
       */
     protected static $openAPITypes = [
-        'free_inbox_structure' => 'bool',
+        'freeInboxStructure' => 'bool',
         'inboxes' => '\OpenAPI\Client\Docbox\Model\InboxFolder[]'
     ];
 
@@ -70,7 +70,7 @@ class InboxStructure implements ModelInterface, ArrayAccess, \JsonSerializable
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'free_inbox_structure' => null,
+        'freeInboxStructure' => null,
         'inboxes' => null
     ];
 
@@ -80,7 +80,7 @@ class InboxStructure implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'free_inbox_structure' => false,
+        'freeInboxStructure' => false,
         'inboxes' => false
     ];
 
@@ -170,7 +170,7 @@ class InboxStructure implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $attributeMap = [
-        'free_inbox_structure' => 'free-inbox-structure',
+        'freeInboxStructure' => 'free-inbox-structure',
         'inboxes' => 'inboxes'
     ];
 
@@ -180,7 +180,7 @@ class InboxStructure implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $setters = [
-        'free_inbox_structure' => 'setFreeInboxStructure',
+        'freeInboxStructure' => 'setFreeInboxStructure',
         'inboxes' => 'setInboxes'
     ];
 
@@ -190,7 +190,7 @@ class InboxStructure implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $getters = [
-        'free_inbox_structure' => 'getFreeInboxStructure',
+        'freeInboxStructure' => 'getFreeInboxStructure',
         'inboxes' => 'getInboxes'
     ];
 
@@ -251,7 +251,7 @@ class InboxStructure implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function __construct(array $data = null)
     {
-        $this->setIfExists('free_inbox_structure', $data ?? [], null);
+        $this->setIfExists('freeInboxStructure', $data ?? [], null);
         $this->setIfExists('inboxes', $data ?? [], null);
     }
 
@@ -282,8 +282,8 @@ class InboxStructure implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         $invalidProperties = [];
 
-        if ($this->container['free_inbox_structure'] === null) {
-            $invalidProperties[] = "'free_inbox_structure' can't be null";
+        if ($this->container['freeInboxStructure'] === null) {
+            $invalidProperties[] = "'freeInboxStructure' can't be null";
         }
         return $invalidProperties;
     }
@@ -301,28 +301,28 @@ class InboxStructure implements ModelInterface, ArrayAccess, \JsonSerializable
 
 
     /**
-     * Gets free_inbox_structure
+     * Gets freeInboxStructure
      *
      * @return bool
      */
     public function getFreeInboxStructure()
     {
-        return $this->container['free_inbox_structure'];
+        return $this->container['freeInboxStructure'];
     }
 
     /**
-     * Sets free_inbox_structure
+     * Sets freeInboxStructure
      *
-     * @param bool $free_inbox_structure free_inbox_structure
+     * @param bool $freeInboxStructure freeInboxStructure
      *
      * @return self
      */
-    public function setFreeInboxStructure($free_inbox_structure)
+    public function setFreeInboxStructure($freeInboxStructure)
     {
-        if (is_null($free_inbox_structure)) {
-            throw new \InvalidArgumentException('non-nullable free_inbox_structure cannot be null');
+        if (is_null($freeInboxStructure)) {
+            throw new \InvalidArgumentException('non-nullable freeInboxStructure cannot be null');
         }
-        $this->container['free_inbox_structure'] = $free_inbox_structure;
+        $this->container['freeInboxStructure'] = $freeInboxStructure;
 
         return $this;
     }
