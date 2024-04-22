@@ -53,14 +53,14 @@ class SearchPOST200ResponseTest extends TestCase
     /**
      * Setup before running each test case
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
     }
 
     /**
      * Clean up after running each test case
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
     }
 
@@ -74,7 +74,7 @@ class SearchPOST200ResponseTest extends TestCase
     /**
      * Test "SearchPOST200Response"
      */
-    public function testSearchPOST200Response()
+    public function testSearchPOST200Response(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -83,7 +83,7 @@ class SearchPOST200ResponseTest extends TestCase
     /**
      * Test attribute "total_hit_documents"
      */
-    public function testPropertyTotalHitDocuments()
+    public function testPropertyTotalHitDocuments(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -92,7 +92,7 @@ class SearchPOST200ResponseTest extends TestCase
     /**
      * Test attribute "documents"
      */
-    public function testPropertyDocuments()
+    public function testPropertyDocuments(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');

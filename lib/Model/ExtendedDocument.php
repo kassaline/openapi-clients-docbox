@@ -41,7 +41,7 @@ use \OpenAPI\Client\Docbox\ObjectSerializer;
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
  */
-class ExtendedDocument implements ModelInterface, ArrayAccess, \JsonSerializable
+class ExtendedDocument implements ModelInterface, ArrayAccess, \JsonSerializable, \Stringable
 {
     public const DISCRIMINATOR = null;
 
@@ -69,7 +69,7 @@ class ExtendedDocument implements ModelInterface, ArrayAccess, \JsonSerializable
         'creatorName' => 'string',
         'keywords' => 'string[]',
         'classification' => 'string[]',
-        'external' => '\OpenAPI\Client\Docbox\Model\ExtendedDocumentExternal',
+        'external' => \OpenAPI\Client\Docbox\Model\ExtendedDocumentExternal::class,
         'workflows' => '\OpenAPI\Client\Docbox\Model\ExtendedDocumentWorkflowsInner[]',
         'pages' => '\OpenAPI\Client\Docbox\Model\DocumentPage[]'
     ];
@@ -149,8 +149,6 @@ class ExtendedDocument implements ModelInterface, ArrayAccess, \JsonSerializable
 
     /**
      * Array of nullable properties
-     *
-     * @return array
      */
     protected static function openAPINullables(): array
     {
@@ -158,30 +156,7 @@ class ExtendedDocument implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
-     * Array of nullable field names deliberately set to null
-     *
-     * @return boolean[]
-     */
-    private function getOpenAPINullablesSetToNull(): array
-    {
-        return $this->openAPINullablesSetToNull;
-    }
-
-    /**
-     * Setter - Array of nullable field names deliberately set to null
-     *
-     * @param boolean[] $openAPINullablesSetToNull
-     */
-    private function setOpenAPINullablesSetToNull(array $openAPINullablesSetToNull): void
-    {
-        $this->openAPINullablesSetToNull = $openAPINullablesSetToNull;
-    }
-
-    /**
      * Checks if a property is nullable
-     *
-     * @param string $property
-     * @return bool
      */
     public static function isNullable(string $property): bool
     {
@@ -190,13 +165,10 @@ class ExtendedDocument implements ModelInterface, ArrayAccess, \JsonSerializable
 
     /**
      * Checks if a nullable property is set to null.
-     *
-     * @param string $property
-     * @return bool
      */
     public function isNullableSetToNull(string $property): bool
     {
-        return in_array($property, $this->getOpenAPINullablesSetToNull(), true);
+        return in_array($property, $this->openAPINullablesSetToNull, true);
     }
 
     /**
@@ -340,15 +312,11 @@ class ExtendedDocument implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
-    * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
-    * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
-    * $this->openAPINullablesSetToNull array
-    *
-    * @param string $variableName
-    * @param array  $fields
-    * @param mixed  $defaultValue
-    */
-    private function setIfExists(string $variableName, array $fields, $defaultValue): void
+     * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
+     * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
+     * $this->openAPINullablesSetToNull array
+     */
+    private function setIfExists(string $variableName, array $fields, mixed $defaultValue): void
     {
         if (self::isNullable($variableName) && array_key_exists($variableName, $fields) && is_null($fields[$variableName])) {
             $this->openAPINullablesSetToNull[] = $variableName;
@@ -362,11 +330,9 @@ class ExtendedDocument implements ModelInterface, ArrayAccess, \JsonSerializable
      *
      * @return array invalid properties with reasons
      */
-    public function listInvalidProperties()
+    public function listInvalidProperties(): array
     {
-        $invalidProperties = [];
-
-        return $invalidProperties;
+        return [];
     }
 
     /**
@@ -375,9 +341,9 @@ class ExtendedDocument implements ModelInterface, ArrayAccess, \JsonSerializable
      *
      * @return bool True if all properties are valid
      */
-    public function valid()
+    public function valid(): bool
     {
-        return count($this->listInvalidProperties()) === 0;
+        return $this->listInvalidProperties() === [];
     }
 
 
@@ -395,14 +361,13 @@ class ExtendedDocument implements ModelInterface, ArrayAccess, \JsonSerializable
      * Sets id
      *
      * @param int|null $id id
-     *
-     * @return self
      */
-    public function setId($id)
+    public function setId($id): self
     {
         if (is_null($id)) {
             throw new \InvalidArgumentException('non-nullable id cannot be null');
         }
+
         $this->container['id'] = $id;
 
         return $this;
@@ -422,14 +387,13 @@ class ExtendedDocument implements ModelInterface, ArrayAccess, \JsonSerializable
      * Sets name
      *
      * @param string|null $name name
-     *
-     * @return self
      */
-    public function setName($name)
+    public function setName($name): self
     {
         if (is_null($name)) {
             throw new \InvalidArgumentException('non-nullable name cannot be null');
         }
+
         $this->container['name'] = $name;
 
         return $this;
@@ -449,14 +413,13 @@ class ExtendedDocument implements ModelInterface, ArrayAccess, \JsonSerializable
      * Sets numPages
      *
      * @param int|null $numPages numPages
-     *
-     * @return self
      */
-    public function setNumPages($numPages)
+    public function setNumPages($numPages): self
     {
         if (is_null($numPages)) {
             throw new \InvalidArgumentException('non-nullable numPages cannot be null');
         }
+
         $this->container['numPages'] = $numPages;
 
         return $this;
@@ -476,14 +439,13 @@ class ExtendedDocument implements ModelInterface, ArrayAccess, \JsonSerializable
      * Sets mandator
      *
      * @param string|null $mandator mandator
-     *
-     * @return self
      */
-    public function setMandator($mandator)
+    public function setMandator($mandator): self
     {
         if (is_null($mandator)) {
             throw new \InvalidArgumentException('non-nullable mandator cannot be null');
         }
+
         $this->container['mandator'] = $mandator;
 
         return $this;
@@ -503,14 +465,13 @@ class ExtendedDocument implements ModelInterface, ArrayAccess, \JsonSerializable
      * Sets folderId
      *
      * @param int|null $folderId folderId
-     *
-     * @return self
      */
-    public function setFolderId($folderId)
+    public function setFolderId($folderId): self
     {
         if (is_null($folderId)) {
             throw new \InvalidArgumentException('non-nullable folderId cannot be null');
         }
+
         $this->container['folderId'] = $folderId;
 
         return $this;
@@ -530,14 +491,13 @@ class ExtendedDocument implements ModelInterface, ArrayAccess, \JsonSerializable
      * Sets folderPath
      *
      * @param string|null $folderPath folderPath
-     *
-     * @return self
      */
-    public function setFolderPath($folderPath)
+    public function setFolderPath($folderPath): self
     {
         if (is_null($folderPath)) {
             throw new \InvalidArgumentException('non-nullable folderPath cannot be null');
         }
+
         $this->container['folderPath'] = $folderPath;
 
         return $this;
@@ -557,14 +517,13 @@ class ExtendedDocument implements ModelInterface, ArrayAccess, \JsonSerializable
      * Sets creationDate
      *
      * @param \DateTime|null $creationDate creationDate
-     *
-     * @return self
      */
-    public function setCreationDate($creationDate)
+    public function setCreationDate($creationDate): self
     {
         if (is_null($creationDate)) {
             throw new \InvalidArgumentException('non-nullable creationDate cannot be null');
         }
+
         $this->container['creationDate'] = $creationDate;
 
         return $this;
@@ -584,14 +543,13 @@ class ExtendedDocument implements ModelInterface, ArrayAccess, \JsonSerializable
      * Sets creatorId
      *
      * @param int|null $creatorId creatorId
-     *
-     * @return self
      */
-    public function setCreatorId($creatorId)
+    public function setCreatorId($creatorId): self
     {
         if (is_null($creatorId)) {
             throw new \InvalidArgumentException('non-nullable creatorId cannot be null');
         }
+
         $this->container['creatorId'] = $creatorId;
 
         return $this;
@@ -611,14 +569,13 @@ class ExtendedDocument implements ModelInterface, ArrayAccess, \JsonSerializable
      * Sets creatorName
      *
      * @param string|null $creatorName creatorName
-     *
-     * @return self
      */
-    public function setCreatorName($creatorName)
+    public function setCreatorName($creatorName): self
     {
         if (is_null($creatorName)) {
             throw new \InvalidArgumentException('non-nullable creatorName cannot be null');
         }
+
         $this->container['creatorName'] = $creatorName;
 
         return $this;
@@ -638,14 +595,13 @@ class ExtendedDocument implements ModelInterface, ArrayAccess, \JsonSerializable
      * Sets keywords
      *
      * @param string[]|null $keywords keywords
-     *
-     * @return self
      */
-    public function setKeywords($keywords)
+    public function setKeywords($keywords): self
     {
         if (is_null($keywords)) {
             throw new \InvalidArgumentException('non-nullable keywords cannot be null');
         }
+
         $this->container['keywords'] = $keywords;
 
         return $this;
@@ -665,14 +621,13 @@ class ExtendedDocument implements ModelInterface, ArrayAccess, \JsonSerializable
      * Sets classification
      *
      * @param string[]|null $classification classification
-     *
-     * @return self
      */
-    public function setClassification($classification)
+    public function setClassification($classification): self
     {
         if (is_null($classification)) {
             throw new \InvalidArgumentException('non-nullable classification cannot be null');
         }
+
         $this->container['classification'] = $classification;
 
         return $this;
@@ -692,14 +647,13 @@ class ExtendedDocument implements ModelInterface, ArrayAccess, \JsonSerializable
      * Sets external
      *
      * @param \OpenAPI\Client\Docbox\Model\ExtendedDocumentExternal|null $external external
-     *
-     * @return self
      */
-    public function setExternal($external)
+    public function setExternal($external): self
     {
         if (is_null($external)) {
             throw new \InvalidArgumentException('non-nullable external cannot be null');
         }
+
         $this->container['external'] = $external;
 
         return $this;
@@ -719,14 +673,13 @@ class ExtendedDocument implements ModelInterface, ArrayAccess, \JsonSerializable
      * Sets workflows
      *
      * @param \OpenAPI\Client\Docbox\Model\ExtendedDocumentWorkflowsInner[]|null $workflows workflows
-     *
-     * @return self
      */
-    public function setWorkflows($workflows)
+    public function setWorkflows($workflows): self
     {
         if (is_null($workflows)) {
             throw new \InvalidArgumentException('non-nullable workflows cannot be null');
         }
+
         $this->container['workflows'] = $workflows;
 
         return $this;
@@ -746,24 +699,22 @@ class ExtendedDocument implements ModelInterface, ArrayAccess, \JsonSerializable
      * Sets pages
      *
      * @param \OpenAPI\Client\Docbox\Model\DocumentPage[]|null $pages pages
-     *
-     * @return self
      */
-    public function setPages($pages)
+    public function setPages($pages): self
     {
         if (is_null($pages)) {
             throw new \InvalidArgumentException('non-nullable pages cannot be null');
         }
+
         $this->container['pages'] = $pages;
 
         return $this;
     }
+
     /**
      * Returns true if offset exists. False otherwise.
      *
      * @param integer $offset Offset
-     *
-     * @return boolean
      */
     public function offsetExists($offset): bool
     {
@@ -788,10 +739,8 @@ class ExtendedDocument implements ModelInterface, ArrayAccess, \JsonSerializable
      *
      * @param int|null $offset Offset
      * @param mixed    $value  Value to be set
-     *
-     * @return void
      */
-    public function offsetSet($offset, $value): void
+    public function offsetSet($offset, mixed $value): void
     {
         if (is_null($offset)) {
             $this->container[] = $value;
@@ -804,8 +753,6 @@ class ExtendedDocument implements ModelInterface, ArrayAccess, \JsonSerializable
      * Unsets offset.
      *
      * @param integer $offset Offset
-     *
-     * @return void
      */
     public function offsetUnset($offset): void
     {
@@ -827,12 +774,10 @@ class ExtendedDocument implements ModelInterface, ArrayAccess, \JsonSerializable
 
     /**
      * Gets the string presentation of the object
-     *
-     * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
-        return json_encode(
+        return (string) json_encode(
             ObjectSerializer::sanitizeForSerialization($this),
             JSON_PRETTY_PRINT
         );

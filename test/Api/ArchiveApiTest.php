@@ -54,14 +54,14 @@ class ArchiveApiTest extends TestCase
     /**
      * Setup before running each test case
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
     }
 
     /**
      * Clean up after running each test case
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
     }
 
@@ -78,7 +78,7 @@ class ArchiveApiTest extends TestCase
      * Archive structure.
      *
      */
-    public function testArchivestructure()
+    public function testArchivestructure(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');

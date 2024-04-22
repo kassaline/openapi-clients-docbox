@@ -50,25 +50,11 @@ use OpenAPI\Client\Docbox\ObjectSerializer;
  */
 class FolderApi
 {
-    /**
-     * @var ClientInterface
-     */
-    protected $client;
+    protected \GuzzleHttp\ClientInterface $client;
 
-    /**
-     * @var Configuration
-     */
-    protected $config;
+    protected \OpenAPI\Client\Docbox\Configuration $config;
 
-    /**
-     * @var HeaderSelector
-     */
-    protected $headerSelector;
-
-    /**
-     * @var int Host index
-     */
-    protected $hostIndex;
+    protected \OpenAPI\Client\Docbox\HeaderSelector $headerSelector;
 
     /** @var string[] $contentTypes **/
     public const contentTypes = [
@@ -78,21 +64,17 @@ class FolderApi
     ];
 
     /**
-     * @param ClientInterface $client
-     * @param Configuration   $config
-     * @param HeaderSelector  $selector
      * @param int             $hostIndex (Optional) host index to select the list of hosts if defined in the OpenAPI spec
      */
     public function __construct(
         ClientInterface $client = null,
-        Configuration $config = null,
-        HeaderSelector $selector = null,
-        $hostIndex = 0
+        Configuration $configuration = null,
+        HeaderSelector $headerSelector = null,
+        protected $hostIndex = 0
     ) {
-        $this->client = $client ?: new Client();
-        $this->config = $config ?: new Configuration();
-        $this->headerSelector = $selector ?: new HeaderSelector();
-        $this->hostIndex = $hostIndex;
+        $this->client = $client instanceof \GuzzleHttp\ClientInterface ? $client : new Client();
+        $this->config = $configuration instanceof \OpenAPI\Client\Docbox\Configuration ? $configuration : new Configuration();
+        $this->headerSelector = $headerSelector instanceof \OpenAPI\Client\Docbox\HeaderSelector ? $headerSelector : new HeaderSelector();
     }
 
     /**
@@ -115,10 +97,7 @@ class FolderApi
         return $this->hostIndex;
     }
 
-    /**
-     * @return Configuration
-     */
-    public function getConfig()
+    public function getConfig(): \OpenAPI\Client\Docbox\Configuration
     {
         return $this->config;
     }
@@ -138,7 +117,7 @@ class FolderApi
      */
     public function folderCreate($parentFolderId, $folderName, string $contentType = self::contentTypes['folderCreate'][0])
     {
-        list($response) = $this->folderCreateWithHttpInfo($parentFolderId, $folderName, $contentType);
+        [$response] = $this->folderCreateWithHttpInfo($parentFolderId, $folderName, $contentType);
         return $response;
     }
 
@@ -165,14 +144,14 @@ class FolderApi
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
+                    sprintf('[%d] %s', $e->getCode(), $e->getMessage()),
                     (int) $e->getCode(),
-                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
-                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                    $e->getResponse() instanceof \Psr\Http\Message\ResponseInterface ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() instanceof \Psr\Http\Message\ResponseInterface ? (string) $e->getResponse()->getBody() : null
                 );
             } catch (ConnectException $e) {
                 throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
+                    sprintf('[%d] %s', $e->getCode(), $e->getMessage()),
                     (int) $e->getCode(),
                     null,
                     null
@@ -194,45 +173,14 @@ class FolderApi
                 );
             }
 
-            switch($statusCode) {
-                case 200:
-                    if ('\OpenAPI\Client\Docbox\Model\FolderCreate' === '\SplFileObject') {
-                        $content = $response->getBody(); //stream goes to serializer
-                    } else {
-                        $content = (string) $response->getBody();
-                        if ('\OpenAPI\Client\Docbox\Model\FolderCreate' !== 'string') {
-                            try {
-                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
-                            } catch (\JsonException $exception) {
-                                throw new ApiException(
-                                    sprintf(
-                                        'Error JSON decoding server response (%s)',
-                                        $request->getUri()
-                                    ),
-                                    $statusCode,
-                                    $response->getHeaders(),
-                                    $content
-                                );
-                            }
-                        }
-                    }
-
-                    return [
-                        ObjectSerializer::deserialize($content, '\OpenAPI\Client\Docbox\Model\FolderCreate', []),
-                        $response->getStatusCode(),
-                        $response->getHeaders()
-                    ];
-            }
-
-            $returnType = '\OpenAPI\Client\Docbox\Model\FolderCreate';
-            if ($returnType === '\SplFileObject') {
-                $content = $response->getBody(); //stream goes to serializer
-            } else {
-                $content = (string) $response->getBody();
-                if ($returnType !== 'string') {
+            if ($statusCode === 200) {
+                if (\OpenAPI\Client\Docbox\Model\FolderCreate::class === '\SplFileObject') {
+                    $content = $response->getBody(); //stream goes to serializer
+                } else {
+                    $content = (string) $response->getBody();
                     try {
                         $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
-                    } catch (\JsonException $exception) {
+                    } catch (\JsonException) {
                         throw new ApiException(
                             sprintf(
                                 'Error JSON decoding server response (%s)',
@@ -244,6 +192,32 @@ class FolderApi
                         );
                     }
                 }
+
+                return [
+                    ObjectSerializer::deserialize($content, \OpenAPI\Client\Docbox\Model\FolderCreate::class, []),
+                    $response->getStatusCode(),
+                    $response->getHeaders()
+                ];
+            }
+
+            $returnType = \OpenAPI\Client\Docbox\Model\FolderCreate::class;
+            if ($returnType === '\SplFileObject') {
+                $content = $response->getBody(); //stream goes to serializer
+            } else {
+                $content = (string) $response->getBody();
+                try {
+                    $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                } catch (\JsonException) {
+                    throw new ApiException(
+                        sprintf(
+                            'Error JSON decoding server response (%s)',
+                            $request->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        $content
+                    );
+                }
             }
 
             return [
@@ -252,18 +226,17 @@ class FolderApi
                 $response->getHeaders()
             ];
 
-        } catch (ApiException $e) {
-            switch ($e->getCode()) {
-                case 200:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\OpenAPI\Client\Docbox\Model\FolderCreate',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    break;
+        } catch (ApiException $apiException) {
+            if ($apiException->getCode() === 200) {
+                $data = ObjectSerializer::deserialize(
+                    $apiException->getResponseBody(),
+                    \OpenAPI\Client\Docbox\Model\FolderCreate::class,
+                    $apiException->getResponseHeaders()
+                );
+                $apiException->setResponseObject($data);
             }
-            throw $e;
+
+            throw $apiException;
         }
     }
 
@@ -277,15 +250,12 @@ class FolderApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['folderCreate'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function folderCreateAsync($parentFolderId, $folderName, string $contentType = self::contentTypes['folderCreate'][0])
+    public function folderCreateAsync($parentFolderId, $folderName, string $contentType = self::contentTypes['folderCreate'][0]): \GuzzleHttp\Promise\PromiseInterface
     {
         return $this->folderCreateAsyncWithHttpInfo($parentFolderId, $folderName, $contentType)
             ->then(
-                function ($response) {
-                    return $response[0];
-                }
+                static fn($response) => $response[0]
             );
     }
 
@@ -299,24 +269,21 @@ class FolderApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['folderCreate'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function folderCreateAsyncWithHttpInfo($parentFolderId, $folderName, string $contentType = self::contentTypes['folderCreate'][0])
+    public function folderCreateAsyncWithHttpInfo($parentFolderId, $folderName, string $contentType = self::contentTypes['folderCreate'][0]): \GuzzleHttp\Promise\PromiseInterface
     {
-        $returnType = '\OpenAPI\Client\Docbox\Model\FolderCreate';
+        $returnType = \OpenAPI\Client\Docbox\Model\FolderCreate::class;
         $request = $this->folderCreateRequest($parentFolderId, $folderName, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                static function ($response) use ($returnType) : array {
                     if ($returnType === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
-                        if ($returnType !== 'string') {
-                            $content = json_decode($content);
-                        }
+                        $content = json_decode($content);
                     }
 
                     return [
@@ -325,7 +292,7 @@ class FolderApi
                         $response->getHeaders()
                     ];
                 },
-                function ($exception) {
+                static function ($exception) : void {
                     $response = $exception->getResponse();
                     $statusCode = $response->getStatusCode();
                     throw new ApiException(
@@ -350,20 +317,19 @@ class FolderApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['folderCreate'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
      */
-    public function folderCreateRequest($parentFolderId, $folderName, string $contentType = self::contentTypes['folderCreate'][0])
+    public function folderCreateRequest($parentFolderId, $folderName, string $contentType = self::contentTypes['folderCreate'][0]): \GuzzleHttp\Psr7\Request
     {
 
         // verify the required parameter 'parentFolderId' is set
-        if ($parentFolderId === null || (is_array($parentFolderId) && count($parentFolderId) === 0)) {
+        if ($parentFolderId === null || (is_array($parentFolderId) && $parentFolderId === [])) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $parentFolderId when calling folderCreate'
             );
         }
 
         // verify the required parameter 'folderName' is set
-        if ($folderName === null || (is_array($folderName) && count($folderName) === 0)) {
+        if ($folderName === null || (is_array($folderName) && $folderName === [])) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $folderName when calling folderCreate'
             );
@@ -376,18 +342,11 @@ class FolderApi
         $headerParams = [];
         $httpBody = '';
         $multipart = false;
-
-
-
+        // form params
+        $formParams['parent-folder-id'] = ObjectSerializer::toFormValue($parentFolderId);
 
         // form params
-        if ($parentFolderId !== null) {
-            $formParams['parent-folder-id'] = ObjectSerializer::toFormValue($parentFolderId);
-        }
-        // form params
-        if ($folderName !== null) {
-            $formParams['folder-name'] = ObjectSerializer::toFormValue($folderName);
-        }
+        $formParams['folder-name'] = ObjectSerializer::toFormValue($folderName);
 
         $headers = $this->headerSelector->selectHeaders(
             ['application/json', ],
@@ -396,28 +355,27 @@ class FolderApi
         );
 
         // for model (json/xml)
-        if (count($formParams) > 0) {
-            if ($multipart) {
-                $multipartContents = [];
-                foreach ($formParams as $formParamName => $formParamValue) {
-                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
-                    foreach ($formParamValueItems as $formParamValueItem) {
-                        $multipartContents[] = [
-                            'name' => $formParamName,
-                            'contents' => $formParamValueItem
-                        ];
-                    }
+        if ($multipart) {
+            $multipartContents = [];
+            foreach ($formParams as $formParamName => $formParamValue) {
+                $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                foreach ($formParamValueItems as $formParamValueItem) {
+                    $multipartContents[] = [
+                        'name' => $formParamName,
+                        'contents' => $formParamValueItem
+                    ];
                 }
-                // for HTTP post (form)
-                $httpBody = new MultipartStream($multipartContents);
-
-            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
-            } else {
-                // for HTTP post (form)
-                $httpBody = ObjectSerializer::buildQuery($formParams);
             }
+
+            // for HTTP post (form)
+            $httpBody = new MultipartStream($multipartContents);
+
+        } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+            # if Content-Type contains "application/json", json_encode the form parameters
+            $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+        } else {
+            // for HTTP post (form)
+            $httpBody = ObjectSerializer::buildQuery($formParams);
         }
 
         // this endpoint requires API key authentication
@@ -425,6 +383,7 @@ class FolderApi
         if ($apiKey !== null) {
             $headers['Cloud-ID'] = $apiKey;
         }
+
         // this endpoint requires API key authentication
         $apiKey = $this->config->getApiKeyWithPrefix('API-Key');
         if ($apiKey !== null) {
@@ -446,7 +405,7 @@ class FolderApi
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'POST',
-            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query !== '' && $query !== '0' ? '?' . $query : ''),
             $headers,
             $httpBody
         );
@@ -458,7 +417,7 @@ class FolderApi
      * @throws \RuntimeException on file opening failure
      * @return array of http client options
      */
-    protected function createHttpClientOption()
+    protected function createHttpClientOption(): array
     {
         $options = [];
         if ($this->config->getDebug()) {

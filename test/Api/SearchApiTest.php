@@ -54,14 +54,14 @@ class SearchApiTest extends TestCase
     /**
      * Setup before running each test case
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
     }
 
     /**
      * Clean up after running each test case
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
     }
 
@@ -78,7 +78,7 @@ class SearchApiTest extends TestCase
      * .
      *
      */
-    public function testSearchPOST()
+    public function testSearchPOST(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');

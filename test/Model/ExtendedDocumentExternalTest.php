@@ -53,14 +53,14 @@ class ExtendedDocumentExternalTest extends TestCase
     /**
      * Setup before running each test case
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
     }
 
     /**
      * Clean up after running each test case
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
     }
 
@@ -74,7 +74,7 @@ class ExtendedDocumentExternalTest extends TestCase
     /**
      * Test "ExtendedDocumentExternal"
      */
-    public function testExtendedDocumentExternal()
+    public function testExtendedDocumentExternal(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -83,7 +83,7 @@ class ExtendedDocumentExternalTest extends TestCase
     /**
      * Test attribute "external_id"
      */
-    public function testPropertyExternalId()
+    public function testPropertyExternalId(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -92,7 +92,7 @@ class ExtendedDocumentExternalTest extends TestCase
     /**
      * Test attribute "metadata"
      */
-    public function testPropertyMetadata()
+    public function testPropertyMetadata(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');

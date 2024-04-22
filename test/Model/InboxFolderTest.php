@@ -53,14 +53,14 @@ class InboxFolderTest extends TestCase
     /**
      * Setup before running each test case
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
     }
 
     /**
      * Clean up after running each test case
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
     }
 
@@ -74,7 +74,7 @@ class InboxFolderTest extends TestCase
     /**
      * Test "InboxFolder"
      */
-    public function testInboxFolder()
+    public function testInboxFolder(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -83,7 +83,7 @@ class InboxFolderTest extends TestCase
     /**
      * Test attribute "user_id"
      */
-    public function testPropertyUserId()
+    public function testPropertyUserId(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -92,7 +92,7 @@ class InboxFolderTest extends TestCase
     /**
      * Test attribute "folder"
      */
-    public function testPropertyFolder()
+    public function testPropertyFolder(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');

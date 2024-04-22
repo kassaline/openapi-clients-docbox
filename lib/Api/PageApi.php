@@ -50,25 +50,11 @@ use OpenAPI\Client\Docbox\ObjectSerializer;
  */
 class PageApi
 {
-    /**
-     * @var ClientInterface
-     */
-    protected $client;
+    protected \GuzzleHttp\ClientInterface $client;
 
-    /**
-     * @var Configuration
-     */
-    protected $config;
+    protected \OpenAPI\Client\Docbox\Configuration $config;
 
-    /**
-     * @var HeaderSelector
-     */
-    protected $headerSelector;
-
-    /**
-     * @var int Host index
-     */
-    protected $hostIndex;
+    protected \OpenAPI\Client\Docbox\HeaderSelector $headerSelector;
 
     /** @var string[] $contentTypes **/
     public const contentTypes = [
@@ -81,21 +67,17 @@ class PageApi
     ];
 
     /**
-     * @param ClientInterface $client
-     * @param Configuration   $config
-     * @param HeaderSelector  $selector
      * @param int             $hostIndex (Optional) host index to select the list of hosts if defined in the OpenAPI spec
      */
     public function __construct(
         ClientInterface $client = null,
-        Configuration $config = null,
-        HeaderSelector $selector = null,
-        $hostIndex = 0
+        Configuration $configuration = null,
+        HeaderSelector $headerSelector = null,
+        protected $hostIndex = 0
     ) {
-        $this->client = $client ?: new Client();
-        $this->config = $config ?: new Configuration();
-        $this->headerSelector = $selector ?: new HeaderSelector();
-        $this->hostIndex = $hostIndex;
+        $this->client = $client instanceof \GuzzleHttp\ClientInterface ? $client : new Client();
+        $this->config = $configuration instanceof \OpenAPI\Client\Docbox\Configuration ? $configuration : new Configuration();
+        $this->headerSelector = $headerSelector instanceof \OpenAPI\Client\Docbox\HeaderSelector ? $headerSelector : new HeaderSelector();
     }
 
     /**
@@ -118,10 +100,7 @@ class PageApi
         return $this->hostIndex;
     }
 
-    /**
-     * @return Configuration
-     */
-    public function getConfig()
+    public function getConfig(): \OpenAPI\Client\Docbox\Configuration
     {
         return $this->config;
     }
@@ -140,7 +119,7 @@ class PageApi
      */
     public function pageOcrResult($id, string $contentType = self::contentTypes['pageOcrResult'][0])
     {
-        list($response) = $this->pageOcrResultWithHttpInfo($id, $contentType);
+        [$response] = $this->pageOcrResultWithHttpInfo($id, $contentType);
         return $response;
     }
 
@@ -166,14 +145,14 @@ class PageApi
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
+                    sprintf('[%d] %s', $e->getCode(), $e->getMessage()),
                     (int) $e->getCode(),
-                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
-                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                    $e->getResponse() instanceof \Psr\Http\Message\ResponseInterface ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() instanceof \Psr\Http\Message\ResponseInterface ? (string) $e->getResponse()->getBody() : null
                 );
             } catch (ConnectException $e) {
                 throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
+                    sprintf('[%d] %s', $e->getCode(), $e->getMessage()),
                     (int) $e->getCode(),
                     null,
                     null
@@ -195,34 +174,33 @@ class PageApi
                 );
             }
 
-            switch($statusCode) {
-                case 200:
-                    if ('string' === '\SplFileObject') {
-                        $content = $response->getBody(); //stream goes to serializer
-                    } else {
-                        $content = (string) $response->getBody();
-                        if ('string' !== 'string') {
-                            try {
-                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
-                            } catch (\JsonException $exception) {
-                                throw new ApiException(
-                                    sprintf(
-                                        'Error JSON decoding server response (%s)',
-                                        $request->getUri()
-                                    ),
-                                    $statusCode,
-                                    $response->getHeaders(),
-                                    $content
-                                );
-                            }
+            if ($statusCode === 200) {
+                if ('string' === '\SplFileObject') {
+                    $content = $response->getBody(); //stream goes to serializer
+                } else {
+                    $content = (string) $response->getBody();
+                    if ('string' !== 'string') {
+                        try {
+                            $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                        } catch (\JsonException) {
+                            throw new ApiException(
+                                sprintf(
+                                    'Error JSON decoding server response (%s)',
+                                    $request->getUri()
+                                ),
+                                $statusCode,
+                                $response->getHeaders(),
+                                $content
+                            );
                         }
                     }
+                }
 
-                    return [
-                        ObjectSerializer::deserialize($content, 'string', []),
-                        $response->getStatusCode(),
-                        $response->getHeaders()
-                    ];
+                return [
+                    ObjectSerializer::deserialize($content, 'string', []),
+                    $response->getStatusCode(),
+                    $response->getHeaders()
+                ];
             }
 
             $returnType = 'string';
@@ -233,7 +211,7 @@ class PageApi
                 if ($returnType !== 'string') {
                     try {
                         $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
-                    } catch (\JsonException $exception) {
+                    } catch (\JsonException) {
                         throw new ApiException(
                             sprintf(
                                 'Error JSON decoding server response (%s)',
@@ -253,18 +231,17 @@ class PageApi
                 $response->getHeaders()
             ];
 
-        } catch (ApiException $e) {
-            switch ($e->getCode()) {
-                case 200:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        'string',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    break;
+        } catch (ApiException $apiException) {
+            if ($apiException->getCode() === 200) {
+                $data = ObjectSerializer::deserialize(
+                    $apiException->getResponseBody(),
+                    'string',
+                    $apiException->getResponseHeaders()
+                );
+                $apiException->setResponseObject($data);
             }
-            throw $e;
+
+            throw $apiException;
         }
     }
 
@@ -277,15 +254,12 @@ class PageApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pageOcrResult'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function pageOcrResultAsync($id, string $contentType = self::contentTypes['pageOcrResult'][0])
+    public function pageOcrResultAsync($id, string $contentType = self::contentTypes['pageOcrResult'][0]): \GuzzleHttp\Promise\PromiseInterface
     {
         return $this->pageOcrResultAsyncWithHttpInfo($id, $contentType)
             ->then(
-                function ($response) {
-                    return $response[0];
-                }
+                static fn($response) => $response[0]
             );
     }
 
@@ -298,9 +272,8 @@ class PageApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pageOcrResult'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function pageOcrResultAsyncWithHttpInfo($id, string $contentType = self::contentTypes['pageOcrResult'][0])
+    public function pageOcrResultAsyncWithHttpInfo($id, string $contentType = self::contentTypes['pageOcrResult'][0]): \GuzzleHttp\Promise\PromiseInterface
     {
         $returnType = 'string';
         $request = $this->pageOcrResultRequest($id, $contentType);
@@ -308,7 +281,7 @@ class PageApi
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                static function ($response) use ($returnType) : array {
                     if ($returnType === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
@@ -324,7 +297,7 @@ class PageApi
                         $response->getHeaders()
                     ];
                 },
-                function ($exception) {
+                static function ($exception) : void {
                     $response = $exception->getResponse();
                     $statusCode = $response->getStatusCode();
                     throw new ApiException(
@@ -348,13 +321,12 @@ class PageApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pageOcrResult'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
      */
-    public function pageOcrResultRequest($id, string $contentType = self::contentTypes['pageOcrResult'][0])
+    public function pageOcrResultRequest($id, string $contentType = self::contentTypes['pageOcrResult'][0]): \GuzzleHttp\Psr7\Request
     {
 
         // verify the required parameter 'id' is set
-        if ($id === null || (is_array($id) && count($id) === 0)) {
+        if ($id === null || (is_array($id) && $id === [])) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $id when calling pageOcrResult'
             );
@@ -371,13 +343,11 @@ class PageApi
 
 
         // path params
-        if ($id !== null) {
-            $resourcePath = str_replace(
-                '{' . 'id' . '}',
-                ObjectSerializer::toPathValue($id),
-                $resourcePath
-            );
-        }
+        $resourcePath = str_replace(
+            '{id}',
+            ObjectSerializer::toPathValue($id),
+            $resourcePath
+        );
 
 
         $headers = $this->headerSelector->selectHeaders(
@@ -387,7 +357,7 @@ class PageApi
         );
 
         // for model (json/xml)
-        if (count($formParams) > 0) {
+        if ($formParams !== []) {
             if ($multipart) {
                 $multipartContents = [];
                 foreach ($formParams as $formParamName => $formParamValue) {
@@ -399,6 +369,7 @@ class PageApi
                         ];
                     }
                 }
+
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
@@ -416,6 +387,7 @@ class PageApi
         if ($apiKey !== null) {
             $headers['Cloud-ID'] = $apiKey;
         }
+
         // this endpoint requires API key authentication
         $apiKey = $this->config->getApiKeyWithPrefix('API-Key');
         if ($apiKey !== null) {
@@ -437,7 +409,7 @@ class PageApi
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'GET',
-            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query !== '' && $query !== '0' ? '?' . $query : ''),
             $headers,
             $httpBody
         );
@@ -459,7 +431,7 @@ class PageApi
      */
     public function pagePreview($id, $bboxWidth = null, $bboxHeight = null, string $contentType = self::contentTypes['pagePreview'][0])
     {
-        list($response) = $this->pagePreviewWithHttpInfo($id, $bboxWidth, $bboxHeight, $contentType);
+        [$response] = $this->pagePreviewWithHttpInfo($id, $bboxWidth, $bboxHeight, $contentType);
         return $response;
     }
 
@@ -487,14 +459,14 @@ class PageApi
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
+                    sprintf('[%d] %s', $e->getCode(), $e->getMessage()),
                     (int) $e->getCode(),
-                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
-                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                    $e->getResponse() instanceof \Psr\Http\Message\ResponseInterface ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() instanceof \Psr\Http\Message\ResponseInterface ? (string) $e->getResponse()->getBody() : null
                 );
             } catch (ConnectException $e) {
                 throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
+                    sprintf('[%d] %s', $e->getCode(), $e->getMessage()),
                     (int) $e->getCode(),
                     null,
                     null
@@ -516,45 +488,14 @@ class PageApi
                 );
             }
 
-            switch($statusCode) {
-                case 200:
-                    if ('\SplFileObject' === '\SplFileObject') {
-                        $content = $response->getBody(); //stream goes to serializer
-                    } else {
-                        $content = (string) $response->getBody();
-                        if ('\SplFileObject' !== 'string') {
-                            try {
-                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
-                            } catch (\JsonException $exception) {
-                                throw new ApiException(
-                                    sprintf(
-                                        'Error JSON decoding server response (%s)',
-                                        $request->getUri()
-                                    ),
-                                    $statusCode,
-                                    $response->getHeaders(),
-                                    $content
-                                );
-                            }
-                        }
-                    }
-
-                    return [
-                        ObjectSerializer::deserialize($content, '\SplFileObject', []),
-                        $response->getStatusCode(),
-                        $response->getHeaders()
-                    ];
-            }
-
-            $returnType = '\SplFileObject';
-            if ($returnType === '\SplFileObject') {
-                $content = $response->getBody(); //stream goes to serializer
-            } else {
-                $content = (string) $response->getBody();
-                if ($returnType !== 'string') {
+            if ($statusCode === 200) {
+                if ('\SplFileObject' === '\SplFileObject') {
+                    $content = $response->getBody(); //stream goes to serializer
+                } else {
+                    $content = (string) $response->getBody();
                     try {
                         $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
-                    } catch (\JsonException $exception) {
+                    } catch (\JsonException) {
                         throw new ApiException(
                             sprintf(
                                 'Error JSON decoding server response (%s)',
@@ -566,6 +507,32 @@ class PageApi
                         );
                     }
                 }
+
+                return [
+                    ObjectSerializer::deserialize($content, '\SplFileObject', []),
+                    $response->getStatusCode(),
+                    $response->getHeaders()
+                ];
+            }
+
+            $returnType = '\SplFileObject';
+            if ($returnType === '\SplFileObject') {
+                $content = $response->getBody(); //stream goes to serializer
+            } else {
+                $content = (string) $response->getBody();
+                try {
+                    $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                } catch (\JsonException) {
+                    throw new ApiException(
+                        sprintf(
+                            'Error JSON decoding server response (%s)',
+                            $request->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        $content
+                    );
+                }
             }
 
             return [
@@ -574,18 +541,17 @@ class PageApi
                 $response->getHeaders()
             ];
 
-        } catch (ApiException $e) {
-            switch ($e->getCode()) {
-                case 200:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\SplFileObject',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    break;
+        } catch (ApiException $apiException) {
+            if ($apiException->getCode() === 200) {
+                $data = ObjectSerializer::deserialize(
+                    $apiException->getResponseBody(),
+                    '\SplFileObject',
+                    $apiException->getResponseHeaders()
+                );
+                $apiException->setResponseObject($data);
             }
-            throw $e;
+
+            throw $apiException;
         }
     }
 
@@ -600,15 +566,12 @@ class PageApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pagePreview'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function pagePreviewAsync($id, $bboxWidth = null, $bboxHeight = null, string $contentType = self::contentTypes['pagePreview'][0])
+    public function pagePreviewAsync($id, $bboxWidth = null, $bboxHeight = null, string $contentType = self::contentTypes['pagePreview'][0]): \GuzzleHttp\Promise\PromiseInterface
     {
         return $this->pagePreviewAsyncWithHttpInfo($id, $bboxWidth, $bboxHeight, $contentType)
             ->then(
-                function ($response) {
-                    return $response[0];
-                }
+                static fn($response) => $response[0]
             );
     }
 
@@ -623,9 +586,8 @@ class PageApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pagePreview'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function pagePreviewAsyncWithHttpInfo($id, $bboxWidth = null, $bboxHeight = null, string $contentType = self::contentTypes['pagePreview'][0])
+    public function pagePreviewAsyncWithHttpInfo($id, $bboxWidth = null, $bboxHeight = null, string $contentType = self::contentTypes['pagePreview'][0]): \GuzzleHttp\Promise\PromiseInterface
     {
         $returnType = '\SplFileObject';
         $request = $this->pagePreviewRequest($id, $bboxWidth, $bboxHeight, $contentType);
@@ -633,14 +595,12 @@ class PageApi
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                static function ($response) use ($returnType) : array {
                     if ($returnType === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
-                        if ($returnType !== 'string') {
-                            $content = json_decode($content);
-                        }
+                        $content = json_decode($content);
                     }
 
                     return [
@@ -649,7 +609,7 @@ class PageApi
                         $response->getHeaders()
                     ];
                 },
-                function ($exception) {
+                static function ($exception) : void {
                     $response = $exception->getResponse();
                     $statusCode = $response->getStatusCode();
                     throw new ApiException(
@@ -675,13 +635,12 @@ class PageApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pagePreview'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
      */
-    public function pagePreviewRequest($id, $bboxWidth = null, $bboxHeight = null, string $contentType = self::contentTypes['pagePreview'][0])
+    public function pagePreviewRequest($id, $bboxWidth = null, $bboxHeight = null, string $contentType = self::contentTypes['pagePreview'][0]): \GuzzleHttp\Psr7\Request
     {
 
         // verify the required parameter 'id' is set
-        if ($id === null || (is_array($id) && count($id) === 0)) {
+        if ($id === null || (is_array($id) && $id === [])) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $id when calling pagePreview'
             );
@@ -718,13 +677,11 @@ class PageApi
 
 
         // path params
-        if ($id !== null) {
-            $resourcePath = str_replace(
-                '{' . 'id' . '}',
-                ObjectSerializer::toPathValue($id),
-                $resourcePath
-            );
-        }
+        $resourcePath = str_replace(
+            '{id}',
+            ObjectSerializer::toPathValue($id),
+            $resourcePath
+        );
 
 
         $headers = $this->headerSelector->selectHeaders(
@@ -734,7 +691,7 @@ class PageApi
         );
 
         // for model (json/xml)
-        if (count($formParams) > 0) {
+        if ($formParams !== []) {
             if ($multipart) {
                 $multipartContents = [];
                 foreach ($formParams as $formParamName => $formParamValue) {
@@ -746,6 +703,7 @@ class PageApi
                         ];
                     }
                 }
+
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
@@ -763,6 +721,7 @@ class PageApi
         if ($apiKey !== null) {
             $headers['Cloud-ID'] = $apiKey;
         }
+
         // this endpoint requires API key authentication
         $apiKey = $this->config->getApiKeyWithPrefix('API-Key');
         if ($apiKey !== null) {
@@ -784,7 +743,7 @@ class PageApi
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'GET',
-            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query !== '' && $query !== '0' ? '?' . $query : ''),
             $headers,
             $httpBody
         );
@@ -796,7 +755,7 @@ class PageApi
      * @throws \RuntimeException on file opening failure
      * @return array of http client options
      */
-    protected function createHttpClientOption()
+    protected function createHttpClientOption(): array
     {
         $options = [];
         if ($this->config->getDebug()) {

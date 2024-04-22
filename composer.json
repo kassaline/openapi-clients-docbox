@@ -19,7 +19,7 @@
         }
     ],
     "require": {
-        "php": "^7.4 || ^8.0",
+        "php": "^8.2 || ^8.3",
         "ext-curl": "*",
         "ext-json": "*",
         "ext-mbstring": "*",
@@ -28,7 +28,9 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^8.0 || ^9.0",
-        "friendsofphp/php-cs-fixer": "^3.5"
+        "friendsofphp/php-cs-fixer": "^3.5",
+        "rector/rector": "^1.0",
+        "driftingly/rector-laravel": "^1.1"
     },
     "autoload": {
         "psr-4": { "OpenAPI\\Client\\Docbox\\" : "lib/" }

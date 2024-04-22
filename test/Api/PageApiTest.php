@@ -54,14 +54,14 @@ class PageApiTest extends TestCase
     /**
      * Setup before running each test case
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
     }
 
     /**
      * Clean up after running each test case
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
     }
 
@@ -78,7 +78,7 @@ class PageApiTest extends TestCase
      * Returns the OCR-result of a page.
      *
      */
-    public function testPageOcrResult()
+    public function testPageOcrResult(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -90,7 +90,7 @@ class PageApiTest extends TestCase
      * Page preview.
      *
      */
-    public function testPagePreview()
+    public function testPagePreview(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');

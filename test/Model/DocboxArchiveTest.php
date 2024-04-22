@@ -53,14 +53,14 @@ class DocboxArchiveTest extends TestCase
     /**
      * Setup before running each test case
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
     }
 
     /**
      * Clean up after running each test case
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
     }
 
@@ -74,7 +74,7 @@ class DocboxArchiveTest extends TestCase
     /**
      * Test "DocboxArchive"
      */
-    public function testDocboxArchive()
+    public function testDocboxArchive(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -83,7 +83,7 @@ class DocboxArchiveTest extends TestCase
     /**
      * Test attribute "free_archive_structure"
      */
-    public function testPropertyFreeArchiveStructure()
+    public function testPropertyFreeArchiveStructure(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -92,7 +92,7 @@ class DocboxArchiveTest extends TestCase
     /**
      * Test attribute "folders"
      */
-    public function testPropertyFolders()
+    public function testPropertyFolders(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');

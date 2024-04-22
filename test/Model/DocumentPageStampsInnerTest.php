@@ -53,14 +53,14 @@ class DocumentPageStampsInnerTest extends TestCase
     /**
      * Setup before running each test case
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
     }
 
     /**
      * Clean up after running each test case
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
     }
 
@@ -74,7 +74,7 @@ class DocumentPageStampsInnerTest extends TestCase
     /**
      * Test "DocumentPageStampsInner"
      */
-    public function testDocumentPageStampsInner()
+    public function testDocumentPageStampsInner(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -83,7 +83,7 @@ class DocumentPageStampsInnerTest extends TestCase
     /**
      * Test attribute "title"
      */
-    public function testPropertyTitle()
+    public function testPropertyTitle(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -92,7 +92,7 @@ class DocumentPageStampsInnerTest extends TestCase
     /**
      * Test attribute "text"
      */
-    public function testPropertyText()
+    public function testPropertyText(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -101,7 +101,7 @@ class DocumentPageStampsInnerTest extends TestCase
     /**
      * Test attribute "date"
      */
-    public function testPropertyDate()
+    public function testPropertyDate(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -110,7 +110,7 @@ class DocumentPageStampsInnerTest extends TestCase
     /**
      * Test attribute "creator_id"
      */
-    public function testPropertyCreatorId()
+    public function testPropertyCreatorId(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -119,7 +119,7 @@ class DocumentPageStampsInnerTest extends TestCase
     /**
      * Test attribute "creator_name"
      */
-    public function testPropertyCreatorName()
+    public function testPropertyCreatorName(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');

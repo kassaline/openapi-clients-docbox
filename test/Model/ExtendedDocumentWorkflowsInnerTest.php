@@ -53,14 +53,14 @@ class ExtendedDocumentWorkflowsInnerTest extends TestCase
     /**
      * Setup before running each test case
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
     }
 
     /**
      * Clean up after running each test case
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
     }
 
@@ -74,7 +74,7 @@ class ExtendedDocumentWorkflowsInnerTest extends TestCase
     /**
      * Test "ExtendedDocumentWorkflowsInner"
      */
-    public function testExtendedDocumentWorkflowsInner()
+    public function testExtendedDocumentWorkflowsInner(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -83,7 +83,7 @@ class ExtendedDocumentWorkflowsInnerTest extends TestCase
     /**
      * Test attribute "name"
      */
-    public function testPropertyName()
+    public function testPropertyName(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -92,7 +92,7 @@ class ExtendedDocumentWorkflowsInnerTest extends TestCase
     /**
      * Test attribute "start_date"
      */
-    public function testPropertyStartDate()
+    public function testPropertyStartDate(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -101,7 +101,7 @@ class ExtendedDocumentWorkflowsInnerTest extends TestCase
     /**
      * Test attribute "finish_date"
      */
-    public function testPropertyFinishDate()
+    public function testPropertyFinishDate(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -110,7 +110,7 @@ class ExtendedDocumentWorkflowsInnerTest extends TestCase
     /**
      * Test attribute "current_state"
      */
-    public function testPropertyCurrentState()
+    public function testPropertyCurrentState(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');

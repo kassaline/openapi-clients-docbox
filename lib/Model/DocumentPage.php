@@ -41,7 +41,7 @@ use \OpenAPI\Client\Docbox\ObjectSerializer;
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
  */
-class DocumentPage implements ModelInterface, ArrayAccess, \JsonSerializable
+class DocumentPage implements ModelInterface, ArrayAccess, \JsonSerializable, \Stringable
 {
     public const DISCRIMINATOR = null;
 
@@ -119,8 +119,6 @@ class DocumentPage implements ModelInterface, ArrayAccess, \JsonSerializable
 
     /**
      * Array of nullable properties
-     *
-     * @return array
      */
     protected static function openAPINullables(): array
     {
@@ -128,30 +126,7 @@ class DocumentPage implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
-     * Array of nullable field names deliberately set to null
-     *
-     * @return boolean[]
-     */
-    private function getOpenAPINullablesSetToNull(): array
-    {
-        return $this->openAPINullablesSetToNull;
-    }
-
-    /**
-     * Setter - Array of nullable field names deliberately set to null
-     *
-     * @param boolean[] $openAPINullablesSetToNull
-     */
-    private function setOpenAPINullablesSetToNull(array $openAPINullablesSetToNull): void
-    {
-        $this->openAPINullablesSetToNull = $openAPINullablesSetToNull;
-    }
-
-    /**
      * Checks if a property is nullable
-     *
-     * @param string $property
-     * @return bool
      */
     public static function isNullable(string $property): bool
     {
@@ -160,13 +135,10 @@ class DocumentPage implements ModelInterface, ArrayAccess, \JsonSerializable
 
     /**
      * Checks if a nullable property is set to null.
-     *
-     * @param string $property
-     * @return bool
      */
     public function isNullableSetToNull(string $property): bool
     {
-        return in_array($property, $this->getOpenAPINullablesSetToNull(), true);
+        return in_array($property, $this->openAPINullablesSetToNull, true);
     }
 
     /**
@@ -270,15 +242,11 @@ class DocumentPage implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
-    * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
-    * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
-    * $this->openAPINullablesSetToNull array
-    *
-    * @param string $variableName
-    * @param array  $fields
-    * @param mixed  $defaultValue
-    */
-    private function setIfExists(string $variableName, array $fields, $defaultValue): void
+     * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
+     * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
+     * $this->openAPINullablesSetToNull array
+     */
+    private function setIfExists(string $variableName, array $fields, mixed $defaultValue): void
     {
         if (self::isNullable($variableName) && array_key_exists($variableName, $fields) && is_null($fields[$variableName])) {
             $this->openAPINullablesSetToNull[] = $variableName;
@@ -292,19 +260,22 @@ class DocumentPage implements ModelInterface, ArrayAccess, \JsonSerializable
      *
      * @return array invalid properties with reasons
      */
-    public function listInvalidProperties()
+    public function listInvalidProperties(): array
     {
         $invalidProperties = [];
 
         if ($this->container['id'] === null) {
             $invalidProperties[] = "'id' can't be null";
         }
+
         if ($this->container['notes'] === null) {
             $invalidProperties[] = "'notes' can't be null";
         }
+
         if ($this->container['stamps'] === null) {
             $invalidProperties[] = "'stamps' can't be null";
         }
+
         return $invalidProperties;
     }
 
@@ -314,9 +285,9 @@ class DocumentPage implements ModelInterface, ArrayAccess, \JsonSerializable
      *
      * @return bool True if all properties are valid
      */
-    public function valid()
+    public function valid(): bool
     {
-        return count($this->listInvalidProperties()) === 0;
+        return $this->listInvalidProperties() === [];
     }
 
 
@@ -334,14 +305,13 @@ class DocumentPage implements ModelInterface, ArrayAccess, \JsonSerializable
      * Sets id
      *
      * @param int $id id
-     *
-     * @return self
      */
-    public function setId($id)
+    public function setId($id): self
     {
         if (is_null($id)) {
             throw new \InvalidArgumentException('non-nullable id cannot be null');
         }
+
         $this->container['id'] = $id;
 
         return $this;
@@ -361,14 +331,13 @@ class DocumentPage implements ModelInterface, ArrayAccess, \JsonSerializable
      * Sets hit
      *
      * @param bool|null $hit hit
-     *
-     * @return self
      */
-    public function setHit($hit)
+    public function setHit($hit): self
     {
         if (is_null($hit)) {
             throw new \InvalidArgumentException('non-nullable hit cannot be null');
         }
+
         $this->container['hit'] = $hit;
 
         return $this;
@@ -388,14 +357,13 @@ class DocumentPage implements ModelInterface, ArrayAccess, \JsonSerializable
      * Sets notes
      *
      * @param \OpenAPI\Client\Docbox\Model\DocumentPageNotesInner[] $notes notes
-     *
-     * @return self
      */
-    public function setNotes($notes)
+    public function setNotes($notes): self
     {
         if (is_null($notes)) {
             throw new \InvalidArgumentException('non-nullable notes cannot be null');
         }
+
         $this->container['notes'] = $notes;
 
         return $this;
@@ -415,24 +383,22 @@ class DocumentPage implements ModelInterface, ArrayAccess, \JsonSerializable
      * Sets stamps
      *
      * @param \OpenAPI\Client\Docbox\Model\DocumentPageStampsInner[] $stamps stamps
-     *
-     * @return self
      */
-    public function setStamps($stamps)
+    public function setStamps($stamps): self
     {
         if (is_null($stamps)) {
             throw new \InvalidArgumentException('non-nullable stamps cannot be null');
         }
+
         $this->container['stamps'] = $stamps;
 
         return $this;
     }
+
     /**
      * Returns true if offset exists. False otherwise.
      *
      * @param integer $offset Offset
-     *
-     * @return boolean
      */
     public function offsetExists($offset): bool
     {
@@ -457,10 +423,8 @@ class DocumentPage implements ModelInterface, ArrayAccess, \JsonSerializable
      *
      * @param int|null $offset Offset
      * @param mixed    $value  Value to be set
-     *
-     * @return void
      */
-    public function offsetSet($offset, $value): void
+    public function offsetSet($offset, mixed $value): void
     {
         if (is_null($offset)) {
             $this->container[] = $value;
@@ -473,8 +437,6 @@ class DocumentPage implements ModelInterface, ArrayAccess, \JsonSerializable
      * Unsets offset.
      *
      * @param integer $offset Offset
-     *
-     * @return void
      */
     public function offsetUnset($offset): void
     {
@@ -496,12 +458,10 @@ class DocumentPage implements ModelInterface, ArrayAccess, \JsonSerializable
 
     /**
      * Gets the string presentation of the object
-     *
-     * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
-        return json_encode(
+        return (string) json_encode(
             ObjectSerializer::sanitizeForSerialization($this),
             JSON_PRETTY_PRINT
         );

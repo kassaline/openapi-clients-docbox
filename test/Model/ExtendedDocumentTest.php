@@ -53,14 +53,14 @@ class ExtendedDocumentTest extends TestCase
     /**
      * Setup before running each test case
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
     }
 
     /**
      * Clean up after running each test case
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
     }
 
@@ -74,7 +74,7 @@ class ExtendedDocumentTest extends TestCase
     /**
      * Test "ExtendedDocument"
      */
-    public function testExtendedDocument()
+    public function testExtendedDocument(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -83,7 +83,7 @@ class ExtendedDocumentTest extends TestCase
     /**
      * Test attribute "id"
      */
-    public function testPropertyId()
+    public function testPropertyId(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -92,7 +92,7 @@ class ExtendedDocumentTest extends TestCase
     /**
      * Test attribute "name"
      */
-    public function testPropertyName()
+    public function testPropertyName(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -101,7 +101,7 @@ class ExtendedDocumentTest extends TestCase
     /**
      * Test attribute "num_pages"
      */
-    public function testPropertyNumPages()
+    public function testPropertyNumPages(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -110,7 +110,7 @@ class ExtendedDocumentTest extends TestCase
     /**
      * Test attribute "mandator"
      */
-    public function testPropertyMandator()
+    public function testPropertyMandator(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -119,7 +119,7 @@ class ExtendedDocumentTest extends TestCase
     /**
      * Test attribute "folder_id"
      */
-    public function testPropertyFolderId()
+    public function testPropertyFolderId(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -128,7 +128,7 @@ class ExtendedDocumentTest extends TestCase
     /**
      * Test attribute "folder_path"
      */
-    public function testPropertyFolderPath()
+    public function testPropertyFolderPath(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -137,7 +137,7 @@ class ExtendedDocumentTest extends TestCase
     /**
      * Test attribute "creation_date"
      */
-    public function testPropertyCreationDate()
+    public function testPropertyCreationDate(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -146,7 +146,7 @@ class ExtendedDocumentTest extends TestCase
     /**
      * Test attribute "creator_id"
      */
-    public function testPropertyCreatorId()
+    public function testPropertyCreatorId(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -155,7 +155,7 @@ class ExtendedDocumentTest extends TestCase
     /**
      * Test attribute "creator_name"
      */
-    public function testPropertyCreatorName()
+    public function testPropertyCreatorName(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -164,7 +164,7 @@ class ExtendedDocumentTest extends TestCase
     /**
      * Test attribute "keywords"
      */
-    public function testPropertyKeywords()
+    public function testPropertyKeywords(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -173,7 +173,7 @@ class ExtendedDocumentTest extends TestCase
     /**
      * Test attribute "classification"
      */
-    public function testPropertyClassification()
+    public function testPropertyClassification(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -182,7 +182,7 @@ class ExtendedDocumentTest extends TestCase
     /**
      * Test attribute "external"
      */
-    public function testPropertyExternal()
+    public function testPropertyExternal(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -191,7 +191,7 @@ class ExtendedDocumentTest extends TestCase
     /**
      * Test attribute "workflows"
      */
-    public function testPropertyWorkflows()
+    public function testPropertyWorkflows(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -200,7 +200,7 @@ class ExtendedDocumentTest extends TestCase
     /**
      * Test attribute "pages"
      */
-    public function testPropertyPages()
+    public function testPropertyPages(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');

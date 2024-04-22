@@ -53,14 +53,14 @@ class DocumentTest extends TestCase
     /**
      * Setup before running each test case
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
     }
 
     /**
      * Clean up after running each test case
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
     }
 
@@ -74,7 +74,7 @@ class DocumentTest extends TestCase
     /**
      * Test "Document"
      */
-    public function testDocument()
+    public function testDocument(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -83,7 +83,7 @@ class DocumentTest extends TestCase
     /**
      * Test attribute "id"
      */
-    public function testPropertyId()
+    public function testPropertyId(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -92,7 +92,7 @@ class DocumentTest extends TestCase
     /**
      * Test attribute "name"
      */
-    public function testPropertyName()
+    public function testPropertyName(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -101,7 +101,7 @@ class DocumentTest extends TestCase
     /**
      * Test attribute "num_pages"
      */
-    public function testPropertyNumPages()
+    public function testPropertyNumPages(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -110,7 +110,7 @@ class DocumentTest extends TestCase
     /**
      * Test attribute "creation_date"
      */
-    public function testPropertyCreationDate()
+    public function testPropertyCreationDate(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -119,7 +119,7 @@ class DocumentTest extends TestCase
     /**
      * Test attribute "archiving_date"
      */
-    public function testPropertyArchivingDate()
+    public function testPropertyArchivingDate(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -128,7 +128,7 @@ class DocumentTest extends TestCase
     /**
      * Test attribute "archiving_user_id"
      */
-    public function testPropertyArchivingUserId()
+    public function testPropertyArchivingUserId(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -137,7 +137,7 @@ class DocumentTest extends TestCase
     /**
      * Test attribute "folder_id"
      */
-    public function testPropertyFolderId()
+    public function testPropertyFolderId(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -146,7 +146,7 @@ class DocumentTest extends TestCase
     /**
      * Test attribute "external_metadata"
      */
-    public function testPropertyExternalMetadata()
+    public function testPropertyExternalMetadata(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');

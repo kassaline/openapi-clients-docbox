@@ -1,0 +1,1946 @@
+{
+  "openapi" : "3.0.1",
+  "info" : {
+    "contact" : {
+      "email" : "support@docbox.eu",
+      "name" : "DOCBOX",
+      "url" : "https://www.docbox.eu/service-kontakt/kontakt.html"
+    },
+    "description" : "The DOCBOX® REST API makes it possible to integrate the DOCBOX® into third-party programs such as ERP or CRM applications. The third-party programs can access certain DOCBOX® functions, for example to archive documents in the DOCBOX® or to search for documents in it.\n\nThe api is available under https://{docbox-host}:{api-port}/api/v2. The default port is 8081 and should not be mistaken with the port of the webapp.\n\nTo authenticate to the API you must pass the API-Key header. Api keys can be configured by administrators in the modules->API section. If you are using the cloud version of DOCBOX® you must also pass the Cloud-ID header with your Cloudid.",
+    "license" : {
+      "name" : "GNU Affero General Public License v3.0",
+      "url" : "https://www.gnu.org/licenses/agpl-3.0-standalone.html"
+    },
+    "termsOfService" : "https://www.docbox.eu/service-kontakt/impressum.html",
+    "title" : "DOCBOX® API",
+    "version" : "7.6.0"
+  },
+  "servers" : [ {
+    "url" : "https://{docbox-host}:{api-port}/api/v2",
+    "variables" : {
+      "docbox-host" : {
+        "default" : "localhost"
+      },
+      "api-port" : {
+        "default" : "8081",
+        "description" : "Port of the API. Can be configured in the Starter and must be different thant the port of the webapp."
+      }
+    }
+  } ],
+  "security" : [ {
+    "apiKeyAuth" : [ ],
+    "cloudId" : [ ]
+  }, {
+    "apiKeyAuth" : [ ]
+  } ],
+  "tags" : [ {
+    "name" : "archive"
+  }, {
+    "name" : "document"
+  }, {
+    "name" : "workflow"
+  }, {
+    "name" : "page"
+  }, {
+    "name" : "search"
+  }, {
+    "name" : "sign"
+  }, {
+    "name" : "user"
+  }, {
+    "name" : "file-upload"
+  }, {
+    "name" : "outlookconnect"
+  } ],
+  "paths" : {
+    "/archivestructure" : {
+      "get" : {
+        "description" : "Retrieves the folder structure of the DOCBOX®.",
+        "operationId" : "archivestructure",
+        "parameters" : [ {
+          "description" : "Parent folder id. If omitted the whole archive is returned.",
+          "explode" : true,
+          "in" : "query",
+          "name" : "parent-folder-id",
+          "required" : false,
+          "schema" : {
+            "type" : "integer"
+          },
+          "style" : "form"
+        }, {
+          "in" : "query",
+          "name" : "lazy",
+          "schema" : {
+            "default" : false,
+            "type" : "boolean"
+          },
+          "style" : "form"
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/docboxArchive"
+                }
+              }
+            },
+            "description" : "Success"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not found"
+          },
+          "500" : {
+            "description" : "Server Error"
+          }
+        },
+        "summary" : "Archive structure",
+        "tags" : [ "archive" ],
+        "x-swagger-router-controller" : "Archive"
+      }
+    },
+    "/document/{id}/archive" : {
+      "post" : {
+        "operationId" : "documentArchive",
+        "parameters" : [ {
+          "description" : "Document id",
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "int64",
+            "type" : "integer"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/x-www-form-urlencoded" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/documentArchive_request"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not found"
+          },
+          "500" : {
+            "description" : "Server Error"
+          }
+        },
+        "summary" : "Archives a INBOX-document",
+        "tags" : [ "document" ],
+        "x-swagger-router-controller" : "Document"
+      }
+    },
+    "/document/{id}/pdf" : {
+      "get" : {
+        "description" : "Gets the current version of a document as a PDF.",
+        "operationId" : "documentPdf",
+        "parameters" : [ {
+          "description" : "Document id",
+          "explode" : false,
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "integer"
+          },
+          "style" : "simple"
+        }, {
+          "explode" : true,
+          "in" : "query",
+          "name" : "original",
+          "required" : false,
+          "schema" : {
+            "default" : false,
+            "type" : "boolean"
+          },
+          "style" : "form"
+        }, {
+          "description" : "Comma separated list of annotations to export. The following values are valid: \"stamp\", \"text\", \"symbol\" and \"note\"",
+          "explode" : true,
+          "in" : "query",
+          "name" : "annotations",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "form"
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/pdf" : {
+                "schema" : {
+                  "format" : "binary",
+                  "type" : "string",
+                  "x-content-type" : "application/pdf"
+                }
+              },
+              "application/octet-stream" : {
+                "schema" : {
+                  "format" : "binary",
+                  "type" : "string"
+                }
+              }
+            },
+            "description" : "Success"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not found"
+          },
+          "500" : {
+            "description" : "Server Error"
+          }
+        },
+        "summary" : "Document",
+        "tags" : [ "document" ],
+        "x-swagger-router-controller" : "Document"
+      }
+    },
+    "/document/{id}/ocr-result" : {
+      "get" : {
+        "description" : "The OCR-result is encoded as UTF-8. The OCR-texts of the individual pages are separated by Form-Feed Characters (0xFF).",
+        "operationId" : "documentOcrResult",
+        "parameters" : [ {
+          "description" : "Document id",
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "int64",
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "text/plain" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "description" : "Success"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not found"
+          },
+          "500" : {
+            "description" : "Server Error"
+          }
+        },
+        "summary" : "Returns the OCR-result of a document",
+        "tags" : [ "document" ],
+        "x-swagger-router-controller" : "Document"
+      }
+    },
+    "/document/{id}/data" : {
+      "get" : {
+        "description" : "Returns data of a document. e.g. pages and annotations",
+        "operationId" : "documentData",
+        "parameters" : [ {
+          "description" : "Document id",
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "int64",
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/extendedDocument"
+                }
+              }
+            },
+            "description" : "Success"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not found"
+          },
+          "500" : {
+            "description" : "Server Error"
+          }
+        },
+        "tags" : [ "document" ]
+      }
+    },
+    "/document/{id}/metadata" : {
+      "get" : {
+        "description" : "Gets the metadata assigned to this document",
+        "operationId" : "documentMetadataGet",
+        "parameters" : [ {
+          "description" : "Document id",
+          "explode" : true,
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "style" : "form"
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "additionalProperties" : {
+                    "type" : "string"
+                  },
+                  "example" : {
+                    "Rechnungsnummer" : "RE123456789",
+                    "Rechnungsdatum" : "2023-01-25T10:11:12.000Z"
+                  },
+                  "type" : "object"
+                }
+              }
+            },
+            "description" : "Success"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not found"
+          },
+          "500" : {
+            "description" : "Server Error"
+          }
+        },
+        "tags" : [ "document" ],
+        "x-swagger-router-controller" : "Document"
+      },
+      "post" : {
+        "description" : "Updates the metadata assigned to this document. Metafields are identified by their tag. Metafields not present in the request are left unhanged.\n\nNumber fields must be written with a point as decimal separator. Date fields must be provided in ISO 8601 format.\n",
+        "operationId" : "documentMetadataPost",
+        "parameters" : [ {
+          "description" : "Document id",
+          "explode" : true,
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "style" : "form"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "additionalProperties" : {
+                  "type" : "string"
+                },
+                "example" : {
+                  "Rechnungsnummer" : "RE123456789",
+                  "Rechnungsdatum" : "2023-01-25T10:11:12.000Z"
+                },
+                "type" : "object"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not found"
+          },
+          "500" : {
+            "description" : "Server Error"
+          }
+        },
+        "tags" : [ "document" ],
+        "x-swagger-router-controller" : "Document"
+      }
+    },
+    "/document/{id}/rename" : {
+      "post" : {
+        "description" : "Renames a document",
+        "operationId" : "documentRename",
+        "parameters" : [ {
+          "description" : "Document id",
+          "explode" : true,
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "style" : "form"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/x-www-form-urlencoded" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/documentRename_request"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not found"
+          },
+          "500" : {
+            "description" : "Server Error"
+          }
+        },
+        "tags" : [ "document" ],
+        "x-swagger-router-controller" : "Document"
+      }
+    },
+    "/document/{id}/replace" : {
+      "post" : {
+        "parameters" : [ {
+          "description" : "Document id",
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "int64",
+            "type" : "integer"
+          }
+        }, {
+          "description" : "Comma separated list of keywords to set for the new document. Commas can be escaped by prepending \\\\.",
+          "in" : "query",
+          "name" : "keywords",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/_document__id__replace_post_request"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not found"
+          },
+          "500" : {
+            "description" : "Server Error"
+          }
+        },
+        "summary" : "Replaces a document in Inbox.",
+        "tags" : [ "document" ],
+        "x-swagger-router-controller" : "Document"
+      }
+    },
+    "/document/{id}/keywords" : {
+      "post" : {
+        "description" : "Updates the keywords assigned to this document",
+        "operationId" : "documentKeywordsPost",
+        "parameters" : [ {
+          "description" : "Document id",
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "int64",
+            "type" : "integer"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "example" : [ "Rechchnung", "RE10001" ],
+                "items" : {
+                  "type" : "string"
+                },
+                "type" : "array"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not found"
+          },
+          "500" : {
+            "description" : "Server Error"
+          }
+        },
+        "tags" : [ "document" ],
+        "x-swagger-router-controller" : "Document"
+      }
+    },
+    "/document/{id}/delete" : {
+      "post" : {
+        "description" : "The document must be in inbox, not signed and must not be in an active workflow.",
+        "parameters" : [ {
+          "description" : "Document id",
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "int64",
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not found"
+          },
+          "500" : {
+            "description" : "Server Error"
+          }
+        },
+        "summary" : "Deletes a inbox document",
+        "tags" : [ "document" ],
+        "x-swagger-router-controller" : "Document"
+      }
+    },
+    "/document/{id}/uploaded-with" : {
+      "get" : {
+        "description" : "If a document is uploaded and multiple documents are created (e.g. emails and their attachment) this endpoint can be used to fetch ids of the other created documents.",
+        "operationId" : "documentUploadedWith",
+        "parameters" : [ {
+          "description" : "Document id",
+          "explode" : true,
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "style" : "form"
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "items" : {
+                    "format" : "int64",
+                    "type" : "integer"
+                  },
+                  "type" : "array"
+                }
+              }
+            },
+            "description" : "Success"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Document does not exists or upload is not finished"
+          },
+          "500" : {
+            "description" : "Server Error"
+          }
+        },
+        "tags" : [ "document" ],
+        "x-swagger-router-controller" : "Document"
+      }
+    },
+    "/document/auto_export_status/set" : {
+      "post" : {
+        "description" : "Sets the auto export status for a document.",
+        "operationId" : "documentAutoExportStatus",
+        "requestBody" : {
+          "content" : {
+            "application/x-www-form-urlencoded" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/documentAutoExportStatus_request"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not found"
+          },
+          "500" : {
+            "description" : "Server Error"
+          }
+        },
+        "summary" : "Set auto export status",
+        "tags" : [ "document" ],
+        "x-swagger-router-controller" : "Document"
+      }
+    },
+    "/document/list" : {
+      "get" : {
+        "description" : "Lists the documents within a specific folder.",
+        "operationId" : "documentList",
+        "parameters" : [ {
+          "explode" : true,
+          "in" : "query",
+          "name" : "folder-id",
+          "required" : true,
+          "schema" : {
+            "type" : "integer"
+          },
+          "style" : "form"
+        }, {
+          "explode" : true,
+          "in" : "query",
+          "name" : "included-metadata-keys",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "form"
+        }, {
+          "explode" : true,
+          "in" : "query",
+          "name" : "excluded-matadata-keys",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "form"
+        }, {
+          "explode" : true,
+          "in" : "query",
+          "name" : "with-autoexport-status",
+          "required" : false,
+          "schema" : {
+            "type" : "boolean"
+          },
+          "style" : "form"
+        }, {
+          "explode" : true,
+          "in" : "query",
+          "name" : "filter-date-created-after",
+          "required" : false,
+          "schema" : {
+            "format" : "date",
+            "type" : "string"
+          },
+          "style" : "form"
+        }, {
+          "explode" : true,
+          "in" : "query",
+          "name" : "subfolders-recursive",
+          "required" : false,
+          "schema" : {
+            "default" : false,
+            "type" : "boolean"
+          },
+          "style" : "form"
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/documentList"
+                }
+              }
+            },
+            "description" : "Success"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not found"
+          },
+          "500" : {
+            "description" : "Server Error"
+          }
+        },
+        "summary" : "Document list",
+        "tags" : [ "document" ],
+        "x-swagger-router-controller" : "Document"
+      }
+    },
+    "/file-upload" : {
+      "post" : {
+        "description" : "Archives a file in the DOCBOX® or places it in an input tray.\n\n**INFO:** Bitte beachten Sie, dass\n* bei einer Splittarchivierung aus dem Eingangsfach in das Archiv mehrere Dokumenten-ID's\n  entstehen.\n  \n  Beispiel: Es liegt ein 5-seitiges Dokument mit der Dokumenten ID 1036 im Eingangsfach.\n  Nun archivieren man Seite 1-2 und am Schluss Seite 3-5. Die Seiten 3-5 behalten die\n  Dokumenten-ID 1036, die Seiten 1-2 erhalten eine neue Dokumenten-ID.\n\n* Wenn Sie ein Dokument im Eingangsfach in Einzelseiten auftrennen (Symbol Schere) entstehen\n  neue Dokumenten-ID's und die ursprüngliche ID wird verworfen.",
+        "operationId" : "fileUpload",
+        "requestBody" : {
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/fileUploadBody"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "text/plain" : {
+                "schema" : {
+                  "example" : 123,
+                  "format" : "int64",
+                  "type" : "integer"
+                }
+              }
+            },
+            "description" : "Success"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not found"
+          },
+          "500" : {
+            "description" : "Server Error"
+          }
+        },
+        "summary" : "File upload",
+        "tags" : [ "file-upload" ],
+        "x-swagger-router-controller" : "FileUpload"
+      }
+    },
+    "/folder/create" : {
+      "post" : {
+        "description" : "Create a new folder",
+        "operationId" : "folderCreate",
+        "requestBody" : {
+          "content" : {
+            "application/x-www-form-urlencoded" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/folderCreate_request"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/folderCreate"
+                }
+              }
+            },
+            "description" : "Success"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not found"
+          },
+          "500" : {
+            "description" : "Server Error"
+          }
+        },
+        "summary" : "Create folder",
+        "tags" : [ "folder" ],
+        "x-swagger-router-controller" : "Folder"
+      }
+    },
+    "/inboxes" : {
+      "get" : {
+        "description" : "Returns the inbox folders",
+        "operationId" : "inboxList",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "lazy",
+          "schema" : {
+            "default" : false,
+            "type" : "boolean"
+          },
+          "style" : "form"
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inboxStructure"
+                }
+              }
+            },
+            "description" : "Success"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not found"
+          },
+          "500" : {
+            "description" : "Server Error"
+          }
+        },
+        "summary" : "Inbox list",
+        "tags" : [ "inbox" ],
+        "x-swagger-router-controller" : "Inbox"
+      }
+    },
+    "/page/{id}/ocr-result" : {
+      "get" : {
+        "description" : "Returns the OCR-result for a specific page encoded as UTF-8.",
+        "operationId" : "pageOcrResult",
+        "parameters" : [ {
+          "description" : "Page id",
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "int64",
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "text/plain" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "description" : "Success"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not found"
+          },
+          "500" : {
+            "description" : "Server Error"
+          }
+        },
+        "summary" : "Returns the OCR-result of a page",
+        "tags" : [ "page" ]
+      }
+    },
+    "/page/{id}/preview" : {
+      "get" : {
+        "description" : "Shows a page preview",
+        "operationId" : "pagePreview",
+        "parameters" : [ {
+          "explode" : false,
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "style" : "simple"
+        }, {
+          "explode" : true,
+          "in" : "query",
+          "name" : "bbox-width",
+          "required" : false,
+          "schema" : {
+            "type" : "integer"
+          },
+          "style" : "form"
+        }, {
+          "explode" : true,
+          "in" : "query",
+          "name" : "bbox-height",
+          "required" : false,
+          "schema" : {
+            "type" : "integer"
+          },
+          "style" : "form"
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "image/jpeg" : {
+                "schema" : {
+                  "format" : "binary",
+                  "type" : "string"
+                }
+              }
+            },
+            "description" : "Success"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not found"
+          },
+          "500" : {
+            "description" : "Server Error"
+          }
+        },
+        "summary" : "Page preview",
+        "tags" : [ "page" ],
+        "x-swagger-router-controller" : "Page"
+      }
+    },
+    "/search" : {
+      "post" : {
+        "description" : "Durchsucht das DOCBOX® Archiv und liefert eine pagebare Liste mit den gefundenen Dokumenten.",
+        "operationId" : "searchPOST",
+        "parameters" : [ {
+          "description" : "Anzahl der Dokumente die im Ergebnis maximal zurückgegeben werden sollen, d.h. dieser Parameter gibt die Größe des Ergbnisfensters für das Paging des Suchergebnisses an.",
+          "explode" : true,
+          "in" : "query",
+          "name" : "pagination-size",
+          "required" : false,
+          "schema" : {
+            "default" : 10,
+            "maximum" : 100,
+            "minimum" : 1,
+            "type" : "integer"
+          },
+          "style" : "form"
+        }, {
+          "description" : "Gibt den Index des Ergebnisfensters an, welches angezeigt werden soll. Das erste Ergebnisfenster entspricht dabei dem Index 0. Durch Erhöhung des Index um 1 gelangt man zum nächsten Ergebnisfenster mit den nächsten Suchtreffern. Beispiel: Bei 27 gefundenen Dokumenten insgesamt und einer pagination-size von 10 liegt der Index des Ergebnisfensters zwischen 0 und 2",
+          "explode" : true,
+          "in" : "query",
+          "name" : "pagination-page",
+          "required" : false,
+          "schema" : {
+            "default" : 0,
+            "minimum" : 0,
+            "type" : "integer"
+          },
+          "style" : "form"
+        }, {
+          "description" : "Liste mit Texten, die alle gemeinsam auf jeder Trefferseite vorkommen müssen.",
+          "explode" : true,
+          "in" : "query",
+          "name" : "fulltext-all",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "form"
+        }, {
+          "description" : "Liste mit Texten, von denen mindestens einer auf jeder Trefferseite vorkommen muss.",
+          "explode" : true,
+          "in" : "query",
+          "name" : "fulltext-one",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "form"
+        }, {
+          "description" : "Liste mit Texten, von denen keiner auf den Trefferseiten vorkommen darf.",
+          "explode" : true,
+          "in" : "query",
+          "name" : "fulltext-none",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "form"
+        }, {
+          "description" : "Sucht nur nach Seiten deren Erstelldatum nach diesem Zeitpunkt liegt.",
+          "explode" : true,
+          "in" : "query",
+          "name" : "from-date",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "form"
+        }, {
+          "description" : "Sucht nur nach Seiten deren Erstelldatum vor diesem Zeitpunkt liegt.",
+          "explode" : true,
+          "in" : "query",
+          "name" : "to-date",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "form"
+        }, {
+          "description" : "Liste mit Texten die alle gemeinsam in den Wiedervorlage-Texten einer Seite vorkommen müssen.",
+          "explode" : true,
+          "in" : "query",
+          "name" : "followup-terms",
+          "required" : false,
+          "schema" : {
+            "description" : "asdf",
+            "type" : "string"
+          },
+          "style" : "form"
+        }, {
+          "description" : "Liste mit Texten die alle gemeinsam in den Notiz-Texten einer Seite vorkommen müssen.",
+          "explode" : true,
+          "in" : "query",
+          "name" : "note-terms",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "form"
+        }, {
+          "description" : "Liste von Texten die alle gemeinsam in den Schlagwörtern einer Seite vorkommen müssen.",
+          "explode" : true,
+          "in" : "query",
+          "name" : "keyword-terms",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "form"
+        }, {
+          "description" : "Liste mit Namen aller Stempel, die gemeinsam auf einer Seite vorkommen müssen.",
+          "explode" : true,
+          "in" : "query",
+          "name" : "stamps-inclusive",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "form"
+        }, {
+          "description" : "Liste mit Namen aller Stempel, von denen keiner auf einer Seite vorkommen darf.",
+          "explode" : true,
+          "in" : "query",
+          "name" : "stamps-exclusive",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "form"
+        }, {
+          "description" : "Liste von Texten die alle im Dokumentennamen einer Seite vorkommen müssen.",
+          "explode" : true,
+          "in" : "query",
+          "name" : "document-name-terms",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "form"
+        }, {
+          "description" : "Liste von Texten die alle im Ordner-Pfad einer Seite vorkommen müssen.",
+          "explode" : true,
+          "in" : "query",
+          "name" : "folder-name-terms",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "form"
+        }, {
+          "description" : "Pfad zu einem Ordner, auf den die Suche beschränkt werden soll (z. B. „/Muster GmbH/Rechnungen/“, „INBOX/Administrator“). Es wird auch in allen Unterordnern dieses Pfades gesucht (außer recursive ist auf false gesetzt).",
+          "explode" : true,
+          "in" : "query",
+          "name" : "location",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "form"
+        }, {
+          "description" : "Ordner-Id, auf den die Suche beschränkt werden soll. Es wird auch in allen Unterordnern dieses Pfades gesucht (außer recursive ist auf false gesetzt).",
+          "in" : "query",
+          "name" : "location-folder-id",
+          "required" : false,
+          "schema" : {
+            "format" : "int64",
+            "type" : "integer"
+          }
+        }, {
+          "description" : "Bestimmt ob auch in Unterordner bei location gesucht wird.",
+          "in" : "query",
+          "name" : "recursive",
+          "required" : false,
+          "schema" : {
+            "default" : true,
+            "type" : "boolean"
+          }
+        }, {
+          "description" : "ID des Users der die zu suchenden Seiten archiviert haben muss.",
+          "explode" : true,
+          "in" : "query",
+          "name" : "archiver-id",
+          "required" : false,
+          "schema" : {
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "style" : "form"
+        }, {
+          "description" : "Name des Workflows in dem sich die zu suchenden Seiten aktuell befinden müssen. Durch Angabe von „*“ wird in allen Workflows gesucht.",
+          "explode" : true,
+          "in" : "query",
+          "name" : "workflow-name",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "form"
+        }, {
+          "description" : "Name des Workflow-Knotens, in dem sich die zu suchenden Seiten aktuell befinden müssen.",
+          "explode" : true,
+          "in" : "query",
+          "name" : "workflow-state",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "form"
+        }, {
+          "description" : "Name oder Alias-Name eines Dokumenten-Typs, der allen zu suchenden Dokumenten zugewiesen sein muss.",
+          "explode" : true,
+          "in" : "query",
+          "name" : "document-type",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "form"
+        }, {
+          "description" : "Gibt an, ob auch Dokumente im Papierkorb mit durchsucht werden sollen.",
+          "explode" : true,
+          "in" : "query",
+          "name" : "include-trash",
+          "required" : false,
+          "schema" : {
+            "default" : false,
+            "type" : "boolean"
+          },
+          "style" : "form"
+        }, {
+          "description" : "Text der in einer externen ID eines Dokuments vorkommen muss, damit es gefunden wird.",
+          "explode" : true,
+          "in" : "query",
+          "name" : "external-id",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "form"
+        }, {
+          "description" : "Sucht Dokumente anhand ihrer externen Metadaten. Für jedes Metadatum in der Liste muss einem Dokument, damit es gefunden wird, ebenfalls ein Metadatum mit genau diesem Key zugeordnet sein und dessen Value den zu suchenden Value enthalten",
+          "explode" : true,
+          "in" : "query",
+          "name" : "external-metadata",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "form"
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/searchPOST_200_response"
+                }
+              }
+            },
+            "description" : "Success"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not found"
+          },
+          "500" : {
+            "description" : "Server Error"
+          }
+        },
+        "tags" : [ "search" ],
+        "x-swagger-router-controller" : "Search"
+      }
+    }
+  },
+  "components" : {
+    "callbacks" : { },
+    "links" : { },
+    "schemas" : {
+      "docboxArchive" : {
+        "properties" : {
+          "free-archive-structure" : {
+            "type" : "boolean"
+          },
+          "folders" : {
+            "items" : {
+              "$ref" : "#/components/schemas/folder"
+            },
+            "type" : "array"
+          }
+        },
+        "type" : "object"
+      },
+      "extendedDocument" : {
+        "example" : {
+          "id" : 3030,
+          "name" : "Rechnung 1234-5",
+          "numPages" : 2,
+          "mandator" : "Muster GmbH",
+          "folderId" : 9080,
+          "folderPath" : "/Rechnungen/2018/01-Jan/",
+          "creationDate" : "2017-10-17 05:03:25",
+          "creatorId" : 0,
+          "creatorName" : "Administrator",
+          "keywords" : [ "Projekt" ],
+          "classification" : [ "Rechnung" ],
+          "external" : {
+            "externalId" : 1,
+            "metadata" : {
+              "Kundennummer" : 528,
+              "Rechnungsnummer" : "1234-5"
+            }
+          },
+          "workflows" : {
+            "name" : "Rechnung",
+            "startDate" : "2017-10-19 06:38:51",
+            "finishDate" : "2017-10-26 09:55:19",
+            "currentState" : "Eingang"
+          },
+          "pages" : [ {
+            "id" : 3031,
+            "hit" : false,
+            "notes" : {
+              "text" : "Skonto gewährt",
+              "date" : "2017-10-19 07:15:39",
+              "creatorId" : 1,
+              "creatorName" : "Mustermann"
+            },
+            "stamps" : {
+              "title" : "EINGANG",
+              "date" : "2018-05-16 07:15:25",
+              "creatorId" : 1,
+              "creatorName" : "Mustermann"
+            }
+          }, {
+            "id" : 3032,
+            "hit" : false,
+            "notes" : [ ],
+            "stamps" : [ ]
+          } ]
+        },
+        "properties" : {
+          "id" : {
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "numPages" : {
+            "type" : "integer"
+          },
+          "mandator" : {
+            "type" : "string"
+          },
+          "folderId" : {
+            "format" : "int64",
+            "type" : "integer",
+            "xml" : {
+              "name" : "folder-id"
+            }
+          },
+          "folderPath" : {
+            "type" : "string",
+            "xml" : {
+              "name" : "folder-path"
+            }
+          },
+          "creationDate" : {
+            "format" : "date-time",
+            "type" : "string",
+            "xml" : {
+              "name" : "creation-date"
+            }
+          },
+          "creatorId" : {
+            "format" : "int64",
+            "type" : "integer",
+            "xml" : {
+              "name" : "creator-id"
+            }
+          },
+          "creatorName" : {
+            "type" : "string",
+            "xml" : {
+              "name" : "creator-name"
+            }
+          },
+          "keywords" : {
+            "items" : {
+              "type" : "string",
+              "xml" : {
+                "name" : "keyword"
+              }
+            },
+            "type" : "array",
+            "xml" : {
+              "wrapped" : true
+            }
+          },
+          "classification" : {
+            "items" : {
+              "type" : "string",
+              "xml" : {
+                "name" : "document-type"
+              }
+            },
+            "type" : "array",
+            "xml" : {
+              "wrapped" : true
+            }
+          },
+          "external" : {
+            "$ref" : "#/components/schemas/extendedDocument_external"
+          },
+          "workflows" : {
+            "items" : {
+              "$ref" : "#/components/schemas/extendedDocument_workflows_inner"
+            },
+            "type" : "array",
+            "xml" : {
+              "wrapped" : true
+            }
+          },
+          "pages" : {
+            "items" : {
+              "$ref" : "#/components/schemas/documentPage"
+            },
+            "type" : "array",
+            "xml" : {
+              "wrapped" : true
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "documentPage" : {
+        "properties" : {
+          "id" : {
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "hit" : {
+            "type" : "boolean"
+          },
+          "notes" : {
+            "items" : {
+              "$ref" : "#/components/schemas/documentPage_notes_inner"
+            },
+            "type" : "array",
+            "xml" : {
+              "wrapped" : true
+            }
+          },
+          "stamps" : {
+            "items" : {
+              "$ref" : "#/components/schemas/documentPage_stamps_inner"
+            },
+            "type" : "array",
+            "xml" : {
+              "wrapped" : true
+            }
+          }
+        },
+        "required" : [ "id", "notes", "stamps" ],
+        "type" : "object",
+        "xml" : {
+          "name" : "page"
+        }
+      },
+      "documentList" : {
+        "example" : [ {
+          "id" : 4,
+          "name" : "VRE1079512.pdf",
+          "creation-date" : "2023-11-22T14:14:29",
+          "external-metadata" : [ {
+            "key" : "invoiceDate",
+            "value" : "2024-03-01T17:57:51.000Z"
+          } ],
+          "num-pages" : 2
+        }, {
+          "id" : 5,
+          "name" : "5 pages.pdf",
+          "creation-date" : "2024-01-25T08:57:16",
+          "archiving-date" : "2024-01-25T08:57:44",
+          "archiving-user-id" : 0,
+          "num-pages" : 5
+        } ],
+        "items" : {
+          "$ref" : "#/components/schemas/document"
+        },
+        "type" : "array",
+        "xml" : {
+          "name" : "docbox-document-list",
+          "wrapped" : true
+        }
+      },
+      "document" : {
+        "properties" : {
+          "id" : {
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "num-pages" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "creation-date" : {
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "archiving-date" : {
+            "format" : "date-time",
+            "nullable" : true,
+            "type" : "string"
+          },
+          "archiving-user-id" : {
+            "format" : "int64",
+            "nullable" : true,
+            "type" : "integer"
+          },
+          "folder-id" : {
+            "format" : "int64",
+            "nullable" : true,
+            "type" : "integer"
+          },
+          "external-metadata" : {
+            "items" : {
+              "$ref" : "#/components/schemas/externalMetadata"
+            },
+            "type" : "array"
+          }
+        },
+        "type" : "object",
+        "xml" : {
+          "name" : "document"
+        }
+      },
+      "externalMetadata" : {
+        "properties" : {
+          "key" : {
+            "type" : "string"
+          },
+          "value" : {
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "fileUploadBody" : {
+        "properties" : {
+          "target-mandator-name" : {
+            "description" : "Name of the mandator where the document should be archived",
+            "type" : "string"
+          },
+          "target-folder-path" : {
+            "description" : "Path to the target folder starting at the mandator. Either this or `target-folder-id` is required. Example: \"/Eingangsrechnungen/2018/\"",
+            "type" : "string"
+          },
+          "target-folder-id" : {
+            "description" : "Id of the target folder. Either this or `target-folder-path` is required.",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "target-document-name" : {
+            "type" : "string"
+          },
+          "upload-data" : {
+            "description" : "The file to upload. Either this or `upload-data-base64` is required.",
+            "format" : "binary",
+            "type" : "string"
+          },
+          "upload-data-base64" : {
+            "description" : "Base64 encoded content of the upload-data. When using this parameter `target-document-name` is required. Either this or `upload-data` is required.",
+            "format" : "byte",
+            "type" : "string"
+          },
+          "keywords" : {
+            "description" : "Comma separated list of keywords. Commas can be escaped by prepending \\\\.",
+            "type" : "string"
+          },
+          "document-types" : {
+            "description" : "Comma separated list of document types (or their alias). Commas can be escaped by prepending \\\\. Ignores values where no document-type was found.",
+            "type" : "string"
+          },
+          "external-id" : {
+            "type" : "string"
+          },
+          "external-metadatas" : {
+            "description" : "Comma separated list of key=value pairs. Comma and equals signs can be escaped by prepending \\\\.",
+            "example" : "key1=value1,key2=value2",
+            "type" : "string"
+          },
+          "email-import-order" : {
+            "enum" : [ "EMAIL_THEN_ATTACHMENTS", "ATTACHMENTS_THEN_EMAIL", "EMAIL_ONLY", "ATTACHMENTS_ONLY" ],
+            "type" : "string"
+          },
+          "force-new-document" : {
+            "type" : "boolean"
+          }
+        },
+        "type" : "object"
+      },
+      "folderCreate" : {
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },
+          "name" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "classification", "creationDate", "external", "folderId", "folderPath", "id", "keywords", "mandator", "name", "numPages", "pages", "workflows" ],
+        "type" : "object"
+      },
+      "inboxStructure" : {
+        "properties" : {
+          "free-inbox-structure" : {
+            "type" : "boolean",
+            "xml" : {
+              "attribute" : true
+            }
+          },
+          "inboxes" : {
+            "items" : {
+              "$ref" : "#/components/schemas/inboxFolder"
+            },
+            "type" : "array",
+            "xml" : {
+              "name" : "folder"
+            }
+          }
+        },
+        "required" : [ "folders", "free-inbox-structure" ],
+        "type" : "object",
+        "xml" : {
+          "name" : "inbox-structure"
+        }
+      },
+      "inboxFolder" : {
+        "properties" : {
+          "user-id" : {
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "folder" : {
+            "$ref" : "#/components/schemas/folder"
+          }
+        },
+        "type" : "object",
+        "xml" : {
+          "name" : "inbox"
+        }
+      },
+      "folder" : {
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "folders" : {
+            "items" : {
+              "$ref" : "#/components/schemas/folder"
+            },
+            "type" : "array",
+            "xml" : {
+              "name" : "folder"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "documentArchive_request" : {
+        "properties" : {
+          "target-folder-id" : {
+            "description" : "Id of the target folder. Either this or `target-folder-path` is required.",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "target-mandator-name" : {
+            "description" : "Name of the mandator where the document should be archived",
+            "type" : "string"
+          },
+          "target-folder-path" : {
+            "description" : "Path to the target folder starting at the mandator. Either this or `target-folder-id` is required. Example: \"/Eingangsrechnungen/2018/\"",
+            "type" : "string"
+          },
+          "target-document-name" : {
+            "description" : "Name of the new created archive-document. If not present, the current name of the document is used.",
+            "type" : "string"
+          },
+          "keywords" : {
+            "description" : "Comma separated list of keywords, which get added to the document.",
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "documentRename_request" : {
+        "properties" : {
+          "new-name" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "new-name" ],
+        "type" : "object"
+      },
+      "_document__id__replace_post_request" : {
+        "properties" : {
+          "upload-data" : {
+            "description" : "The file to upload. Either this or `upload-data-base64` is required.",
+            "format" : "binary",
+            "type" : "string"
+          },
+          "upload-data-base64" : {
+            "description" : "Base64 encoded content of the upload-data. When using this parameter `target-document-name` is required. Either this or `upload-data` is required.",
+            "format" : "byte",
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "documentAutoExportStatus_request" : {
+        "properties" : {
+          "document-id" : {
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "autoexport-status" : {
+            "type" : "boolean"
+          }
+        },
+        "required" : [ "autoexport-status", "document-id" ],
+        "type" : "object"
+      },
+      "folderCreate_request" : {
+        "properties" : {
+          "parent-folder-id" : {
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "folder-name" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "folder-name", "parent-folder-id" ],
+        "type" : "object"
+      },
+      "searchPOST_200_response" : {
+        "properties" : {
+          "totalHitDocuments" : {
+            "type" : "integer"
+          },
+          "documents" : {
+            "items" : {
+              "$ref" : "#/components/schemas/extendedDocument"
+            },
+            "type" : "array"
+          }
+        },
+        "type" : "object"
+      },
+      "extendedDocument_external" : {
+        "properties" : {
+          "externalId" : {
+            "type" : "string",
+            "xml" : {
+              "name" : "external-id"
+            }
+          },
+          "metadata" : {
+            "additionalProperties" : {
+              "type" : "string"
+            },
+            "type" : "object"
+          }
+        },
+        "required" : [ "metadata" ],
+        "type" : "object"
+      },
+      "extendedDocument_workflows_inner" : {
+        "properties" : {
+          "name" : {
+            "type" : "string"
+          },
+          "startDate" : {
+            "format" : "date-time",
+            "type" : "string",
+            "xml" : {
+              "name" : "start-date"
+            }
+          },
+          "finishDate" : {
+            "format" : "date-time",
+            "type" : "string",
+            "xml" : {
+              "name" : "finish-date"
+            }
+          },
+          "currentState" : {
+            "type" : "string",
+            "xml" : {
+              "name" : "current-state"
+            }
+          }
+        },
+        "required" : [ "currentState", "name", "startDate" ],
+        "type" : "object",
+        "xml" : {
+          "name" : "workflow"
+        }
+      },
+      "documentPage_notes_inner" : {
+        "properties" : {
+          "text" : {
+            "type" : "string"
+          },
+          "date" : {
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "creatorId" : {
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "creatorName" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "creatorId", "creatorName", "date", "text" ],
+        "type" : "object",
+        "xml" : {
+          "name" : "note"
+        }
+      },
+      "documentPage_stamps_inner" : {
+        "properties" : {
+          "title" : {
+            "type" : "string"
+          },
+          "text" : {
+            "type" : "string"
+          },
+          "date" : {
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "creatorId" : {
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "creatorName" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "creatorId", "creatorName", "title" ],
+        "type" : "object",
+        "xml" : {
+          "name" : "stamp"
+        }
+      }
+    },
+    "securitySchemes" : {
+      "apiKeyAuth" : {
+        "in" : "header",
+        "name" : "API-Key",
+        "type" : "apiKey"
+      },
+      "cloudId" : {
+        "in" : "header",
+        "name" : "Cloud-ID",
+        "type" : "apiKey"
+      }
+    }
+  }
+}

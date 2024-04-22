@@ -50,25 +50,11 @@ use OpenAPI\Client\Docbox\ObjectSerializer;
  */
 class ArchiveApi
 {
-    /**
-     * @var ClientInterface
-     */
-    protected $client;
+    protected \GuzzleHttp\ClientInterface $client;
 
-    /**
-     * @var Configuration
-     */
-    protected $config;
+    protected \OpenAPI\Client\Docbox\Configuration $config;
 
-    /**
-     * @var HeaderSelector
-     */
-    protected $headerSelector;
-
-    /**
-     * @var int Host index
-     */
-    protected $hostIndex;
+    protected \OpenAPI\Client\Docbox\HeaderSelector $headerSelector;
 
     /** @var string[] $contentTypes **/
     public const contentTypes = [
@@ -78,21 +64,17 @@ class ArchiveApi
     ];
 
     /**
-     * @param ClientInterface $client
-     * @param Configuration   $config
-     * @param HeaderSelector  $selector
      * @param int             $hostIndex (Optional) host index to select the list of hosts if defined in the OpenAPI spec
      */
     public function __construct(
         ClientInterface $client = null,
-        Configuration $config = null,
-        HeaderSelector $selector = null,
-        $hostIndex = 0
+        Configuration $configuration = null,
+        HeaderSelector $headerSelector = null,
+        protected $hostIndex = 0
     ) {
-        $this->client = $client ?: new Client();
-        $this->config = $config ?: new Configuration();
-        $this->headerSelector = $selector ?: new HeaderSelector();
-        $this->hostIndex = $hostIndex;
+        $this->client = $client instanceof \GuzzleHttp\ClientInterface ? $client : new Client();
+        $this->config = $configuration instanceof \OpenAPI\Client\Docbox\Configuration ? $configuration : new Configuration();
+        $this->headerSelector = $headerSelector instanceof \OpenAPI\Client\Docbox\HeaderSelector ? $headerSelector : new HeaderSelector();
     }
 
     /**
@@ -115,10 +97,7 @@ class ArchiveApi
         return $this->hostIndex;
     }
 
-    /**
-     * @return Configuration
-     */
-    public function getConfig()
+    public function getConfig(): \OpenAPI\Client\Docbox\Configuration
     {
         return $this->config;
     }
@@ -138,7 +117,7 @@ class ArchiveApi
      */
     public function archivestructure($parentFolderId = null, $lazy = false, string $contentType = self::contentTypes['archivestructure'][0])
     {
-        list($response) = $this->archivestructureWithHttpInfo($parentFolderId, $lazy, $contentType);
+        [$response] = $this->archivestructureWithHttpInfo($parentFolderId, $lazy, $contentType);
         return $response;
     }
 
@@ -165,14 +144,14 @@ class ArchiveApi
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
+                    sprintf('[%d] %s', $e->getCode(), $e->getMessage()),
                     (int) $e->getCode(),
-                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
-                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                    $e->getResponse() instanceof \Psr\Http\Message\ResponseInterface ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() instanceof \Psr\Http\Message\ResponseInterface ? (string) $e->getResponse()->getBody() : null
                 );
             } catch (ConnectException $e) {
                 throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
+                    sprintf('[%d] %s', $e->getCode(), $e->getMessage()),
                     (int) $e->getCode(),
                     null,
                     null
@@ -194,45 +173,14 @@ class ArchiveApi
                 );
             }
 
-            switch($statusCode) {
-                case 200:
-                    if ('\OpenAPI\Client\Docbox\Model\DocboxArchive' === '\SplFileObject') {
-                        $content = $response->getBody(); //stream goes to serializer
-                    } else {
-                        $content = (string) $response->getBody();
-                        if ('\OpenAPI\Client\Docbox\Model\DocboxArchive' !== 'string') {
-                            try {
-                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
-                            } catch (\JsonException $exception) {
-                                throw new ApiException(
-                                    sprintf(
-                                        'Error JSON decoding server response (%s)',
-                                        $request->getUri()
-                                    ),
-                                    $statusCode,
-                                    $response->getHeaders(),
-                                    $content
-                                );
-                            }
-                        }
-                    }
-
-                    return [
-                        ObjectSerializer::deserialize($content, '\OpenAPI\Client\Docbox\Model\DocboxArchive', []),
-                        $response->getStatusCode(),
-                        $response->getHeaders()
-                    ];
-            }
-
-            $returnType = '\OpenAPI\Client\Docbox\Model\DocboxArchive';
-            if ($returnType === '\SplFileObject') {
-                $content = $response->getBody(); //stream goes to serializer
-            } else {
-                $content = (string) $response->getBody();
-                if ($returnType !== 'string') {
+            if ($statusCode === 200) {
+                if (\OpenAPI\Client\Docbox\Model\DocboxArchive::class === '\SplFileObject') {
+                    $content = $response->getBody(); //stream goes to serializer
+                } else {
+                    $content = (string) $response->getBody();
                     try {
                         $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
-                    } catch (\JsonException $exception) {
+                    } catch (\JsonException) {
                         throw new ApiException(
                             sprintf(
                                 'Error JSON decoding server response (%s)',
@@ -244,6 +192,32 @@ class ArchiveApi
                         );
                     }
                 }
+
+                return [
+                    ObjectSerializer::deserialize($content, \OpenAPI\Client\Docbox\Model\DocboxArchive::class, []),
+                    $response->getStatusCode(),
+                    $response->getHeaders()
+                ];
+            }
+
+            $returnType = \OpenAPI\Client\Docbox\Model\DocboxArchive::class;
+            if ($returnType === '\SplFileObject') {
+                $content = $response->getBody(); //stream goes to serializer
+            } else {
+                $content = (string) $response->getBody();
+                try {
+                    $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                } catch (\JsonException) {
+                    throw new ApiException(
+                        sprintf(
+                            'Error JSON decoding server response (%s)',
+                            $request->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        $content
+                    );
+                }
             }
 
             return [
@@ -252,18 +226,17 @@ class ArchiveApi
                 $response->getHeaders()
             ];
 
-        } catch (ApiException $e) {
-            switch ($e->getCode()) {
-                case 200:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\OpenAPI\Client\Docbox\Model\DocboxArchive',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    break;
+        } catch (ApiException $apiException) {
+            if ($apiException->getCode() === 200) {
+                $data = ObjectSerializer::deserialize(
+                    $apiException->getResponseBody(),
+                    \OpenAPI\Client\Docbox\Model\DocboxArchive::class,
+                    $apiException->getResponseHeaders()
+                );
+                $apiException->setResponseObject($data);
             }
-            throw $e;
+
+            throw $apiException;
         }
     }
 
@@ -277,15 +250,12 @@ class ArchiveApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['archivestructure'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function archivestructureAsync($parentFolderId = null, $lazy = false, string $contentType = self::contentTypes['archivestructure'][0])
+    public function archivestructureAsync($parentFolderId = null, $lazy = false, string $contentType = self::contentTypes['archivestructure'][0]): \GuzzleHttp\Promise\PromiseInterface
     {
         return $this->archivestructureAsyncWithHttpInfo($parentFolderId, $lazy, $contentType)
             ->then(
-                function ($response) {
-                    return $response[0];
-                }
+                static fn($response) => $response[0]
             );
     }
 
@@ -299,24 +269,21 @@ class ArchiveApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['archivestructure'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function archivestructureAsyncWithHttpInfo($parentFolderId = null, $lazy = false, string $contentType = self::contentTypes['archivestructure'][0])
+    public function archivestructureAsyncWithHttpInfo($parentFolderId = null, $lazy = false, string $contentType = self::contentTypes['archivestructure'][0]): \GuzzleHttp\Promise\PromiseInterface
     {
-        $returnType = '\OpenAPI\Client\Docbox\Model\DocboxArchive';
+        $returnType = \OpenAPI\Client\Docbox\Model\DocboxArchive::class;
         $request = $this->archivestructureRequest($parentFolderId, $lazy, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                static function ($response) use ($returnType) : array {
                     if ($returnType === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
-                        if ($returnType !== 'string') {
-                            $content = json_decode($content);
-                        }
+                        $content = json_decode($content);
                     }
 
                     return [
@@ -325,7 +292,7 @@ class ArchiveApi
                         $response->getHeaders()
                     ];
                 },
-                function ($exception) {
+                static function ($exception) : void {
                     $response = $exception->getResponse();
                     $statusCode = $response->getStatusCode();
                     throw new ApiException(
@@ -350,9 +317,8 @@ class ArchiveApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['archivestructure'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
      */
-    public function archivestructureRequest($parentFolderId = null, $lazy = false, string $contentType = self::contentTypes['archivestructure'][0])
+    public function archivestructureRequest($parentFolderId = null, $lazy = false, string $contentType = self::contentTypes['archivestructure'][0]): \GuzzleHttp\Psr7\Request
     {
 
 
@@ -394,7 +360,7 @@ class ArchiveApi
         );
 
         // for model (json/xml)
-        if (count($formParams) > 0) {
+        if ($formParams !== []) {
             if ($multipart) {
                 $multipartContents = [];
                 foreach ($formParams as $formParamName => $formParamValue) {
@@ -406,6 +372,7 @@ class ArchiveApi
                         ];
                     }
                 }
+
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
@@ -423,6 +390,7 @@ class ArchiveApi
         if ($apiKey !== null) {
             $headers['Cloud-ID'] = $apiKey;
         }
+
         // this endpoint requires API key authentication
         $apiKey = $this->config->getApiKeyWithPrefix('API-Key');
         if ($apiKey !== null) {
@@ -444,7 +412,7 @@ class ArchiveApi
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'GET',
-            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query !== '' && $query !== '0' ? '?' . $query : ''),
             $headers,
             $httpBody
         );
@@ -456,7 +424,7 @@ class ArchiveApi
      * @throws \RuntimeException on file opening failure
      * @return array of http client options
      */
-    protected function createHttpClientOption()
+    protected function createHttpClientOption(): array
     {
         $options = [];
         if ($this->config->getDebug()) {

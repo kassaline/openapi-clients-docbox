@@ -50,25 +50,11 @@ use OpenAPI\Client\Docbox\ObjectSerializer;
  */
 class InboxApi
 {
-    /**
-     * @var ClientInterface
-     */
-    protected $client;
+    protected \GuzzleHttp\ClientInterface $client;
 
-    /**
-     * @var Configuration
-     */
-    protected $config;
+    protected \OpenAPI\Client\Docbox\Configuration $config;
 
-    /**
-     * @var HeaderSelector
-     */
-    protected $headerSelector;
-
-    /**
-     * @var int Host index
-     */
-    protected $hostIndex;
+    protected \OpenAPI\Client\Docbox\HeaderSelector $headerSelector;
 
     /** @var string[] $contentTypes **/
     public const contentTypes = [
@@ -78,21 +64,17 @@ class InboxApi
     ];
 
     /**
-     * @param ClientInterface $client
-     * @param Configuration   $config
-     * @param HeaderSelector  $selector
      * @param int             $hostIndex (Optional) host index to select the list of hosts if defined in the OpenAPI spec
      */
     public function __construct(
         ClientInterface $client = null,
-        Configuration $config = null,
-        HeaderSelector $selector = null,
-        $hostIndex = 0
+        Configuration $configuration = null,
+        HeaderSelector $headerSelector = null,
+        protected $hostIndex = 0
     ) {
-        $this->client = $client ?: new Client();
-        $this->config = $config ?: new Configuration();
-        $this->headerSelector = $selector ?: new HeaderSelector();
-        $this->hostIndex = $hostIndex;
+        $this->client = $client instanceof \GuzzleHttp\ClientInterface ? $client : new Client();
+        $this->config = $configuration instanceof \OpenAPI\Client\Docbox\Configuration ? $configuration : new Configuration();
+        $this->headerSelector = $headerSelector instanceof \OpenAPI\Client\Docbox\HeaderSelector ? $headerSelector : new HeaderSelector();
     }
 
     /**
@@ -115,10 +97,7 @@ class InboxApi
         return $this->hostIndex;
     }
 
-    /**
-     * @return Configuration
-     */
-    public function getConfig()
+    public function getConfig(): \OpenAPI\Client\Docbox\Configuration
     {
         return $this->config;
     }
@@ -137,7 +116,7 @@ class InboxApi
      */
     public function inboxList($lazy = false, string $contentType = self::contentTypes['inboxList'][0])
     {
-        list($response) = $this->inboxListWithHttpInfo($lazy, $contentType);
+        [$response] = $this->inboxListWithHttpInfo($lazy, $contentType);
         return $response;
     }
 
@@ -163,14 +142,14 @@ class InboxApi
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
+                    sprintf('[%d] %s', $e->getCode(), $e->getMessage()),
                     (int) $e->getCode(),
-                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
-                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                    $e->getResponse() instanceof \Psr\Http\Message\ResponseInterface ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() instanceof \Psr\Http\Message\ResponseInterface ? (string) $e->getResponse()->getBody() : null
                 );
             } catch (ConnectException $e) {
                 throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
+                    sprintf('[%d] %s', $e->getCode(), $e->getMessage()),
                     (int) $e->getCode(),
                     null,
                     null
@@ -192,45 +171,14 @@ class InboxApi
                 );
             }
 
-            switch($statusCode) {
-                case 200:
-                    if ('\OpenAPI\Client\Docbox\Model\InboxStructure' === '\SplFileObject') {
-                        $content = $response->getBody(); //stream goes to serializer
-                    } else {
-                        $content = (string) $response->getBody();
-                        if ('\OpenAPI\Client\Docbox\Model\InboxStructure' !== 'string') {
-                            try {
-                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
-                            } catch (\JsonException $exception) {
-                                throw new ApiException(
-                                    sprintf(
-                                        'Error JSON decoding server response (%s)',
-                                        $request->getUri()
-                                    ),
-                                    $statusCode,
-                                    $response->getHeaders(),
-                                    $content
-                                );
-                            }
-                        }
-                    }
-
-                    return [
-                        ObjectSerializer::deserialize($content, '\OpenAPI\Client\Docbox\Model\InboxStructure', []),
-                        $response->getStatusCode(),
-                        $response->getHeaders()
-                    ];
-            }
-
-            $returnType = '\OpenAPI\Client\Docbox\Model\InboxStructure';
-            if ($returnType === '\SplFileObject') {
-                $content = $response->getBody(); //stream goes to serializer
-            } else {
-                $content = (string) $response->getBody();
-                if ($returnType !== 'string') {
+            if ($statusCode === 200) {
+                if (\OpenAPI\Client\Docbox\Model\InboxStructure::class === '\SplFileObject') {
+                    $content = $response->getBody(); //stream goes to serializer
+                } else {
+                    $content = (string) $response->getBody();
                     try {
                         $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
-                    } catch (\JsonException $exception) {
+                    } catch (\JsonException) {
                         throw new ApiException(
                             sprintf(
                                 'Error JSON decoding server response (%s)',
@@ -242,6 +190,32 @@ class InboxApi
                         );
                     }
                 }
+
+                return [
+                    ObjectSerializer::deserialize($content, \OpenAPI\Client\Docbox\Model\InboxStructure::class, []),
+                    $response->getStatusCode(),
+                    $response->getHeaders()
+                ];
+            }
+
+            $returnType = \OpenAPI\Client\Docbox\Model\InboxStructure::class;
+            if ($returnType === '\SplFileObject') {
+                $content = $response->getBody(); //stream goes to serializer
+            } else {
+                $content = (string) $response->getBody();
+                try {
+                    $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                } catch (\JsonException) {
+                    throw new ApiException(
+                        sprintf(
+                            'Error JSON decoding server response (%s)',
+                            $request->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        $content
+                    );
+                }
             }
 
             return [
@@ -250,18 +224,17 @@ class InboxApi
                 $response->getHeaders()
             ];
 
-        } catch (ApiException $e) {
-            switch ($e->getCode()) {
-                case 200:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\OpenAPI\Client\Docbox\Model\InboxStructure',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    break;
+        } catch (ApiException $apiException) {
+            if ($apiException->getCode() === 200) {
+                $data = ObjectSerializer::deserialize(
+                    $apiException->getResponseBody(),
+                    \OpenAPI\Client\Docbox\Model\InboxStructure::class,
+                    $apiException->getResponseHeaders()
+                );
+                $apiException->setResponseObject($data);
             }
-            throw $e;
+
+            throw $apiException;
         }
     }
 
@@ -274,15 +247,12 @@ class InboxApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['inboxList'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function inboxListAsync($lazy = false, string $contentType = self::contentTypes['inboxList'][0])
+    public function inboxListAsync($lazy = false, string $contentType = self::contentTypes['inboxList'][0]): \GuzzleHttp\Promise\PromiseInterface
     {
         return $this->inboxListAsyncWithHttpInfo($lazy, $contentType)
             ->then(
-                function ($response) {
-                    return $response[0];
-                }
+                static fn($response) => $response[0]
             );
     }
 
@@ -295,24 +265,21 @@ class InboxApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['inboxList'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function inboxListAsyncWithHttpInfo($lazy = false, string $contentType = self::contentTypes['inboxList'][0])
+    public function inboxListAsyncWithHttpInfo($lazy = false, string $contentType = self::contentTypes['inboxList'][0]): \GuzzleHttp\Promise\PromiseInterface
     {
-        $returnType = '\OpenAPI\Client\Docbox\Model\InboxStructure';
+        $returnType = \OpenAPI\Client\Docbox\Model\InboxStructure::class;
         $request = $this->inboxListRequest($lazy, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                static function ($response) use ($returnType) : array {
                     if ($returnType === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
-                        if ($returnType !== 'string') {
-                            $content = json_decode($content);
-                        }
+                        $content = json_decode($content);
                     }
 
                     return [
@@ -321,7 +288,7 @@ class InboxApi
                         $response->getHeaders()
                     ];
                 },
-                function ($exception) {
+                static function ($exception) : void {
                     $response = $exception->getResponse();
                     $statusCode = $response->getStatusCode();
                     throw new ApiException(
@@ -345,9 +312,8 @@ class InboxApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['inboxList'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
      */
-    public function inboxListRequest($lazy = false, string $contentType = self::contentTypes['inboxList'][0])
+    public function inboxListRequest($lazy = false, string $contentType = self::contentTypes['inboxList'][0]): \GuzzleHttp\Psr7\Request
     {
 
 
@@ -379,7 +345,7 @@ class InboxApi
         );
 
         // for model (json/xml)
-        if (count($formParams) > 0) {
+        if ($formParams !== []) {
             if ($multipart) {
                 $multipartContents = [];
                 foreach ($formParams as $formParamName => $formParamValue) {
@@ -391,6 +357,7 @@ class InboxApi
                         ];
                     }
                 }
+
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
@@ -408,6 +375,7 @@ class InboxApi
         if ($apiKey !== null) {
             $headers['Cloud-ID'] = $apiKey;
         }
+
         // this endpoint requires API key authentication
         $apiKey = $this->config->getApiKeyWithPrefix('API-Key');
         if ($apiKey !== null) {
@@ -429,7 +397,7 @@ class InboxApi
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'GET',
-            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query !== '' && $query !== '0' ? '?' . $query : ''),
             $headers,
             $httpBody
         );
@@ -441,7 +409,7 @@ class InboxApi
      * @throws \RuntimeException on file opening failure
      * @return array of http client options
      */
-    protected function createHttpClientOption()
+    protected function createHttpClientOption(): array
     {
         $options = [];
         if ($this->config->getDebug()) {

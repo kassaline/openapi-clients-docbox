@@ -53,14 +53,14 @@ class ExternalMetadataTest extends TestCase
     /**
      * Setup before running each test case
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
     }
 
     /**
      * Clean up after running each test case
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
     }
 
@@ -74,7 +74,7 @@ class ExternalMetadataTest extends TestCase
     /**
      * Test "ExternalMetadata"
      */
-    public function testExternalMetadata()
+    public function testExternalMetadata(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -83,7 +83,7 @@ class ExternalMetadataTest extends TestCase
     /**
      * Test attribute "key"
      */
-    public function testPropertyKey()
+    public function testPropertyKey(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -92,7 +92,7 @@ class ExternalMetadataTest extends TestCase
     /**
      * Test attribute "value"
      */
-    public function testPropertyValue()
+    public function testPropertyValue(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');

@@ -41,7 +41,7 @@ use \OpenAPI\Client\Docbox\ObjectSerializer;
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
  */
-class Document implements ModelInterface, ArrayAccess, \JsonSerializable
+class Document implements ModelInterface, ArrayAccess, \JsonSerializable, \Stringable
 {
     public const DISCRIMINATOR = null;
 
@@ -131,22 +131,10 @@ class Document implements ModelInterface, ArrayAccess, \JsonSerializable
 
     /**
      * Array of nullable properties
-     *
-     * @return array
      */
     protected static function openAPINullables(): array
     {
         return self::$openAPINullables;
-    }
-
-    /**
-     * Array of nullable field names deliberately set to null
-     *
-     * @return boolean[]
-     */
-    private function getOpenAPINullablesSetToNull(): array
-    {
-        return $this->openAPINullablesSetToNull;
     }
 
     /**
@@ -161,9 +149,6 @@ class Document implements ModelInterface, ArrayAccess, \JsonSerializable
 
     /**
      * Checks if a property is nullable
-     *
-     * @param string $property
-     * @return bool
      */
     public static function isNullable(string $property): bool
     {
@@ -172,13 +157,10 @@ class Document implements ModelInterface, ArrayAccess, \JsonSerializable
 
     /**
      * Checks if a nullable property is set to null.
-     *
-     * @param string $property
-     * @return bool
      */
     public function isNullableSetToNull(string $property): bool
     {
-        return in_array($property, $this->getOpenAPINullablesSetToNull(), true);
+        return in_array($property, $this->openAPINullablesSetToNull, true);
     }
 
     /**
@@ -298,15 +280,11 @@ class Document implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
-    * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
-    * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
-    * $this->openAPINullablesSetToNull array
-    *
-    * @param string $variableName
-    * @param array  $fields
-    * @param mixed  $defaultValue
-    */
-    private function setIfExists(string $variableName, array $fields, $defaultValue): void
+     * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
+     * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
+     * $this->openAPINullablesSetToNull array
+     */
+    private function setIfExists(string $variableName, array $fields, mixed $defaultValue): void
     {
         if (self::isNullable($variableName) && array_key_exists($variableName, $fields) && is_null($fields[$variableName])) {
             $this->openAPINullablesSetToNull[] = $variableName;
@@ -320,11 +298,9 @@ class Document implements ModelInterface, ArrayAccess, \JsonSerializable
      *
      * @return array invalid properties with reasons
      */
-    public function listInvalidProperties()
+    public function listInvalidProperties(): array
     {
-        $invalidProperties = [];
-
-        return $invalidProperties;
+        return [];
     }
 
     /**
@@ -333,9 +309,9 @@ class Document implements ModelInterface, ArrayAccess, \JsonSerializable
      *
      * @return bool True if all properties are valid
      */
-    public function valid()
+    public function valid(): bool
     {
-        return count($this->listInvalidProperties()) === 0;
+        return $this->listInvalidProperties() === [];
     }
 
 
@@ -353,14 +329,13 @@ class Document implements ModelInterface, ArrayAccess, \JsonSerializable
      * Sets id
      *
      * @param int|null $id id
-     *
-     * @return self
      */
-    public function setId($id)
+    public function setId($id): self
     {
         if (is_null($id)) {
             throw new \InvalidArgumentException('non-nullable id cannot be null');
         }
+
         $this->container['id'] = $id;
 
         return $this;
@@ -380,14 +355,13 @@ class Document implements ModelInterface, ArrayAccess, \JsonSerializable
      * Sets name
      *
      * @param string|null $name name
-     *
-     * @return self
      */
-    public function setName($name)
+    public function setName($name): self
     {
         if (is_null($name)) {
             throw new \InvalidArgumentException('non-nullable name cannot be null');
         }
+
         $this->container['name'] = $name;
 
         return $this;
@@ -407,14 +381,13 @@ class Document implements ModelInterface, ArrayAccess, \JsonSerializable
      * Sets numPages
      *
      * @param int|null $numPages numPages
-     *
-     * @return self
      */
-    public function setNumPages($numPages)
+    public function setNumPages($numPages): self
     {
         if (is_null($numPages)) {
             throw new \InvalidArgumentException('non-nullable numPages cannot be null');
         }
+
         $this->container['numPages'] = $numPages;
 
         return $this;
@@ -434,14 +407,13 @@ class Document implements ModelInterface, ArrayAccess, \JsonSerializable
      * Sets creationDate
      *
      * @param \DateTime|null $creationDate creationDate
-     *
-     * @return self
      */
-    public function setCreationDate($creationDate)
+    public function setCreationDate($creationDate): self
     {
         if (is_null($creationDate)) {
             throw new \InvalidArgumentException('non-nullable creationDate cannot be null');
         }
+
         $this->container['creationDate'] = $creationDate;
 
         return $this;
@@ -461,21 +433,20 @@ class Document implements ModelInterface, ArrayAccess, \JsonSerializable
      * Sets archivingDate
      *
      * @param \DateTime|null $archivingDate archivingDate
-     *
-     * @return self
      */
-    public function setArchivingDate($archivingDate)
+    public function setArchivingDate($archivingDate): self
     {
         if (is_null($archivingDate)) {
-            array_push($this->openAPINullablesSetToNull, 'archivingDate');
+            $this->openAPINullablesSetToNull[] = 'archivingDate';
         } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('archivingDate', $nullablesSetToNull);
+            $nullablesSetToNull = $this->openAPINullablesSetToNull;
+            $index = array_search('archivingDate', $nullablesSetToNull, true);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
+
         $this->container['archivingDate'] = $archivingDate;
 
         return $this;
@@ -495,21 +466,20 @@ class Document implements ModelInterface, ArrayAccess, \JsonSerializable
      * Sets archivingUserId
      *
      * @param int|null $archivingUserId archivingUserId
-     *
-     * @return self
      */
-    public function setArchivingUserId($archivingUserId)
+    public function setArchivingUserId($archivingUserId): self
     {
         if (is_null($archivingUserId)) {
-            array_push($this->openAPINullablesSetToNull, 'archivingUserId');
+            $this->openAPINullablesSetToNull[] = 'archivingUserId';
         } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('archivingUserId', $nullablesSetToNull);
+            $nullablesSetToNull = $this->openAPINullablesSetToNull;
+            $index = array_search('archivingUserId', $nullablesSetToNull, true);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
+
         $this->container['archivingUserId'] = $archivingUserId;
 
         return $this;
@@ -529,21 +499,20 @@ class Document implements ModelInterface, ArrayAccess, \JsonSerializable
      * Sets folderId
      *
      * @param int|null $folderId folderId
-     *
-     * @return self
      */
-    public function setFolderId($folderId)
+    public function setFolderId($folderId): self
     {
         if (is_null($folderId)) {
-            array_push($this->openAPINullablesSetToNull, 'folderId');
+            $this->openAPINullablesSetToNull[] = 'folderId';
         } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('folderId', $nullablesSetToNull);
+            $nullablesSetToNull = $this->openAPINullablesSetToNull;
+            $index = array_search('folderId', $nullablesSetToNull, true);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
+
         $this->container['folderId'] = $folderId;
 
         return $this;
@@ -563,24 +532,22 @@ class Document implements ModelInterface, ArrayAccess, \JsonSerializable
      * Sets externalMetadata
      *
      * @param \OpenAPI\Client\Docbox\Model\ExternalMetadata[]|null $externalMetadata externalMetadata
-     *
-     * @return self
      */
-    public function setExternalMetadata($externalMetadata)
+    public function setExternalMetadata($externalMetadata): self
     {
         if (is_null($externalMetadata)) {
             throw new \InvalidArgumentException('non-nullable externalMetadata cannot be null');
         }
+
         $this->container['externalMetadata'] = $externalMetadata;
 
         return $this;
     }
+
     /**
      * Returns true if offset exists. False otherwise.
      *
      * @param integer $offset Offset
-     *
-     * @return boolean
      */
     public function offsetExists($offset): bool
     {
@@ -605,10 +572,8 @@ class Document implements ModelInterface, ArrayAccess, \JsonSerializable
      *
      * @param int|null $offset Offset
      * @param mixed    $value  Value to be set
-     *
-     * @return void
      */
-    public function offsetSet($offset, $value): void
+    public function offsetSet($offset, mixed $value): void
     {
         if (is_null($offset)) {
             $this->container[] = $value;
@@ -621,8 +586,6 @@ class Document implements ModelInterface, ArrayAccess, \JsonSerializable
      * Unsets offset.
      *
      * @param integer $offset Offset
-     *
-     * @return void
      */
     public function offsetUnset($offset): void
     {
@@ -644,12 +607,10 @@ class Document implements ModelInterface, ArrayAccess, \JsonSerializable
 
     /**
      * Gets the string presentation of the object
-     *
-     * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
-        return json_encode(
+        return (string) json_encode(
             ObjectSerializer::sanitizeForSerialization($this),
             JSON_PRETTY_PRINT
         );

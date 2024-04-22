@@ -53,14 +53,14 @@ class DocumentPageTest extends TestCase
     /**
      * Setup before running each test case
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
     }
 
     /**
      * Clean up after running each test case
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
     }
 
@@ -74,7 +74,7 @@ class DocumentPageTest extends TestCase
     /**
      * Test "DocumentPage"
      */
-    public function testDocumentPage()
+    public function testDocumentPage(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -83,7 +83,7 @@ class DocumentPageTest extends TestCase
     /**
      * Test attribute "id"
      */
-    public function testPropertyId()
+    public function testPropertyId(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -92,7 +92,7 @@ class DocumentPageTest extends TestCase
     /**
      * Test attribute "hit"
      */
-    public function testPropertyHit()
+    public function testPropertyHit(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -101,7 +101,7 @@ class DocumentPageTest extends TestCase
     /**
      * Test attribute "notes"
      */
-    public function testPropertyNotes()
+    public function testPropertyNotes(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -110,7 +110,7 @@ class DocumentPageTest extends TestCase
     /**
      * Test attribute "stamps"
      */
-    public function testPropertyStamps()
+    public function testPropertyStamps(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');

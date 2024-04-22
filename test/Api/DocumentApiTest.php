@@ -54,14 +54,14 @@ class DocumentApiTest extends TestCase
     /**
      * Setup before running each test case
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
     }
 
     /**
      * Clean up after running each test case
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
     }
 
@@ -78,7 +78,7 @@ class DocumentApiTest extends TestCase
      * Archives a INBOX-document.
      *
      */
-    public function testDocumentArchive()
+    public function testDocumentArchive(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -90,7 +90,7 @@ class DocumentApiTest extends TestCase
      * Set auto export status.
      *
      */
-    public function testDocumentAutoExportStatus()
+    public function testDocumentAutoExportStatus(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -102,7 +102,7 @@ class DocumentApiTest extends TestCase
      * .
      *
      */
-    public function testDocumentData()
+    public function testDocumentData(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -114,7 +114,7 @@ class DocumentApiTest extends TestCase
      * Deletes a inbox document.
      *
      */
-    public function testDocumentIdDeletePost()
+    public function testDocumentIdDeletePost(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -126,7 +126,7 @@ class DocumentApiTest extends TestCase
      * Replaces a document in Inbox..
      *
      */
-    public function testDocumentIdReplacePost()
+    public function testDocumentIdReplacePost(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -138,7 +138,7 @@ class DocumentApiTest extends TestCase
      * .
      *
      */
-    public function testDocumentKeywordsPost()
+    public function testDocumentKeywordsPost(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -150,7 +150,7 @@ class DocumentApiTest extends TestCase
      * Document list.
      *
      */
-    public function testDocumentList()
+    public function testDocumentList(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -162,7 +162,7 @@ class DocumentApiTest extends TestCase
      * .
      *
      */
-    public function testDocumentMetadataGet()
+    public function testDocumentMetadataGet(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -174,7 +174,7 @@ class DocumentApiTest extends TestCase
      * .
      *
      */
-    public function testDocumentMetadataPost()
+    public function testDocumentMetadataPost(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -186,7 +186,7 @@ class DocumentApiTest extends TestCase
      * Returns the OCR-result of a document.
      *
      */
-    public function testDocumentOcrResult()
+    public function testDocumentOcrResult(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -198,7 +198,7 @@ class DocumentApiTest extends TestCase
      * Document.
      *
      */
-    public function testDocumentPdf()
+    public function testDocumentPdf(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -210,7 +210,7 @@ class DocumentApiTest extends TestCase
      * .
      *
      */
-    public function testDocumentRename()
+    public function testDocumentRename(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -222,7 +222,7 @@ class DocumentApiTest extends TestCase
      * .
      *
      */
-    public function testDocumentUploadedWith()
+    public function testDocumentUploadedWith(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');

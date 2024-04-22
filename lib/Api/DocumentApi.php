@@ -50,25 +50,11 @@ use OpenAPI\Client\Docbox\ObjectSerializer;
  */
 class DocumentApi
 {
-    /**
-     * @var ClientInterface
-     */
-    protected $client;
+    protected \GuzzleHttp\ClientInterface $client;
 
-    /**
-     * @var Configuration
-     */
-    protected $config;
+    protected \OpenAPI\Client\Docbox\Configuration $config;
 
-    /**
-     * @var HeaderSelector
-     */
-    protected $headerSelector;
-
-    /**
-     * @var int Host index
-     */
-    protected $hostIndex;
+    protected \OpenAPI\Client\Docbox\HeaderSelector $headerSelector;
 
     /** @var string[] $contentTypes **/
     public const contentTypes = [
@@ -114,21 +100,17 @@ class DocumentApi
     ];
 
     /**
-     * @param ClientInterface $client
-     * @param Configuration   $config
-     * @param HeaderSelector  $selector
      * @param int             $hostIndex (Optional) host index to select the list of hosts if defined in the OpenAPI spec
      */
     public function __construct(
         ClientInterface $client = null,
-        Configuration $config = null,
-        HeaderSelector $selector = null,
-        $hostIndex = 0
+        Configuration $configuration = null,
+        HeaderSelector $headerSelector = null,
+        protected $hostIndex = 0
     ) {
-        $this->client = $client ?: new Client();
-        $this->config = $config ?: new Configuration();
-        $this->headerSelector = $selector ?: new HeaderSelector();
-        $this->hostIndex = $hostIndex;
+        $this->client = $client instanceof \GuzzleHttp\ClientInterface ? $client : new Client();
+        $this->config = $configuration instanceof \OpenAPI\Client\Docbox\Configuration ? $configuration : new Configuration();
+        $this->headerSelector = $headerSelector instanceof \OpenAPI\Client\Docbox\HeaderSelector ? $headerSelector : new HeaderSelector();
     }
 
     /**
@@ -151,10 +133,7 @@ class DocumentApi
         return $this->hostIndex;
     }
 
-    /**
-     * @return Configuration
-     */
-    public function getConfig()
+    public function getConfig(): \OpenAPI\Client\Docbox\Configuration
     {
         return $this->config;
     }
@@ -174,9 +153,8 @@ class DocumentApi
      *
      * @throws \OpenAPI\Client\Docbox\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return void
      */
-    public function documentArchive($id, $targetFolderId = null, $targetMandatorName = null, $targetFolderPath = null, $targetDocumentName = null, $keywords = null, string $contentType = self::contentTypes['documentArchive'][0])
+    public function documentArchive($id, $targetFolderId = null, $targetMandatorName = null, $targetFolderPath = null, $targetDocumentName = null, $keywords = null, string $contentType = self::contentTypes['documentArchive'][0]): void
     {
         $this->documentArchiveWithHttpInfo($id, $targetFolderId, $targetMandatorName, $targetFolderPath, $targetDocumentName, $keywords, $contentType);
     }
@@ -208,14 +186,14 @@ class DocumentApi
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
+                    sprintf('[%d] %s', $e->getCode(), $e->getMessage()),
                     (int) $e->getCode(),
-                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
-                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                    $e->getResponse() instanceof \Psr\Http\Message\ResponseInterface ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() instanceof \Psr\Http\Message\ResponseInterface ? (string) $e->getResponse()->getBody() : null
                 );
             } catch (ConnectException $e) {
                 throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
+                    sprintf('[%d] %s', $e->getCode(), $e->getMessage()),
                     (int) $e->getCode(),
                     null,
                     null
@@ -239,10 +217,11 @@ class DocumentApi
 
             return [null, $statusCode, $response->getHeaders()];
 
-        } catch (ApiException $e) {
-            switch ($e->getCode()) {
+        } catch (ApiException $apiException) {
+            switch ($apiException->getCode()) {
             }
-            throw $e;
+            
+            throw $apiException;
         }
     }
 
@@ -260,15 +239,12 @@ class DocumentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentArchive'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function documentArchiveAsync($id, $targetFolderId = null, $targetMandatorName = null, $targetFolderPath = null, $targetDocumentName = null, $keywords = null, string $contentType = self::contentTypes['documentArchive'][0])
+    public function documentArchiveAsync($id, $targetFolderId = null, $targetMandatorName = null, $targetFolderPath = null, $targetDocumentName = null, $keywords = null, string $contentType = self::contentTypes['documentArchive'][0]): \GuzzleHttp\Promise\PromiseInterface
     {
         return $this->documentArchiveAsyncWithHttpInfo($id, $targetFolderId, $targetMandatorName, $targetFolderPath, $targetDocumentName, $keywords, $contentType)
             ->then(
-                function ($response) {
-                    return $response[0];
-                }
+                static fn($response) => $response[0]
             );
     }
 
@@ -286,20 +262,16 @@ class DocumentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentArchive'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function documentArchiveAsyncWithHttpInfo($id, $targetFolderId = null, $targetMandatorName = null, $targetFolderPath = null, $targetDocumentName = null, $keywords = null, string $contentType = self::contentTypes['documentArchive'][0])
+    public function documentArchiveAsyncWithHttpInfo($id, $targetFolderId = null, $targetMandatorName = null, $targetFolderPath = null, $targetDocumentName = null, $keywords = null, string $contentType = self::contentTypes['documentArchive'][0]): \GuzzleHttp\Promise\PromiseInterface
     {
-        $returnType = '';
         $request = $this->documentArchiveRequest($id, $targetFolderId, $targetMandatorName, $targetFolderPath, $targetDocumentName, $keywords, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
-                    return [null, $response->getStatusCode(), $response->getHeaders()];
-                },
-                function ($exception) {
+                static fn($response): array => [null, $response->getStatusCode(), $response->getHeaders()],
+                static function ($exception) : void {
                     $response = $exception->getResponse();
                     $statusCode = $response->getStatusCode();
                     throw new ApiException(
@@ -328,13 +300,12 @@ class DocumentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentArchive'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
      */
-    public function documentArchiveRequest($id, $targetFolderId = null, $targetMandatorName = null, $targetFolderPath = null, $targetDocumentName = null, $keywords = null, string $contentType = self::contentTypes['documentArchive'][0])
+    public function documentArchiveRequest($id, $targetFolderId = null, $targetMandatorName = null, $targetFolderPath = null, $targetDocumentName = null, $keywords = null, string $contentType = self::contentTypes['documentArchive'][0]): \GuzzleHttp\Psr7\Request
     {
 
         // verify the required parameter 'id' is set
-        if ($id === null || (is_array($id) && count($id) === 0)) {
+        if ($id === null || (is_array($id) && $id === [])) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $id when calling documentArchive'
             );
@@ -356,30 +327,32 @@ class DocumentApi
 
 
         // path params
-        if ($id !== null) {
-            $resourcePath = str_replace(
-                '{' . 'id' . '}',
-                ObjectSerializer::toPathValue($id),
-                $resourcePath
-            );
-        }
+        $resourcePath = str_replace(
+            '{id}',
+            ObjectSerializer::toPathValue($id),
+            $resourcePath
+        );
 
         // form params
         if ($targetFolderId !== null) {
             $formParams['target-folder-id'] = ObjectSerializer::toFormValue($targetFolderId);
         }
+        
         // form params
         if ($targetMandatorName !== null) {
             $formParams['target-mandator-name'] = ObjectSerializer::toFormValue($targetMandatorName);
         }
+        
         // form params
         if ($targetFolderPath !== null) {
             $formParams['target-folder-path'] = ObjectSerializer::toFormValue($targetFolderPath);
         }
+        
         // form params
         if ($targetDocumentName !== null) {
             $formParams['target-document-name'] = ObjectSerializer::toFormValue($targetDocumentName);
         }
+        
         // form params
         if ($keywords !== null) {
             $formParams['keywords'] = ObjectSerializer::toFormValue($keywords);
@@ -392,7 +365,7 @@ class DocumentApi
         );
 
         // for model (json/xml)
-        if (count($formParams) > 0) {
+        if ($formParams !== []) {
             if ($multipart) {
                 $multipartContents = [];
                 foreach ($formParams as $formParamName => $formParamValue) {
@@ -404,6 +377,7 @@ class DocumentApi
                         ];
                     }
                 }
+                
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
@@ -421,6 +395,7 @@ class DocumentApi
         if ($apiKey !== null) {
             $headers['Cloud-ID'] = $apiKey;
         }
+        
         // this endpoint requires API key authentication
         $apiKey = $this->config->getApiKeyWithPrefix('API-Key');
         if ($apiKey !== null) {
@@ -442,7 +417,7 @@ class DocumentApi
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'POST',
-            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query !== '' && $query !== '0' ? '?' . $query : ''),
             $headers,
             $httpBody
         );
@@ -459,9 +434,8 @@ class DocumentApi
      *
      * @throws \OpenAPI\Client\Docbox\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return void
      */
-    public function documentAutoExportStatus($documentId, $autoexportStatus, string $contentType = self::contentTypes['documentAutoExportStatus'][0])
+    public function documentAutoExportStatus($documentId, $autoexportStatus, string $contentType = self::contentTypes['documentAutoExportStatus'][0]): void
     {
         $this->documentAutoExportStatusWithHttpInfo($documentId, $autoexportStatus, $contentType);
     }
@@ -489,14 +463,14 @@ class DocumentApi
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
+                    sprintf('[%d] %s', $e->getCode(), $e->getMessage()),
                     (int) $e->getCode(),
-                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
-                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                    $e->getResponse() instanceof \Psr\Http\Message\ResponseInterface ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() instanceof \Psr\Http\Message\ResponseInterface ? (string) $e->getResponse()->getBody() : null
                 );
             } catch (ConnectException $e) {
                 throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
+                    sprintf('[%d] %s', $e->getCode(), $e->getMessage()),
                     (int) $e->getCode(),
                     null,
                     null
@@ -520,10 +494,11 @@ class DocumentApi
 
             return [null, $statusCode, $response->getHeaders()];
 
-        } catch (ApiException $e) {
-            switch ($e->getCode()) {
+        } catch (ApiException $apiException) {
+            switch ($apiException->getCode()) {
             }
-            throw $e;
+            
+            throw $apiException;
         }
     }
 
@@ -537,15 +512,12 @@ class DocumentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentAutoExportStatus'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function documentAutoExportStatusAsync($documentId, $autoexportStatus, string $contentType = self::contentTypes['documentAutoExportStatus'][0])
+    public function documentAutoExportStatusAsync($documentId, $autoexportStatus, string $contentType = self::contentTypes['documentAutoExportStatus'][0]): \GuzzleHttp\Promise\PromiseInterface
     {
         return $this->documentAutoExportStatusAsyncWithHttpInfo($documentId, $autoexportStatus, $contentType)
             ->then(
-                function ($response) {
-                    return $response[0];
-                }
+                static fn($response) => $response[0]
             );
     }
 
@@ -559,20 +531,16 @@ class DocumentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentAutoExportStatus'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function documentAutoExportStatusAsyncWithHttpInfo($documentId, $autoexportStatus, string $contentType = self::contentTypes['documentAutoExportStatus'][0])
+    public function documentAutoExportStatusAsyncWithHttpInfo($documentId, $autoexportStatus, string $contentType = self::contentTypes['documentAutoExportStatus'][0]): \GuzzleHttp\Promise\PromiseInterface
     {
-        $returnType = '';
         $request = $this->documentAutoExportStatusRequest($documentId, $autoexportStatus, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
-                    return [null, $response->getStatusCode(), $response->getHeaders()];
-                },
-                function ($exception) {
+                static fn($response): array => [null, $response->getStatusCode(), $response->getHeaders()],
+                static function ($exception) : void {
                     $response = $exception->getResponse();
                     $statusCode = $response->getStatusCode();
                     throw new ApiException(
@@ -597,20 +565,19 @@ class DocumentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentAutoExportStatus'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
      */
-    public function documentAutoExportStatusRequest($documentId, $autoexportStatus, string $contentType = self::contentTypes['documentAutoExportStatus'][0])
+    public function documentAutoExportStatusRequest($documentId, $autoexportStatus, string $contentType = self::contentTypes['documentAutoExportStatus'][0]): \GuzzleHttp\Psr7\Request
     {
 
         // verify the required parameter 'documentId' is set
-        if ($documentId === null || (is_array($documentId) && count($documentId) === 0)) {
+        if ($documentId === null || (is_array($documentId) && $documentId === [])) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $documentId when calling documentAutoExportStatus'
             );
         }
 
         // verify the required parameter 'autoexportStatus' is set
-        if ($autoexportStatus === null || (is_array($autoexportStatus) && count($autoexportStatus) === 0)) {
+        if ($autoexportStatus === null || (is_array($autoexportStatus) && $autoexportStatus === [])) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $autoexportStatus when calling documentAutoExportStatus'
             );
@@ -623,18 +590,11 @@ class DocumentApi
         $headerParams = [];
         $httpBody = '';
         $multipart = false;
-
-
-
+        // form params
+        $formParams['document-id'] = ObjectSerializer::toFormValue($documentId);
 
         // form params
-        if ($documentId !== null) {
-            $formParams['document-id'] = ObjectSerializer::toFormValue($documentId);
-        }
-        // form params
-        if ($autoexportStatus !== null) {
-            $formParams['autoexport-status'] = ObjectSerializer::toFormValue($autoexportStatus);
-        }
+        $formParams['autoexport-status'] = ObjectSerializer::toFormValue($autoexportStatus);
 
         $headers = $this->headerSelector->selectHeaders(
             [],
@@ -643,28 +603,27 @@ class DocumentApi
         );
 
         // for model (json/xml)
-        if (count($formParams) > 0) {
-            if ($multipart) {
-                $multipartContents = [];
-                foreach ($formParams as $formParamName => $formParamValue) {
-                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
-                    foreach ($formParamValueItems as $formParamValueItem) {
-                        $multipartContents[] = [
-                            'name' => $formParamName,
-                            'contents' => $formParamValueItem
-                        ];
-                    }
+        if ($multipart) {
+            $multipartContents = [];
+            foreach ($formParams as $formParamName => $formParamValue) {
+                $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                foreach ($formParamValueItems as $formParamValueItem) {
+                    $multipartContents[] = [
+                        'name' => $formParamName,
+                        'contents' => $formParamValueItem
+                    ];
                 }
-                // for HTTP post (form)
-                $httpBody = new MultipartStream($multipartContents);
-
-            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
-            } else {
-                // for HTTP post (form)
-                $httpBody = ObjectSerializer::buildQuery($formParams);
             }
+            
+            // for HTTP post (form)
+            $httpBody = new MultipartStream($multipartContents);
+
+        } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+            # if Content-Type contains "application/json", json_encode the form parameters
+            $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+        } else {
+            // for HTTP post (form)
+            $httpBody = ObjectSerializer::buildQuery($formParams);
         }
 
         // this endpoint requires API key authentication
@@ -672,6 +631,7 @@ class DocumentApi
         if ($apiKey !== null) {
             $headers['Cloud-ID'] = $apiKey;
         }
+        
         // this endpoint requires API key authentication
         $apiKey = $this->config->getApiKeyWithPrefix('API-Key');
         if ($apiKey !== null) {
@@ -693,7 +653,7 @@ class DocumentApi
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'POST',
-            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query !== '' && $query !== '0' ? '?' . $query : ''),
             $headers,
             $httpBody
         );
@@ -711,7 +671,7 @@ class DocumentApi
      */
     public function documentData($id, string $contentType = self::contentTypes['documentData'][0])
     {
-        list($response) = $this->documentDataWithHttpInfo($id, $contentType);
+        [$response] = $this->documentDataWithHttpInfo($id, $contentType);
         return $response;
     }
 
@@ -735,14 +695,14 @@ class DocumentApi
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
+                    sprintf('[%d] %s', $e->getCode(), $e->getMessage()),
                     (int) $e->getCode(),
-                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
-                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                    $e->getResponse() instanceof \Psr\Http\Message\ResponseInterface ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() instanceof \Psr\Http\Message\ResponseInterface ? (string) $e->getResponse()->getBody() : null
                 );
             } catch (ConnectException $e) {
                 throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
+                    sprintf('[%d] %s', $e->getCode(), $e->getMessage()),
                     (int) $e->getCode(),
                     null,
                     null
@@ -764,45 +724,14 @@ class DocumentApi
                 );
             }
 
-            switch($statusCode) {
-                case 200:
-                    if ('\OpenAPI\Client\Docbox\Model\ExtendedDocument' === '\SplFileObject') {
-                        $content = $response->getBody(); //stream goes to serializer
-                    } else {
-                        $content = (string) $response->getBody();
-                        if ('\OpenAPI\Client\Docbox\Model\ExtendedDocument' !== 'string') {
-                            try {
-                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
-                            } catch (\JsonException $exception) {
-                                throw new ApiException(
-                                    sprintf(
-                                        'Error JSON decoding server response (%s)',
-                                        $request->getUri()
-                                    ),
-                                    $statusCode,
-                                    $response->getHeaders(),
-                                    $content
-                                );
-                            }
-                        }
-                    }
-
-                    return [
-                        ObjectSerializer::deserialize($content, '\OpenAPI\Client\Docbox\Model\ExtendedDocument', []),
-                        $response->getStatusCode(),
-                        $response->getHeaders()
-                    ];
-            }
-
-            $returnType = '\OpenAPI\Client\Docbox\Model\ExtendedDocument';
-            if ($returnType === '\SplFileObject') {
-                $content = $response->getBody(); //stream goes to serializer
-            } else {
-                $content = (string) $response->getBody();
-                if ($returnType !== 'string') {
+            if ($statusCode === 200) {
+                if (\OpenAPI\Client\Docbox\Model\ExtendedDocument::class === '\SplFileObject') {
+                    $content = $response->getBody(); //stream goes to serializer
+                } else {
+                    $content = (string) $response->getBody();
                     try {
                         $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
-                    } catch (\JsonException $exception) {
+                    } catch (\JsonException) {
                         throw new ApiException(
                             sprintf(
                                 'Error JSON decoding server response (%s)',
@@ -814,6 +743,32 @@ class DocumentApi
                         );
                     }
                 }
+
+                return [
+                    ObjectSerializer::deserialize($content, \OpenAPI\Client\Docbox\Model\ExtendedDocument::class, []),
+                    $response->getStatusCode(),
+                    $response->getHeaders()
+                ];
+            }
+
+            $returnType = \OpenAPI\Client\Docbox\Model\ExtendedDocument::class;
+            if ($returnType === '\SplFileObject') {
+                $content = $response->getBody(); //stream goes to serializer
+            } else {
+                $content = (string) $response->getBody();
+                try {
+                    $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                } catch (\JsonException) {
+                    throw new ApiException(
+                        sprintf(
+                            'Error JSON decoding server response (%s)',
+                            $request->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        $content
+                    );
+                }
             }
 
             return [
@@ -822,18 +777,17 @@ class DocumentApi
                 $response->getHeaders()
             ];
 
-        } catch (ApiException $e) {
-            switch ($e->getCode()) {
-                case 200:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\OpenAPI\Client\Docbox\Model\ExtendedDocument',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    break;
+        } catch (ApiException $apiException) {
+            if ($apiException->getCode() === 200) {
+                $data = ObjectSerializer::deserialize(
+                    $apiException->getResponseBody(),
+                    \OpenAPI\Client\Docbox\Model\ExtendedDocument::class,
+                    $apiException->getResponseHeaders()
+                );
+                $apiException->setResponseObject($data);
             }
-            throw $e;
+
+            throw $apiException;
         }
     }
 
@@ -844,15 +798,12 @@ class DocumentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentData'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function documentDataAsync($id, string $contentType = self::contentTypes['documentData'][0])
+    public function documentDataAsync($id, string $contentType = self::contentTypes['documentData'][0]): \GuzzleHttp\Promise\PromiseInterface
     {
         return $this->documentDataAsyncWithHttpInfo($id, $contentType)
             ->then(
-                function ($response) {
-                    return $response[0];
-                }
+                static fn($response) => $response[0]
             );
     }
 
@@ -863,24 +814,21 @@ class DocumentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentData'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function documentDataAsyncWithHttpInfo($id, string $contentType = self::contentTypes['documentData'][0])
+    public function documentDataAsyncWithHttpInfo($id, string $contentType = self::contentTypes['documentData'][0]): \GuzzleHttp\Promise\PromiseInterface
     {
-        $returnType = '\OpenAPI\Client\Docbox\Model\ExtendedDocument';
+        $returnType = \OpenAPI\Client\Docbox\Model\ExtendedDocument::class;
         $request = $this->documentDataRequest($id, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                static function ($response) use ($returnType) : array {
                     if ($returnType === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
-                        if ($returnType !== 'string') {
-                            $content = json_decode($content);
-                        }
+                        $content = json_decode($content);
                     }
 
                     return [
@@ -889,7 +837,7 @@ class DocumentApi
                         $response->getHeaders()
                     ];
                 },
-                function ($exception) {
+                static function ($exception) : void {
                     $response = $exception->getResponse();
                     $statusCode = $response->getStatusCode();
                     throw new ApiException(
@@ -913,13 +861,12 @@ class DocumentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentData'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
      */
-    public function documentDataRequest($id, string $contentType = self::contentTypes['documentData'][0])
+    public function documentDataRequest($id, string $contentType = self::contentTypes['documentData'][0]): \GuzzleHttp\Psr7\Request
     {
 
         // verify the required parameter 'id' is set
-        if ($id === null || (is_array($id) && count($id) === 0)) {
+        if ($id === null || (is_array($id) && $id === [])) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $id when calling documentData'
             );
@@ -936,13 +883,11 @@ class DocumentApi
 
 
         // path params
-        if ($id !== null) {
-            $resourcePath = str_replace(
-                '{' . 'id' . '}',
-                ObjectSerializer::toPathValue($id),
-                $resourcePath
-            );
-        }
+        $resourcePath = str_replace(
+            '{id}',
+            ObjectSerializer::toPathValue($id),
+            $resourcePath
+        );
 
 
         $headers = $this->headerSelector->selectHeaders(
@@ -952,7 +897,7 @@ class DocumentApi
         );
 
         // for model (json/xml)
-        if (count($formParams) > 0) {
+        if ($formParams !== []) {
             if ($multipart) {
                 $multipartContents = [];
                 foreach ($formParams as $formParamName => $formParamValue) {
@@ -964,6 +909,7 @@ class DocumentApi
                         ];
                     }
                 }
+                
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
@@ -981,6 +927,7 @@ class DocumentApi
         if ($apiKey !== null) {
             $headers['Cloud-ID'] = $apiKey;
         }
+        
         // this endpoint requires API key authentication
         $apiKey = $this->config->getApiKeyWithPrefix('API-Key');
         if ($apiKey !== null) {
@@ -1002,7 +949,7 @@ class DocumentApi
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'GET',
-            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query !== '' && $query !== '0' ? '?' . $query : ''),
             $headers,
             $httpBody
         );
@@ -1018,9 +965,8 @@ class DocumentApi
      *
      * @throws \OpenAPI\Client\Docbox\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return void
      */
-    public function documentIdDeletePost($id, string $contentType = self::contentTypes['documentIdDeletePost'][0])
+    public function documentIdDeletePost($id, string $contentType = self::contentTypes['documentIdDeletePost'][0]): void
     {
         $this->documentIdDeletePostWithHttpInfo($id, $contentType);
     }
@@ -1047,14 +993,14 @@ class DocumentApi
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
+                    sprintf('[%d] %s', $e->getCode(), $e->getMessage()),
                     (int) $e->getCode(),
-                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
-                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                    $e->getResponse() instanceof \Psr\Http\Message\ResponseInterface ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() instanceof \Psr\Http\Message\ResponseInterface ? (string) $e->getResponse()->getBody() : null
                 );
             } catch (ConnectException $e) {
                 throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
+                    sprintf('[%d] %s', $e->getCode(), $e->getMessage()),
                     (int) $e->getCode(),
                     null,
                     null
@@ -1078,10 +1024,11 @@ class DocumentApi
 
             return [null, $statusCode, $response->getHeaders()];
 
-        } catch (ApiException $e) {
-            switch ($e->getCode()) {
+        } catch (ApiException $apiException) {
+            switch ($apiException->getCode()) {
             }
-            throw $e;
+            
+            throw $apiException;
         }
     }
 
@@ -1094,15 +1041,12 @@ class DocumentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentIdDeletePost'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function documentIdDeletePostAsync($id, string $contentType = self::contentTypes['documentIdDeletePost'][0])
+    public function documentIdDeletePostAsync($id, string $contentType = self::contentTypes['documentIdDeletePost'][0]): \GuzzleHttp\Promise\PromiseInterface
     {
         return $this->documentIdDeletePostAsyncWithHttpInfo($id, $contentType)
             ->then(
-                function ($response) {
-                    return $response[0];
-                }
+                static fn($response) => $response[0]
             );
     }
 
@@ -1115,20 +1059,16 @@ class DocumentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentIdDeletePost'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function documentIdDeletePostAsyncWithHttpInfo($id, string $contentType = self::contentTypes['documentIdDeletePost'][0])
+    public function documentIdDeletePostAsyncWithHttpInfo($id, string $contentType = self::contentTypes['documentIdDeletePost'][0]): \GuzzleHttp\Promise\PromiseInterface
     {
-        $returnType = '';
         $request = $this->documentIdDeletePostRequest($id, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
-                    return [null, $response->getStatusCode(), $response->getHeaders()];
-                },
-                function ($exception) {
+                static fn($response): array => [null, $response->getStatusCode(), $response->getHeaders()],
+                static function ($exception) : void {
                     $response = $exception->getResponse();
                     $statusCode = $response->getStatusCode();
                     throw new ApiException(
@@ -1152,13 +1092,12 @@ class DocumentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentIdDeletePost'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
      */
-    public function documentIdDeletePostRequest($id, string $contentType = self::contentTypes['documentIdDeletePost'][0])
+    public function documentIdDeletePostRequest($id, string $contentType = self::contentTypes['documentIdDeletePost'][0]): \GuzzleHttp\Psr7\Request
     {
 
         // verify the required parameter 'id' is set
-        if ($id === null || (is_array($id) && count($id) === 0)) {
+        if ($id === null || (is_array($id) && $id === [])) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $id when calling documentIdDeletePost'
             );
@@ -1175,13 +1114,11 @@ class DocumentApi
 
 
         // path params
-        if ($id !== null) {
-            $resourcePath = str_replace(
-                '{' . 'id' . '}',
-                ObjectSerializer::toPathValue($id),
-                $resourcePath
-            );
-        }
+        $resourcePath = str_replace(
+            '{id}',
+            ObjectSerializer::toPathValue($id),
+            $resourcePath
+        );
 
 
         $headers = $this->headerSelector->selectHeaders(
@@ -1191,7 +1128,7 @@ class DocumentApi
         );
 
         // for model (json/xml)
-        if (count($formParams) > 0) {
+        if ($formParams !== []) {
             if ($multipart) {
                 $multipartContents = [];
                 foreach ($formParams as $formParamName => $formParamValue) {
@@ -1203,6 +1140,7 @@ class DocumentApi
                         ];
                     }
                 }
+                
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
@@ -1220,6 +1158,7 @@ class DocumentApi
         if ($apiKey !== null) {
             $headers['Cloud-ID'] = $apiKey;
         }
+        
         // this endpoint requires API key authentication
         $apiKey = $this->config->getApiKeyWithPrefix('API-Key');
         if ($apiKey !== null) {
@@ -1241,7 +1180,7 @@ class DocumentApi
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'POST',
-            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query !== '' && $query !== '0' ? '?' . $query : ''),
             $headers,
             $httpBody
         );
@@ -1260,9 +1199,8 @@ class DocumentApi
      *
      * @throws \OpenAPI\Client\Docbox\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return void
      */
-    public function documentIdReplacePost($id, $keywords = null, $uploadData = null, $uploadDataBase64 = null, string $contentType = self::contentTypes['documentIdReplacePost'][0])
+    public function documentIdReplacePost($id, $keywords = null, $uploadData = null, $uploadDataBase64 = null, string $contentType = self::contentTypes['documentIdReplacePost'][0]): void
     {
         $this->documentIdReplacePostWithHttpInfo($id, $keywords, $uploadData, $uploadDataBase64, $contentType);
     }
@@ -1292,14 +1230,14 @@ class DocumentApi
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
+                    sprintf('[%d] %s', $e->getCode(), $e->getMessage()),
                     (int) $e->getCode(),
-                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
-                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                    $e->getResponse() instanceof \Psr\Http\Message\ResponseInterface ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() instanceof \Psr\Http\Message\ResponseInterface ? (string) $e->getResponse()->getBody() : null
                 );
             } catch (ConnectException $e) {
                 throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
+                    sprintf('[%d] %s', $e->getCode(), $e->getMessage()),
                     (int) $e->getCode(),
                     null,
                     null
@@ -1323,10 +1261,11 @@ class DocumentApi
 
             return [null, $statusCode, $response->getHeaders()];
 
-        } catch (ApiException $e) {
-            switch ($e->getCode()) {
+        } catch (ApiException $apiException) {
+            switch ($apiException->getCode()) {
             }
-            throw $e;
+            
+            throw $apiException;
         }
     }
 
@@ -1342,15 +1281,12 @@ class DocumentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentIdReplacePost'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function documentIdReplacePostAsync($id, $keywords = null, $uploadData = null, $uploadDataBase64 = null, string $contentType = self::contentTypes['documentIdReplacePost'][0])
+    public function documentIdReplacePostAsync($id, $keywords = null, $uploadData = null, $uploadDataBase64 = null, string $contentType = self::contentTypes['documentIdReplacePost'][0]): \GuzzleHttp\Promise\PromiseInterface
     {
         return $this->documentIdReplacePostAsyncWithHttpInfo($id, $keywords, $uploadData, $uploadDataBase64, $contentType)
             ->then(
-                function ($response) {
-                    return $response[0];
-                }
+                static fn($response) => $response[0]
             );
     }
 
@@ -1366,20 +1302,16 @@ class DocumentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentIdReplacePost'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function documentIdReplacePostAsyncWithHttpInfo($id, $keywords = null, $uploadData = null, $uploadDataBase64 = null, string $contentType = self::contentTypes['documentIdReplacePost'][0])
+    public function documentIdReplacePostAsyncWithHttpInfo($id, $keywords = null, $uploadData = null, $uploadDataBase64 = null, string $contentType = self::contentTypes['documentIdReplacePost'][0]): \GuzzleHttp\Promise\PromiseInterface
     {
-        $returnType = '';
         $request = $this->documentIdReplacePostRequest($id, $keywords, $uploadData, $uploadDataBase64, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
-                    return [null, $response->getStatusCode(), $response->getHeaders()];
-                },
-                function ($exception) {
+                static fn($response): array => [null, $response->getStatusCode(), $response->getHeaders()],
+                static function ($exception) : void {
                     $response = $exception->getResponse();
                     $statusCode = $response->getStatusCode();
                     throw new ApiException(
@@ -1406,13 +1338,12 @@ class DocumentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentIdReplacePost'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
      */
-    public function documentIdReplacePostRequest($id, $keywords = null, $uploadData = null, $uploadDataBase64 = null, string $contentType = self::contentTypes['documentIdReplacePost'][0])
+    public function documentIdReplacePostRequest($id, $keywords = null, $uploadData = null, $uploadDataBase64 = null, string $contentType = self::contentTypes['documentIdReplacePost'][0]): \GuzzleHttp\Psr7\Request
     {
 
         // verify the required parameter 'id' is set
-        if ($id === null || (is_array($id) && count($id) === 0)) {
+        if ($id === null || (is_array($id) && $id === [])) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $id when calling documentIdReplacePost'
             );
@@ -1441,13 +1372,11 @@ class DocumentApi
 
 
         // path params
-        if ($id !== null) {
-            $resourcePath = str_replace(
-                '{' . 'id' . '}',
-                ObjectSerializer::toPathValue($id),
-                $resourcePath
-            );
-        }
+        $resourcePath = str_replace(
+            '{id}',
+            ObjectSerializer::toPathValue($id),
+            $resourcePath
+        );
 
         // form params
         if ($uploadData !== null) {
@@ -1461,6 +1390,7 @@ class DocumentApi
                 );
             }
         }
+        
         // form params
         if ($uploadDataBase64 !== null) {
             $formParams['upload-data-base64'] = ObjectSerializer::toFormValue($uploadDataBase64);
@@ -1473,7 +1403,7 @@ class DocumentApi
         );
 
         // for model (json/xml)
-        if (count($formParams) > 0) {
+        if ($formParams !== []) {
             if ($multipart) {
                 $multipartContents = [];
                 foreach ($formParams as $formParamName => $formParamValue) {
@@ -1485,6 +1415,7 @@ class DocumentApi
                         ];
                     }
                 }
+                
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
@@ -1502,6 +1433,7 @@ class DocumentApi
         if ($apiKey !== null) {
             $headers['Cloud-ID'] = $apiKey;
         }
+        
         // this endpoint requires API key authentication
         $apiKey = $this->config->getApiKeyWithPrefix('API-Key');
         if ($apiKey !== null) {
@@ -1523,7 +1455,7 @@ class DocumentApi
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'POST',
-            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query !== '' && $query !== '0' ? '?' . $query : ''),
             $headers,
             $httpBody
         );
@@ -1538,9 +1470,8 @@ class DocumentApi
      *
      * @throws \OpenAPI\Client\Docbox\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return void
      */
-    public function documentKeywordsPost($id, $requestBody, string $contentType = self::contentTypes['documentKeywordsPost'][0])
+    public function documentKeywordsPost($id, $requestBody, string $contentType = self::contentTypes['documentKeywordsPost'][0]): void
     {
         $this->documentKeywordsPostWithHttpInfo($id, $requestBody, $contentType);
     }
@@ -1566,14 +1497,14 @@ class DocumentApi
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
+                    sprintf('[%d] %s', $e->getCode(), $e->getMessage()),
                     (int) $e->getCode(),
-                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
-                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                    $e->getResponse() instanceof \Psr\Http\Message\ResponseInterface ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() instanceof \Psr\Http\Message\ResponseInterface ? (string) $e->getResponse()->getBody() : null
                 );
             } catch (ConnectException $e) {
                 throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
+                    sprintf('[%d] %s', $e->getCode(), $e->getMessage()),
                     (int) $e->getCode(),
                     null,
                     null
@@ -1597,10 +1528,11 @@ class DocumentApi
 
             return [null, $statusCode, $response->getHeaders()];
 
-        } catch (ApiException $e) {
-            switch ($e->getCode()) {
+        } catch (ApiException $apiException) {
+            switch ($apiException->getCode()) {
             }
-            throw $e;
+            
+            throw $apiException;
         }
     }
 
@@ -1612,15 +1544,12 @@ class DocumentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentKeywordsPost'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function documentKeywordsPostAsync($id, $requestBody, string $contentType = self::contentTypes['documentKeywordsPost'][0])
+    public function documentKeywordsPostAsync($id, $requestBody, string $contentType = self::contentTypes['documentKeywordsPost'][0]): \GuzzleHttp\Promise\PromiseInterface
     {
         return $this->documentKeywordsPostAsyncWithHttpInfo($id, $requestBody, $contentType)
             ->then(
-                function ($response) {
-                    return $response[0];
-                }
+                static fn($response) => $response[0]
             );
     }
 
@@ -1632,20 +1561,16 @@ class DocumentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentKeywordsPost'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function documentKeywordsPostAsyncWithHttpInfo($id, $requestBody, string $contentType = self::contentTypes['documentKeywordsPost'][0])
+    public function documentKeywordsPostAsyncWithHttpInfo($id, $requestBody, string $contentType = self::contentTypes['documentKeywordsPost'][0]): \GuzzleHttp\Promise\PromiseInterface
     {
-        $returnType = '';
         $request = $this->documentKeywordsPostRequest($id, $requestBody, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
-                    return [null, $response->getStatusCode(), $response->getHeaders()];
-                },
-                function ($exception) {
+                static fn($response): array => [null, $response->getStatusCode(), $response->getHeaders()],
+                static function ($exception) : void {
                     $response = $exception->getResponse();
                     $statusCode = $response->getStatusCode();
                     throw new ApiException(
@@ -1670,20 +1595,19 @@ class DocumentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentKeywordsPost'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
      */
-    public function documentKeywordsPostRequest($id, $requestBody, string $contentType = self::contentTypes['documentKeywordsPost'][0])
+    public function documentKeywordsPostRequest($id, $requestBody, string $contentType = self::contentTypes['documentKeywordsPost'][0]): \GuzzleHttp\Psr7\Request
     {
 
         // verify the required parameter 'id' is set
-        if ($id === null || (is_array($id) && count($id) === 0)) {
+        if ($id === null || (is_array($id) && $id === [])) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $id when calling documentKeywordsPost'
             );
         }
 
         // verify the required parameter 'requestBody' is set
-        if ($requestBody === null || (is_array($requestBody) && count($requestBody) === 0)) {
+        if ($requestBody === null || (is_array($requestBody) && $requestBody === [])) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $requestBody when calling documentKeywordsPost'
             );
@@ -1700,13 +1624,11 @@ class DocumentApi
 
 
         // path params
-        if ($id !== null) {
-            $resourcePath = str_replace(
-                '{' . 'id' . '}',
-                ObjectSerializer::toPathValue($id),
-                $resourcePath
-            );
-        }
+        $resourcePath = str_replace(
+            '{id}',
+            ObjectSerializer::toPathValue($id),
+            $resourcePath
+        );
 
 
         $headers = $this->headerSelector->selectHeaders(
@@ -1723,7 +1645,7 @@ class DocumentApi
             } else {
                 $httpBody = $requestBody;
             }
-        } elseif (count($formParams) > 0) {
+        } elseif ($formParams !== []) {
             if ($multipart) {
                 $multipartContents = [];
                 foreach ($formParams as $formParamName => $formParamValue) {
@@ -1735,6 +1657,7 @@ class DocumentApi
                         ];
                     }
                 }
+                
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
@@ -1752,6 +1675,7 @@ class DocumentApi
         if ($apiKey !== null) {
             $headers['Cloud-ID'] = $apiKey;
         }
+        
         // this endpoint requires API key authentication
         $apiKey = $this->config->getApiKeyWithPrefix('API-Key');
         if ($apiKey !== null) {
@@ -1773,7 +1697,7 @@ class DocumentApi
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'POST',
-            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query !== '' && $query !== '0' ? '?' . $query : ''),
             $headers,
             $httpBody
         );
@@ -1798,7 +1722,7 @@ class DocumentApi
      */
     public function documentList($folderId, $includedMetadataKeys = null, $excludedMatadataKeys = null, $withAutoexportStatus = null, $filterDateCreatedAfter = null, $subfoldersRecursive = false, string $contentType = self::contentTypes['documentList'][0])
     {
-        list($response) = $this->documentListWithHttpInfo($folderId, $includedMetadataKeys, $excludedMatadataKeys, $withAutoexportStatus, $filterDateCreatedAfter, $subfoldersRecursive, $contentType);
+        [$response] = $this->documentListWithHttpInfo($folderId, $includedMetadataKeys, $excludedMatadataKeys, $withAutoexportStatus, $filterDateCreatedAfter, $subfoldersRecursive, $contentType);
         return $response;
     }
 
@@ -1829,14 +1753,14 @@ class DocumentApi
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
+                    sprintf('[%d] %s', $e->getCode(), $e->getMessage()),
                     (int) $e->getCode(),
-                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
-                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                    $e->getResponse() instanceof \Psr\Http\Message\ResponseInterface ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() instanceof \Psr\Http\Message\ResponseInterface ? (string) $e->getResponse()->getBody() : null
                 );
             } catch (ConnectException $e) {
                 throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
+                    sprintf('[%d] %s', $e->getCode(), $e->getMessage()),
                     (int) $e->getCode(),
                     null,
                     null
@@ -1858,45 +1782,14 @@ class DocumentApi
                 );
             }
 
-            switch($statusCode) {
-                case 200:
-                    if ('\OpenAPI\Client\Docbox\Model\Document[]' === '\SplFileObject') {
-                        $content = $response->getBody(); //stream goes to serializer
-                    } else {
-                        $content = (string) $response->getBody();
-                        if ('\OpenAPI\Client\Docbox\Model\Document[]' !== 'string') {
-                            try {
-                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
-                            } catch (\JsonException $exception) {
-                                throw new ApiException(
-                                    sprintf(
-                                        'Error JSON decoding server response (%s)',
-                                        $request->getUri()
-                                    ),
-                                    $statusCode,
-                                    $response->getHeaders(),
-                                    $content
-                                );
-                            }
-                        }
-                    }
-
-                    return [
-                        ObjectSerializer::deserialize($content, '\OpenAPI\Client\Docbox\Model\Document[]', []),
-                        $response->getStatusCode(),
-                        $response->getHeaders()
-                    ];
-            }
-
-            $returnType = '\OpenAPI\Client\Docbox\Model\Document[]';
-            if ($returnType === '\SplFileObject') {
-                $content = $response->getBody(); //stream goes to serializer
-            } else {
-                $content = (string) $response->getBody();
-                if ($returnType !== 'string') {
+            if ($statusCode === 200) {
+                if ('\OpenAPI\Client\Docbox\Model\Document[]' === '\SplFileObject') {
+                    $content = $response->getBody(); //stream goes to serializer
+                } else {
+                    $content = (string) $response->getBody();
                     try {
                         $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
-                    } catch (\JsonException $exception) {
+                    } catch (\JsonException) {
                         throw new ApiException(
                             sprintf(
                                 'Error JSON decoding server response (%s)',
@@ -1908,6 +1801,32 @@ class DocumentApi
                         );
                     }
                 }
+
+                return [
+                    ObjectSerializer::deserialize($content, '\OpenAPI\Client\Docbox\Model\Document[]', []),
+                    $response->getStatusCode(),
+                    $response->getHeaders()
+                ];
+            }
+
+            $returnType = '\OpenAPI\Client\Docbox\Model\Document[]';
+            if ($returnType === '\SplFileObject') {
+                $content = $response->getBody(); //stream goes to serializer
+            } else {
+                $content = (string) $response->getBody();
+                try {
+                    $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                } catch (\JsonException) {
+                    throw new ApiException(
+                        sprintf(
+                            'Error JSON decoding server response (%s)',
+                            $request->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        $content
+                    );
+                }
             }
 
             return [
@@ -1916,18 +1835,17 @@ class DocumentApi
                 $response->getHeaders()
             ];
 
-        } catch (ApiException $e) {
-            switch ($e->getCode()) {
-                case 200:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\OpenAPI\Client\Docbox\Model\Document[]',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    break;
+        } catch (ApiException $apiException) {
+            if ($apiException->getCode() === 200) {
+                $data = ObjectSerializer::deserialize(
+                    $apiException->getResponseBody(),
+                    '\OpenAPI\Client\Docbox\Model\Document[]',
+                    $apiException->getResponseHeaders()
+                );
+                $apiException->setResponseObject($data);
             }
-            throw $e;
+
+            throw $apiException;
         }
     }
 
@@ -1945,15 +1863,12 @@ class DocumentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentList'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function documentListAsync($folderId, $includedMetadataKeys = null, $excludedMatadataKeys = null, $withAutoexportStatus = null, $filterDateCreatedAfter = null, $subfoldersRecursive = false, string $contentType = self::contentTypes['documentList'][0])
+    public function documentListAsync($folderId, $includedMetadataKeys = null, $excludedMatadataKeys = null, $withAutoexportStatus = null, $filterDateCreatedAfter = null, $subfoldersRecursive = false, string $contentType = self::contentTypes['documentList'][0]): \GuzzleHttp\Promise\PromiseInterface
     {
         return $this->documentListAsyncWithHttpInfo($folderId, $includedMetadataKeys, $excludedMatadataKeys, $withAutoexportStatus, $filterDateCreatedAfter, $subfoldersRecursive, $contentType)
             ->then(
-                function ($response) {
-                    return $response[0];
-                }
+                static fn($response) => $response[0]
             );
     }
 
@@ -1971,9 +1886,8 @@ class DocumentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentList'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function documentListAsyncWithHttpInfo($folderId, $includedMetadataKeys = null, $excludedMatadataKeys = null, $withAutoexportStatus = null, $filterDateCreatedAfter = null, $subfoldersRecursive = false, string $contentType = self::contentTypes['documentList'][0])
+    public function documentListAsyncWithHttpInfo($folderId, $includedMetadataKeys = null, $excludedMatadataKeys = null, $withAutoexportStatus = null, $filterDateCreatedAfter = null, $subfoldersRecursive = false, string $contentType = self::contentTypes['documentList'][0]): \GuzzleHttp\Promise\PromiseInterface
     {
         $returnType = '\OpenAPI\Client\Docbox\Model\Document[]';
         $request = $this->documentListRequest($folderId, $includedMetadataKeys, $excludedMatadataKeys, $withAutoexportStatus, $filterDateCreatedAfter, $subfoldersRecursive, $contentType);
@@ -1981,14 +1895,12 @@ class DocumentApi
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                static function ($response) use ($returnType) : array {
                     if ($returnType === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
-                        if ($returnType !== 'string') {
-                            $content = json_decode($content);
-                        }
+                        $content = json_decode($content);
                     }
 
                     return [
@@ -1997,7 +1909,7 @@ class DocumentApi
                         $response->getHeaders()
                     ];
                 },
-                function ($exception) {
+                static function ($exception) : void {
                     $response = $exception->getResponse();
                     $statusCode = $response->getStatusCode();
                     throw new ApiException(
@@ -2026,13 +1938,12 @@ class DocumentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentList'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
      */
-    public function documentListRequest($folderId, $includedMetadataKeys = null, $excludedMatadataKeys = null, $withAutoexportStatus = null, $filterDateCreatedAfter = null, $subfoldersRecursive = false, string $contentType = self::contentTypes['documentList'][0])
+    public function documentListRequest($folderId, $includedMetadataKeys = null, $excludedMatadataKeys = null, $withAutoexportStatus = null, $filterDateCreatedAfter = null, $subfoldersRecursive = false, string $contentType = self::contentTypes['documentList'][0]): \GuzzleHttp\Psr7\Request
     {
 
         // verify the required parameter 'folderId' is set
-        if ($folderId === null || (is_array($folderId) && count($folderId) === 0)) {
+        if ($folderId === null || (is_array($folderId) && $folderId === [])) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $folderId when calling documentList'
             );
@@ -2116,7 +2027,7 @@ class DocumentApi
         );
 
         // for model (json/xml)
-        if (count($formParams) > 0) {
+        if ($formParams !== []) {
             if ($multipart) {
                 $multipartContents = [];
                 foreach ($formParams as $formParamName => $formParamValue) {
@@ -2128,6 +2039,7 @@ class DocumentApi
                         ];
                     }
                 }
+                
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
@@ -2145,6 +2057,7 @@ class DocumentApi
         if ($apiKey !== null) {
             $headers['Cloud-ID'] = $apiKey;
         }
+        
         // this endpoint requires API key authentication
         $apiKey = $this->config->getApiKeyWithPrefix('API-Key');
         if ($apiKey !== null) {
@@ -2166,7 +2079,7 @@ class DocumentApi
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'GET',
-            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query !== '' && $query !== '0' ? '?' . $query : ''),
             $headers,
             $httpBody
         );
@@ -2184,7 +2097,7 @@ class DocumentApi
      */
     public function documentMetadataGet($id, string $contentType = self::contentTypes['documentMetadataGet'][0])
     {
-        list($response) = $this->documentMetadataGetWithHttpInfo($id, $contentType);
+        [$response] = $this->documentMetadataGetWithHttpInfo($id, $contentType);
         return $response;
     }
 
@@ -2208,14 +2121,14 @@ class DocumentApi
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
+                    sprintf('[%d] %s', $e->getCode(), $e->getMessage()),
                     (int) $e->getCode(),
-                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
-                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                    $e->getResponse() instanceof \Psr\Http\Message\ResponseInterface ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() instanceof \Psr\Http\Message\ResponseInterface ? (string) $e->getResponse()->getBody() : null
                 );
             } catch (ConnectException $e) {
                 throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
+                    sprintf('[%d] %s', $e->getCode(), $e->getMessage()),
                     (int) $e->getCode(),
                     null,
                     null
@@ -2237,45 +2150,14 @@ class DocumentApi
                 );
             }
 
-            switch($statusCode) {
-                case 200:
-                    if ('array<string,string>' === '\SplFileObject') {
-                        $content = $response->getBody(); //stream goes to serializer
-                    } else {
-                        $content = (string) $response->getBody();
-                        if ('array<string,string>' !== 'string') {
-                            try {
-                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
-                            } catch (\JsonException $exception) {
-                                throw new ApiException(
-                                    sprintf(
-                                        'Error JSON decoding server response (%s)',
-                                        $request->getUri()
-                                    ),
-                                    $statusCode,
-                                    $response->getHeaders(),
-                                    $content
-                                );
-                            }
-                        }
-                    }
-
-                    return [
-                        ObjectSerializer::deserialize($content, 'array<string,string>', []),
-                        $response->getStatusCode(),
-                        $response->getHeaders()
-                    ];
-            }
-
-            $returnType = 'array<string,string>';
-            if ($returnType === '\SplFileObject') {
-                $content = $response->getBody(); //stream goes to serializer
-            } else {
-                $content = (string) $response->getBody();
-                if ($returnType !== 'string') {
+            if ($statusCode === 200) {
+                if ('array<string,string>' === '\SplFileObject') {
+                    $content = $response->getBody(); //stream goes to serializer
+                } else {
+                    $content = (string) $response->getBody();
                     try {
                         $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
-                    } catch (\JsonException $exception) {
+                    } catch (\JsonException) {
                         throw new ApiException(
                             sprintf(
                                 'Error JSON decoding server response (%s)',
@@ -2287,6 +2169,32 @@ class DocumentApi
                         );
                     }
                 }
+
+                return [
+                    ObjectSerializer::deserialize($content, 'array<string,string>', []),
+                    $response->getStatusCode(),
+                    $response->getHeaders()
+                ];
+            }
+
+            $returnType = 'array<string,string>';
+            if ($returnType === '\SplFileObject') {
+                $content = $response->getBody(); //stream goes to serializer
+            } else {
+                $content = (string) $response->getBody();
+                try {
+                    $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                } catch (\JsonException) {
+                    throw new ApiException(
+                        sprintf(
+                            'Error JSON decoding server response (%s)',
+                            $request->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        $content
+                    );
+                }
             }
 
             return [
@@ -2295,18 +2203,17 @@ class DocumentApi
                 $response->getHeaders()
             ];
 
-        } catch (ApiException $e) {
-            switch ($e->getCode()) {
-                case 200:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        'array<string,string>',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    break;
+        } catch (ApiException $apiException) {
+            if ($apiException->getCode() === 200) {
+                $data = ObjectSerializer::deserialize(
+                    $apiException->getResponseBody(),
+                    'array<string,string>',
+                    $apiException->getResponseHeaders()
+                );
+                $apiException->setResponseObject($data);
             }
-            throw $e;
+
+            throw $apiException;
         }
     }
 
@@ -2317,15 +2224,12 @@ class DocumentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentMetadataGet'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function documentMetadataGetAsync($id, string $contentType = self::contentTypes['documentMetadataGet'][0])
+    public function documentMetadataGetAsync($id, string $contentType = self::contentTypes['documentMetadataGet'][0]): \GuzzleHttp\Promise\PromiseInterface
     {
         return $this->documentMetadataGetAsyncWithHttpInfo($id, $contentType)
             ->then(
-                function ($response) {
-                    return $response[0];
-                }
+                static fn($response) => $response[0]
             );
     }
 
@@ -2336,9 +2240,8 @@ class DocumentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentMetadataGet'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function documentMetadataGetAsyncWithHttpInfo($id, string $contentType = self::contentTypes['documentMetadataGet'][0])
+    public function documentMetadataGetAsyncWithHttpInfo($id, string $contentType = self::contentTypes['documentMetadataGet'][0]): \GuzzleHttp\Promise\PromiseInterface
     {
         $returnType = 'array<string,string>';
         $request = $this->documentMetadataGetRequest($id, $contentType);
@@ -2346,14 +2249,12 @@ class DocumentApi
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                static function ($response) use ($returnType) : array {
                     if ($returnType === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
-                        if ($returnType !== 'string') {
-                            $content = json_decode($content);
-                        }
+                        $content = json_decode($content);
                     }
 
                     return [
@@ -2362,7 +2263,7 @@ class DocumentApi
                         $response->getHeaders()
                     ];
                 },
-                function ($exception) {
+                static function ($exception) : void {
                     $response = $exception->getResponse();
                     $statusCode = $response->getStatusCode();
                     throw new ApiException(
@@ -2386,13 +2287,12 @@ class DocumentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentMetadataGet'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
      */
-    public function documentMetadataGetRequest($id, string $contentType = self::contentTypes['documentMetadataGet'][0])
+    public function documentMetadataGetRequest($id, string $contentType = self::contentTypes['documentMetadataGet'][0]): \GuzzleHttp\Psr7\Request
     {
 
         // verify the required parameter 'id' is set
-        if ($id === null || (is_array($id) && count($id) === 0)) {
+        if ($id === null || (is_array($id) && $id === [])) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $id when calling documentMetadataGet'
             );
@@ -2409,13 +2309,11 @@ class DocumentApi
 
 
         // path params
-        if ($id !== null) {
-            $resourcePath = str_replace(
-                '{' . 'id' . '}',
-                ObjectSerializer::toPathValue($id),
-                $resourcePath
-            );
-        }
+        $resourcePath = str_replace(
+            '{id}',
+            ObjectSerializer::toPathValue($id),
+            $resourcePath
+        );
 
 
         $headers = $this->headerSelector->selectHeaders(
@@ -2425,7 +2323,7 @@ class DocumentApi
         );
 
         // for model (json/xml)
-        if (count($formParams) > 0) {
+        if ($formParams !== []) {
             if ($multipart) {
                 $multipartContents = [];
                 foreach ($formParams as $formParamName => $formParamValue) {
@@ -2437,6 +2335,7 @@ class DocumentApi
                         ];
                     }
                 }
+                
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
@@ -2454,6 +2353,7 @@ class DocumentApi
         if ($apiKey !== null) {
             $headers['Cloud-ID'] = $apiKey;
         }
+        
         // this endpoint requires API key authentication
         $apiKey = $this->config->getApiKeyWithPrefix('API-Key');
         if ($apiKey !== null) {
@@ -2475,7 +2375,7 @@ class DocumentApi
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'GET',
-            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query !== '' && $query !== '0' ? '?' . $query : ''),
             $headers,
             $httpBody
         );
@@ -2490,9 +2390,8 @@ class DocumentApi
      *
      * @throws \OpenAPI\Client\Docbox\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return void
      */
-    public function documentMetadataPost($id, $requestBody, string $contentType = self::contentTypes['documentMetadataPost'][0])
+    public function documentMetadataPost($id, $requestBody, string $contentType = self::contentTypes['documentMetadataPost'][0]): void
     {
         $this->documentMetadataPostWithHttpInfo($id, $requestBody, $contentType);
     }
@@ -2518,14 +2417,14 @@ class DocumentApi
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
+                    sprintf('[%d] %s', $e->getCode(), $e->getMessage()),
                     (int) $e->getCode(),
-                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
-                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                    $e->getResponse() instanceof \Psr\Http\Message\ResponseInterface ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() instanceof \Psr\Http\Message\ResponseInterface ? (string) $e->getResponse()->getBody() : null
                 );
             } catch (ConnectException $e) {
                 throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
+                    sprintf('[%d] %s', $e->getCode(), $e->getMessage()),
                     (int) $e->getCode(),
                     null,
                     null
@@ -2549,10 +2448,11 @@ class DocumentApi
 
             return [null, $statusCode, $response->getHeaders()];
 
-        } catch (ApiException $e) {
-            switch ($e->getCode()) {
+        } catch (ApiException $apiException) {
+            switch ($apiException->getCode()) {
             }
-            throw $e;
+            
+            throw $apiException;
         }
     }
 
@@ -2564,15 +2464,12 @@ class DocumentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentMetadataPost'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function documentMetadataPostAsync($id, $requestBody, string $contentType = self::contentTypes['documentMetadataPost'][0])
+    public function documentMetadataPostAsync($id, $requestBody, string $contentType = self::contentTypes['documentMetadataPost'][0]): \GuzzleHttp\Promise\PromiseInterface
     {
         return $this->documentMetadataPostAsyncWithHttpInfo($id, $requestBody, $contentType)
             ->then(
-                function ($response) {
-                    return $response[0];
-                }
+                static fn($response) => $response[0]
             );
     }
 
@@ -2584,20 +2481,16 @@ class DocumentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentMetadataPost'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function documentMetadataPostAsyncWithHttpInfo($id, $requestBody, string $contentType = self::contentTypes['documentMetadataPost'][0])
+    public function documentMetadataPostAsyncWithHttpInfo($id, $requestBody, string $contentType = self::contentTypes['documentMetadataPost'][0]): \GuzzleHttp\Promise\PromiseInterface
     {
-        $returnType = '';
         $request = $this->documentMetadataPostRequest($id, $requestBody, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
-                    return [null, $response->getStatusCode(), $response->getHeaders()];
-                },
-                function ($exception) {
+                static fn($response): array => [null, $response->getStatusCode(), $response->getHeaders()],
+                static function ($exception) : void {
                     $response = $exception->getResponse();
                     $statusCode = $response->getStatusCode();
                     throw new ApiException(
@@ -2622,20 +2515,19 @@ class DocumentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentMetadataPost'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
      */
-    public function documentMetadataPostRequest($id, $requestBody, string $contentType = self::contentTypes['documentMetadataPost'][0])
+    public function documentMetadataPostRequest($id, $requestBody, string $contentType = self::contentTypes['documentMetadataPost'][0]): \GuzzleHttp\Psr7\Request
     {
 
         // verify the required parameter 'id' is set
-        if ($id === null || (is_array($id) && count($id) === 0)) {
+        if ($id === null || (is_array($id) && $id === [])) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $id when calling documentMetadataPost'
             );
         }
 
         // verify the required parameter 'requestBody' is set
-        if ($requestBody === null || (is_array($requestBody) && count($requestBody) === 0)) {
+        if ($requestBody === null || (is_array($requestBody) && $requestBody === [])) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $requestBody when calling documentMetadataPost'
             );
@@ -2652,13 +2544,11 @@ class DocumentApi
 
 
         // path params
-        if ($id !== null) {
-            $resourcePath = str_replace(
-                '{' . 'id' . '}',
-                ObjectSerializer::toPathValue($id),
-                $resourcePath
-            );
-        }
+        $resourcePath = str_replace(
+            '{id}',
+            ObjectSerializer::toPathValue($id),
+            $resourcePath
+        );
 
 
         $headers = $this->headerSelector->selectHeaders(
@@ -2675,7 +2565,7 @@ class DocumentApi
             } else {
                 $httpBody = $requestBody;
             }
-        } elseif (count($formParams) > 0) {
+        } elseif ($formParams !== []) {
             if ($multipart) {
                 $multipartContents = [];
                 foreach ($formParams as $formParamName => $formParamValue) {
@@ -2687,6 +2577,7 @@ class DocumentApi
                         ];
                     }
                 }
+                
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
@@ -2704,6 +2595,7 @@ class DocumentApi
         if ($apiKey !== null) {
             $headers['Cloud-ID'] = $apiKey;
         }
+        
         // this endpoint requires API key authentication
         $apiKey = $this->config->getApiKeyWithPrefix('API-Key');
         if ($apiKey !== null) {
@@ -2725,7 +2617,7 @@ class DocumentApi
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'POST',
-            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query !== '' && $query !== '0' ? '?' . $query : ''),
             $headers,
             $httpBody
         );
@@ -2745,7 +2637,7 @@ class DocumentApi
      */
     public function documentOcrResult($id, string $contentType = self::contentTypes['documentOcrResult'][0])
     {
-        list($response) = $this->documentOcrResultWithHttpInfo($id, $contentType);
+        [$response] = $this->documentOcrResultWithHttpInfo($id, $contentType);
         return $response;
     }
 
@@ -2771,14 +2663,14 @@ class DocumentApi
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
+                    sprintf('[%d] %s', $e->getCode(), $e->getMessage()),
                     (int) $e->getCode(),
-                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
-                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                    $e->getResponse() instanceof \Psr\Http\Message\ResponseInterface ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() instanceof \Psr\Http\Message\ResponseInterface ? (string) $e->getResponse()->getBody() : null
                 );
             } catch (ConnectException $e) {
                 throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
+                    sprintf('[%d] %s', $e->getCode(), $e->getMessage()),
                     (int) $e->getCode(),
                     null,
                     null
@@ -2800,34 +2692,33 @@ class DocumentApi
                 );
             }
 
-            switch($statusCode) {
-                case 200:
-                    if ('string' === '\SplFileObject') {
-                        $content = $response->getBody(); //stream goes to serializer
-                    } else {
-                        $content = (string) $response->getBody();
-                        if ('string' !== 'string') {
-                            try {
-                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
-                            } catch (\JsonException $exception) {
-                                throw new ApiException(
-                                    sprintf(
-                                        'Error JSON decoding server response (%s)',
-                                        $request->getUri()
-                                    ),
-                                    $statusCode,
-                                    $response->getHeaders(),
-                                    $content
-                                );
-                            }
+            if ($statusCode === 200) {
+                if ('string' === '\SplFileObject') {
+                    $content = $response->getBody(); //stream goes to serializer
+                } else {
+                    $content = (string) $response->getBody();
+                    if ('string' !== 'string') {
+                        try {
+                            $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                        } catch (\JsonException) {
+                            throw new ApiException(
+                                sprintf(
+                                    'Error JSON decoding server response (%s)',
+                                    $request->getUri()
+                                ),
+                                $statusCode,
+                                $response->getHeaders(),
+                                $content
+                            );
                         }
                     }
+                }
 
-                    return [
-                        ObjectSerializer::deserialize($content, 'string', []),
-                        $response->getStatusCode(),
-                        $response->getHeaders()
-                    ];
+                return [
+                    ObjectSerializer::deserialize($content, 'string', []),
+                    $response->getStatusCode(),
+                    $response->getHeaders()
+                ];
             }
 
             $returnType = 'string';
@@ -2838,7 +2729,7 @@ class DocumentApi
                 if ($returnType !== 'string') {
                     try {
                         $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
-                    } catch (\JsonException $exception) {
+                    } catch (\JsonException) {
                         throw new ApiException(
                             sprintf(
                                 'Error JSON decoding server response (%s)',
@@ -2858,18 +2749,17 @@ class DocumentApi
                 $response->getHeaders()
             ];
 
-        } catch (ApiException $e) {
-            switch ($e->getCode()) {
-                case 200:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        'string',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    break;
+        } catch (ApiException $apiException) {
+            if ($apiException->getCode() === 200) {
+                $data = ObjectSerializer::deserialize(
+                    $apiException->getResponseBody(),
+                    'string',
+                    $apiException->getResponseHeaders()
+                );
+                $apiException->setResponseObject($data);
             }
-            throw $e;
+
+            throw $apiException;
         }
     }
 
@@ -2882,15 +2772,12 @@ class DocumentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentOcrResult'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function documentOcrResultAsync($id, string $contentType = self::contentTypes['documentOcrResult'][0])
+    public function documentOcrResultAsync($id, string $contentType = self::contentTypes['documentOcrResult'][0]): \GuzzleHttp\Promise\PromiseInterface
     {
         return $this->documentOcrResultAsyncWithHttpInfo($id, $contentType)
             ->then(
-                function ($response) {
-                    return $response[0];
-                }
+                static fn($response) => $response[0]
             );
     }
 
@@ -2903,9 +2790,8 @@ class DocumentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentOcrResult'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function documentOcrResultAsyncWithHttpInfo($id, string $contentType = self::contentTypes['documentOcrResult'][0])
+    public function documentOcrResultAsyncWithHttpInfo($id, string $contentType = self::contentTypes['documentOcrResult'][0]): \GuzzleHttp\Promise\PromiseInterface
     {
         $returnType = 'string';
         $request = $this->documentOcrResultRequest($id, $contentType);
@@ -2913,7 +2799,7 @@ class DocumentApi
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                static function ($response) use ($returnType) : array {
                     if ($returnType === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
@@ -2929,7 +2815,7 @@ class DocumentApi
                         $response->getHeaders()
                     ];
                 },
-                function ($exception) {
+                static function ($exception) : void {
                     $response = $exception->getResponse();
                     $statusCode = $response->getStatusCode();
                     throw new ApiException(
@@ -2953,13 +2839,12 @@ class DocumentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentOcrResult'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
      */
-    public function documentOcrResultRequest($id, string $contentType = self::contentTypes['documentOcrResult'][0])
+    public function documentOcrResultRequest($id, string $contentType = self::contentTypes['documentOcrResult'][0]): \GuzzleHttp\Psr7\Request
     {
 
         // verify the required parameter 'id' is set
-        if ($id === null || (is_array($id) && count($id) === 0)) {
+        if ($id === null || (is_array($id) && $id === [])) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $id when calling documentOcrResult'
             );
@@ -2976,13 +2861,11 @@ class DocumentApi
 
 
         // path params
-        if ($id !== null) {
-            $resourcePath = str_replace(
-                '{' . 'id' . '}',
-                ObjectSerializer::toPathValue($id),
-                $resourcePath
-            );
-        }
+        $resourcePath = str_replace(
+            '{id}',
+            ObjectSerializer::toPathValue($id),
+            $resourcePath
+        );
 
 
         $headers = $this->headerSelector->selectHeaders(
@@ -2992,7 +2875,7 @@ class DocumentApi
         );
 
         // for model (json/xml)
-        if (count($formParams) > 0) {
+        if ($formParams !== []) {
             if ($multipart) {
                 $multipartContents = [];
                 foreach ($formParams as $formParamName => $formParamValue) {
@@ -3004,6 +2887,7 @@ class DocumentApi
                         ];
                     }
                 }
+                
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
@@ -3021,6 +2905,7 @@ class DocumentApi
         if ($apiKey !== null) {
             $headers['Cloud-ID'] = $apiKey;
         }
+        
         // this endpoint requires API key authentication
         $apiKey = $this->config->getApiKeyWithPrefix('API-Key');
         if ($apiKey !== null) {
@@ -3042,7 +2927,7 @@ class DocumentApi
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'GET',
-            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query !== '' && $query !== '0' ? '?' . $query : ''),
             $headers,
             $httpBody
         );
@@ -3064,7 +2949,7 @@ class DocumentApi
      */
     public function documentPdf($id, $original = false, $annotations = null, string $contentType = self::contentTypes['documentPdf'][0])
     {
-        list($response) = $this->documentPdfWithHttpInfo($id, $original, $annotations, $contentType);
+        [$response] = $this->documentPdfWithHttpInfo($id, $original, $annotations, $contentType);
         return $response;
     }
 
@@ -3092,14 +2977,14 @@ class DocumentApi
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
+                    sprintf('[%d] %s', $e->getCode(), $e->getMessage()),
                     (int) $e->getCode(),
-                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
-                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                    $e->getResponse() instanceof \Psr\Http\Message\ResponseInterface ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() instanceof \Psr\Http\Message\ResponseInterface ? (string) $e->getResponse()->getBody() : null
                 );
             } catch (ConnectException $e) {
                 throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
+                    sprintf('[%d] %s', $e->getCode(), $e->getMessage()),
                     (int) $e->getCode(),
                     null,
                     null
@@ -3121,45 +3006,14 @@ class DocumentApi
                 );
             }
 
-            switch($statusCode) {
-                case 200:
-                    if ('\SplFileObject' === '\SplFileObject') {
-                        $content = $response->getBody(); //stream goes to serializer
-                    } else {
-                        $content = (string) $response->getBody();
-                        if ('\SplFileObject' !== 'string') {
-                            try {
-                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
-                            } catch (\JsonException $exception) {
-                                throw new ApiException(
-                                    sprintf(
-                                        'Error JSON decoding server response (%s)',
-                                        $request->getUri()
-                                    ),
-                                    $statusCode,
-                                    $response->getHeaders(),
-                                    $content
-                                );
-                            }
-                        }
-                    }
-
-                    return [
-                        ObjectSerializer::deserialize($content, '\SplFileObject', []),
-                        $response->getStatusCode(),
-                        $response->getHeaders()
-                    ];
-            }
-
-            $returnType = '\SplFileObject';
-            if ($returnType === '\SplFileObject') {
-                $content = $response->getBody(); //stream goes to serializer
-            } else {
-                $content = (string) $response->getBody();
-                if ($returnType !== 'string') {
+            if ($statusCode === 200) {
+                if ('\SplFileObject' === '\SplFileObject') {
+                    $content = $response->getBody(); //stream goes to serializer
+                } else {
+                    $content = (string) $response->getBody();
                     try {
                         $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
-                    } catch (\JsonException $exception) {
+                    } catch (\JsonException) {
                         throw new ApiException(
                             sprintf(
                                 'Error JSON decoding server response (%s)',
@@ -3171,6 +3025,32 @@ class DocumentApi
                         );
                     }
                 }
+
+                return [
+                    ObjectSerializer::deserialize($content, '\SplFileObject', []),
+                    $response->getStatusCode(),
+                    $response->getHeaders()
+                ];
+            }
+
+            $returnType = '\SplFileObject';
+            if ($returnType === '\SplFileObject') {
+                $content = $response->getBody(); //stream goes to serializer
+            } else {
+                $content = (string) $response->getBody();
+                try {
+                    $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                } catch (\JsonException) {
+                    throw new ApiException(
+                        sprintf(
+                            'Error JSON decoding server response (%s)',
+                            $request->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        $content
+                    );
+                }
             }
 
             return [
@@ -3179,18 +3059,17 @@ class DocumentApi
                 $response->getHeaders()
             ];
 
-        } catch (ApiException $e) {
-            switch ($e->getCode()) {
-                case 200:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\SplFileObject',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    break;
+        } catch (ApiException $apiException) {
+            if ($apiException->getCode() === 200) {
+                $data = ObjectSerializer::deserialize(
+                    $apiException->getResponseBody(),
+                    '\SplFileObject',
+                    $apiException->getResponseHeaders()
+                );
+                $apiException->setResponseObject($data);
             }
-            throw $e;
+
+            throw $apiException;
         }
     }
 
@@ -3205,15 +3084,12 @@ class DocumentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentPdf'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function documentPdfAsync($id, $original = false, $annotations = null, string $contentType = self::contentTypes['documentPdf'][0])
+    public function documentPdfAsync($id, $original = false, $annotations = null, string $contentType = self::contentTypes['documentPdf'][0]): \GuzzleHttp\Promise\PromiseInterface
     {
         return $this->documentPdfAsyncWithHttpInfo($id, $original, $annotations, $contentType)
             ->then(
-                function ($response) {
-                    return $response[0];
-                }
+                static fn($response) => $response[0]
             );
     }
 
@@ -3228,9 +3104,8 @@ class DocumentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentPdf'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function documentPdfAsyncWithHttpInfo($id, $original = false, $annotations = null, string $contentType = self::contentTypes['documentPdf'][0])
+    public function documentPdfAsyncWithHttpInfo($id, $original = false, $annotations = null, string $contentType = self::contentTypes['documentPdf'][0]): \GuzzleHttp\Promise\PromiseInterface
     {
         $returnType = '\SplFileObject';
         $request = $this->documentPdfRequest($id, $original, $annotations, $contentType);
@@ -3238,14 +3113,12 @@ class DocumentApi
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                static function ($response) use ($returnType) : array {
                     if ($returnType === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
-                        if ($returnType !== 'string') {
-                            $content = json_decode($content);
-                        }
+                        $content = json_decode($content);
                     }
 
                     return [
@@ -3254,7 +3127,7 @@ class DocumentApi
                         $response->getHeaders()
                     ];
                 },
-                function ($exception) {
+                static function ($exception) : void {
                     $response = $exception->getResponse();
                     $statusCode = $response->getStatusCode();
                     throw new ApiException(
@@ -3280,13 +3153,12 @@ class DocumentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentPdf'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
      */
-    public function documentPdfRequest($id, $original = false, $annotations = null, string $contentType = self::contentTypes['documentPdf'][0])
+    public function documentPdfRequest($id, $original = false, $annotations = null, string $contentType = self::contentTypes['documentPdf'][0]): \GuzzleHttp\Psr7\Request
     {
 
         // verify the required parameter 'id' is set
-        if ($id === null || (is_array($id) && count($id) === 0)) {
+        if ($id === null || (is_array($id) && $id === [])) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $id when calling documentPdf'
             );
@@ -3323,13 +3195,11 @@ class DocumentApi
 
 
         // path params
-        if ($id !== null) {
-            $resourcePath = str_replace(
-                '{' . 'id' . '}',
-                ObjectSerializer::toPathValue($id),
-                $resourcePath
-            );
-        }
+        $resourcePath = str_replace(
+            '{id}',
+            ObjectSerializer::toPathValue($id),
+            $resourcePath
+        );
 
 
         $headers = $this->headerSelector->selectHeaders(
@@ -3339,7 +3209,7 @@ class DocumentApi
         );
 
         // for model (json/xml)
-        if (count($formParams) > 0) {
+        if ($formParams !== []) {
             if ($multipart) {
                 $multipartContents = [];
                 foreach ($formParams as $formParamName => $formParamValue) {
@@ -3351,6 +3221,7 @@ class DocumentApi
                         ];
                     }
                 }
+                
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
@@ -3368,6 +3239,7 @@ class DocumentApi
         if ($apiKey !== null) {
             $headers['Cloud-ID'] = $apiKey;
         }
+        
         // this endpoint requires API key authentication
         $apiKey = $this->config->getApiKeyWithPrefix('API-Key');
         if ($apiKey !== null) {
@@ -3389,7 +3261,7 @@ class DocumentApi
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'GET',
-            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query !== '' && $query !== '0' ? '?' . $query : ''),
             $headers,
             $httpBody
         );
@@ -3404,9 +3276,8 @@ class DocumentApi
      *
      * @throws \OpenAPI\Client\Docbox\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return void
      */
-    public function documentRename($id, $newName, string $contentType = self::contentTypes['documentRename'][0])
+    public function documentRename($id, $newName, string $contentType = self::contentTypes['documentRename'][0]): void
     {
         $this->documentRenameWithHttpInfo($id, $newName, $contentType);
     }
@@ -3432,14 +3303,14 @@ class DocumentApi
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
+                    sprintf('[%d] %s', $e->getCode(), $e->getMessage()),
                     (int) $e->getCode(),
-                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
-                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                    $e->getResponse() instanceof \Psr\Http\Message\ResponseInterface ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() instanceof \Psr\Http\Message\ResponseInterface ? (string) $e->getResponse()->getBody() : null
                 );
             } catch (ConnectException $e) {
                 throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
+                    sprintf('[%d] %s', $e->getCode(), $e->getMessage()),
                     (int) $e->getCode(),
                     null,
                     null
@@ -3463,10 +3334,11 @@ class DocumentApi
 
             return [null, $statusCode, $response->getHeaders()];
 
-        } catch (ApiException $e) {
-            switch ($e->getCode()) {
+        } catch (ApiException $apiException) {
+            switch ($apiException->getCode()) {
             }
-            throw $e;
+            
+            throw $apiException;
         }
     }
 
@@ -3478,15 +3350,12 @@ class DocumentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentRename'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function documentRenameAsync($id, $newName, string $contentType = self::contentTypes['documentRename'][0])
+    public function documentRenameAsync($id, $newName, string $contentType = self::contentTypes['documentRename'][0]): \GuzzleHttp\Promise\PromiseInterface
     {
         return $this->documentRenameAsyncWithHttpInfo($id, $newName, $contentType)
             ->then(
-                function ($response) {
-                    return $response[0];
-                }
+                static fn($response) => $response[0]
             );
     }
 
@@ -3498,20 +3367,16 @@ class DocumentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentRename'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function documentRenameAsyncWithHttpInfo($id, $newName, string $contentType = self::contentTypes['documentRename'][0])
+    public function documentRenameAsyncWithHttpInfo($id, $newName, string $contentType = self::contentTypes['documentRename'][0]): \GuzzleHttp\Promise\PromiseInterface
     {
-        $returnType = '';
         $request = $this->documentRenameRequest($id, $newName, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
-                    return [null, $response->getStatusCode(), $response->getHeaders()];
-                },
-                function ($exception) {
+                static fn($response): array => [null, $response->getStatusCode(), $response->getHeaders()],
+                static function ($exception) : void {
                     $response = $exception->getResponse();
                     $statusCode = $response->getStatusCode();
                     throw new ApiException(
@@ -3536,20 +3401,19 @@ class DocumentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentRename'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
      */
-    public function documentRenameRequest($id, $newName, string $contentType = self::contentTypes['documentRename'][0])
+    public function documentRenameRequest($id, $newName, string $contentType = self::contentTypes['documentRename'][0]): \GuzzleHttp\Psr7\Request
     {
 
         // verify the required parameter 'id' is set
-        if ($id === null || (is_array($id) && count($id) === 0)) {
+        if ($id === null || (is_array($id) && $id === [])) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $id when calling documentRename'
             );
         }
 
         // verify the required parameter 'newName' is set
-        if ($newName === null || (is_array($newName) && count($newName) === 0)) {
+        if ($newName === null || (is_array($newName) && $newName === [])) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $newName when calling documentRename'
             );
@@ -3566,18 +3430,14 @@ class DocumentApi
 
 
         // path params
-        if ($id !== null) {
-            $resourcePath = str_replace(
-                '{' . 'id' . '}',
-                ObjectSerializer::toPathValue($id),
-                $resourcePath
-            );
-        }
+        $resourcePath = str_replace(
+            '{id}',
+            ObjectSerializer::toPathValue($id),
+            $resourcePath
+        );
 
         // form params
-        if ($newName !== null) {
-            $formParams['new-name'] = ObjectSerializer::toFormValue($newName);
-        }
+        $formParams['new-name'] = ObjectSerializer::toFormValue($newName);
 
         $headers = $this->headerSelector->selectHeaders(
             [],
@@ -3586,28 +3446,27 @@ class DocumentApi
         );
 
         // for model (json/xml)
-        if (count($formParams) > 0) {
-            if ($multipart) {
-                $multipartContents = [];
-                foreach ($formParams as $formParamName => $formParamValue) {
-                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
-                    foreach ($formParamValueItems as $formParamValueItem) {
-                        $multipartContents[] = [
-                            'name' => $formParamName,
-                            'contents' => $formParamValueItem
-                        ];
-                    }
+        if ($multipart) {
+            $multipartContents = [];
+            foreach ($formParams as $formParamName => $formParamValue) {
+                $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                foreach ($formParamValueItems as $formParamValueItem) {
+                    $multipartContents[] = [
+                        'name' => $formParamName,
+                        'contents' => $formParamValueItem
+                    ];
                 }
-                // for HTTP post (form)
-                $httpBody = new MultipartStream($multipartContents);
-
-            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
-            } else {
-                // for HTTP post (form)
-                $httpBody = ObjectSerializer::buildQuery($formParams);
             }
+            
+            // for HTTP post (form)
+            $httpBody = new MultipartStream($multipartContents);
+
+        } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+            # if Content-Type contains "application/json", json_encode the form parameters
+            $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+        } else {
+            // for HTTP post (form)
+            $httpBody = ObjectSerializer::buildQuery($formParams);
         }
 
         // this endpoint requires API key authentication
@@ -3615,6 +3474,7 @@ class DocumentApi
         if ($apiKey !== null) {
             $headers['Cloud-ID'] = $apiKey;
         }
+        
         // this endpoint requires API key authentication
         $apiKey = $this->config->getApiKeyWithPrefix('API-Key');
         if ($apiKey !== null) {
@@ -3636,7 +3496,7 @@ class DocumentApi
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'POST',
-            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query !== '' && $query !== '0' ? '?' . $query : ''),
             $headers,
             $httpBody
         );
@@ -3654,7 +3514,7 @@ class DocumentApi
      */
     public function documentUploadedWith($id, string $contentType = self::contentTypes['documentUploadedWith'][0])
     {
-        list($response) = $this->documentUploadedWithWithHttpInfo($id, $contentType);
+        [$response] = $this->documentUploadedWithWithHttpInfo($id, $contentType);
         return $response;
     }
 
@@ -3678,14 +3538,14 @@ class DocumentApi
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
+                    sprintf('[%d] %s', $e->getCode(), $e->getMessage()),
                     (int) $e->getCode(),
-                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
-                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                    $e->getResponse() instanceof \Psr\Http\Message\ResponseInterface ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() instanceof \Psr\Http\Message\ResponseInterface ? (string) $e->getResponse()->getBody() : null
                 );
             } catch (ConnectException $e) {
                 throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
+                    sprintf('[%d] %s', $e->getCode(), $e->getMessage()),
                     (int) $e->getCode(),
                     null,
                     null
@@ -3707,45 +3567,14 @@ class DocumentApi
                 );
             }
 
-            switch($statusCode) {
-                case 200:
-                    if ('int[]' === '\SplFileObject') {
-                        $content = $response->getBody(); //stream goes to serializer
-                    } else {
-                        $content = (string) $response->getBody();
-                        if ('int[]' !== 'string') {
-                            try {
-                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
-                            } catch (\JsonException $exception) {
-                                throw new ApiException(
-                                    sprintf(
-                                        'Error JSON decoding server response (%s)',
-                                        $request->getUri()
-                                    ),
-                                    $statusCode,
-                                    $response->getHeaders(),
-                                    $content
-                                );
-                            }
-                        }
-                    }
-
-                    return [
-                        ObjectSerializer::deserialize($content, 'int[]', []),
-                        $response->getStatusCode(),
-                        $response->getHeaders()
-                    ];
-            }
-
-            $returnType = 'int[]';
-            if ($returnType === '\SplFileObject') {
-                $content = $response->getBody(); //stream goes to serializer
-            } else {
-                $content = (string) $response->getBody();
-                if ($returnType !== 'string') {
+            if ($statusCode === 200) {
+                if ('int[]' === '\SplFileObject') {
+                    $content = $response->getBody(); //stream goes to serializer
+                } else {
+                    $content = (string) $response->getBody();
                     try {
                         $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
-                    } catch (\JsonException $exception) {
+                    } catch (\JsonException) {
                         throw new ApiException(
                             sprintf(
                                 'Error JSON decoding server response (%s)',
@@ -3757,6 +3586,32 @@ class DocumentApi
                         );
                     }
                 }
+
+                return [
+                    ObjectSerializer::deserialize($content, 'int[]', []),
+                    $response->getStatusCode(),
+                    $response->getHeaders()
+                ];
+            }
+
+            $returnType = 'int[]';
+            if ($returnType === '\SplFileObject') {
+                $content = $response->getBody(); //stream goes to serializer
+            } else {
+                $content = (string) $response->getBody();
+                try {
+                    $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                } catch (\JsonException) {
+                    throw new ApiException(
+                        sprintf(
+                            'Error JSON decoding server response (%s)',
+                            $request->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        $content
+                    );
+                }
             }
 
             return [
@@ -3765,18 +3620,17 @@ class DocumentApi
                 $response->getHeaders()
             ];
 
-        } catch (ApiException $e) {
-            switch ($e->getCode()) {
-                case 200:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        'int[]',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    break;
+        } catch (ApiException $apiException) {
+            if ($apiException->getCode() === 200) {
+                $data = ObjectSerializer::deserialize(
+                    $apiException->getResponseBody(),
+                    'int[]',
+                    $apiException->getResponseHeaders()
+                );
+                $apiException->setResponseObject($data);
             }
-            throw $e;
+
+            throw $apiException;
         }
     }
 
@@ -3787,15 +3641,12 @@ class DocumentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentUploadedWith'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function documentUploadedWithAsync($id, string $contentType = self::contentTypes['documentUploadedWith'][0])
+    public function documentUploadedWithAsync($id, string $contentType = self::contentTypes['documentUploadedWith'][0]): \GuzzleHttp\Promise\PromiseInterface
     {
         return $this->documentUploadedWithAsyncWithHttpInfo($id, $contentType)
             ->then(
-                function ($response) {
-                    return $response[0];
-                }
+                static fn($response) => $response[0]
             );
     }
 
@@ -3806,9 +3657,8 @@ class DocumentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentUploadedWith'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function documentUploadedWithAsyncWithHttpInfo($id, string $contentType = self::contentTypes['documentUploadedWith'][0])
+    public function documentUploadedWithAsyncWithHttpInfo($id, string $contentType = self::contentTypes['documentUploadedWith'][0]): \GuzzleHttp\Promise\PromiseInterface
     {
         $returnType = 'int[]';
         $request = $this->documentUploadedWithRequest($id, $contentType);
@@ -3816,14 +3666,12 @@ class DocumentApi
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                static function ($response) use ($returnType) : array {
                     if ($returnType === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
-                        if ($returnType !== 'string') {
-                            $content = json_decode($content);
-                        }
+                        $content = json_decode($content);
                     }
 
                     return [
@@ -3832,7 +3680,7 @@ class DocumentApi
                         $response->getHeaders()
                     ];
                 },
-                function ($exception) {
+                static function ($exception) : void {
                     $response = $exception->getResponse();
                     $statusCode = $response->getStatusCode();
                     throw new ApiException(
@@ -3856,13 +3704,12 @@ class DocumentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['documentUploadedWith'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
      */
-    public function documentUploadedWithRequest($id, string $contentType = self::contentTypes['documentUploadedWith'][0])
+    public function documentUploadedWithRequest($id, string $contentType = self::contentTypes['documentUploadedWith'][0]): \GuzzleHttp\Psr7\Request
     {
 
         // verify the required parameter 'id' is set
-        if ($id === null || (is_array($id) && count($id) === 0)) {
+        if ($id === null || (is_array($id) && $id === [])) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $id when calling documentUploadedWith'
             );
@@ -3879,13 +3726,11 @@ class DocumentApi
 
 
         // path params
-        if ($id !== null) {
-            $resourcePath = str_replace(
-                '{' . 'id' . '}',
-                ObjectSerializer::toPathValue($id),
-                $resourcePath
-            );
-        }
+        $resourcePath = str_replace(
+            '{id}',
+            ObjectSerializer::toPathValue($id),
+            $resourcePath
+        );
 
 
         $headers = $this->headerSelector->selectHeaders(
@@ -3895,7 +3740,7 @@ class DocumentApi
         );
 
         // for model (json/xml)
-        if (count($formParams) > 0) {
+        if ($formParams !== []) {
             if ($multipart) {
                 $multipartContents = [];
                 foreach ($formParams as $formParamName => $formParamValue) {
@@ -3907,6 +3752,7 @@ class DocumentApi
                         ];
                     }
                 }
+                
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
@@ -3924,6 +3770,7 @@ class DocumentApi
         if ($apiKey !== null) {
             $headers['Cloud-ID'] = $apiKey;
         }
+        
         // this endpoint requires API key authentication
         $apiKey = $this->config->getApiKeyWithPrefix('API-Key');
         if ($apiKey !== null) {
@@ -3945,7 +3792,7 @@ class DocumentApi
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'GET',
-            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query !== '' && $query !== '0' ? '?' . $query : ''),
             $headers,
             $httpBody
         );
@@ -3957,7 +3804,7 @@ class DocumentApi
      * @throws \RuntimeException on file opening failure
      * @return array of http client options
      */
-    protected function createHttpClientOption()
+    protected function createHttpClientOption(): array
     {
         $options = [];
         if ($this->config->getDebug()) {

@@ -53,14 +53,14 @@ class InboxStructureTest extends TestCase
     /**
      * Setup before running each test case
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
     }
 
     /**
      * Clean up after running each test case
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
     }
 
@@ -74,7 +74,7 @@ class InboxStructureTest extends TestCase
     /**
      * Test "InboxStructure"
      */
-    public function testInboxStructure()
+    public function testInboxStructure(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -83,7 +83,7 @@ class InboxStructureTest extends TestCase
     /**
      * Test attribute "free_inbox_structure"
      */
-    public function testPropertyFreeInboxStructure()
+    public function testPropertyFreeInboxStructure(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -92,7 +92,7 @@ class InboxStructureTest extends TestCase
     /**
      * Test attribute "inboxes"
      */
-    public function testPropertyInboxes()
+    public function testPropertyInboxes(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');

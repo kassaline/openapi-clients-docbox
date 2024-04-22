@@ -53,14 +53,14 @@ class FolderTest extends TestCase
     /**
      * Setup before running each test case
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
     }
 
     /**
      * Clean up after running each test case
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
     }
 
@@ -74,7 +74,7 @@ class FolderTest extends TestCase
     /**
      * Test "Folder"
      */
-    public function testFolder()
+    public function testFolder(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -83,7 +83,7 @@ class FolderTest extends TestCase
     /**
      * Test attribute "id"
      */
-    public function testPropertyId()
+    public function testPropertyId(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -92,7 +92,7 @@ class FolderTest extends TestCase
     /**
      * Test attribute "name"
      */
-    public function testPropertyName()
+    public function testPropertyName(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -101,7 +101,7 @@ class FolderTest extends TestCase
     /**
      * Test attribute "folders"
      */
-    public function testPropertyFolders()
+    public function testPropertyFolders(): void
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');

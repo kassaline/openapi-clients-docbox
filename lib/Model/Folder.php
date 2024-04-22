@@ -41,7 +41,7 @@ use \OpenAPI\Client\Docbox\ObjectSerializer;
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
  */
-class Folder implements ModelInterface, ArrayAccess, \JsonSerializable
+class Folder implements ModelInterface, ArrayAccess, \JsonSerializable, \Stringable
 {
     public const DISCRIMINATOR = null;
 
@@ -116,8 +116,6 @@ class Folder implements ModelInterface, ArrayAccess, \JsonSerializable
 
     /**
      * Array of nullable properties
-     *
-     * @return array
      */
     protected static function openAPINullables(): array
     {
@@ -125,30 +123,7 @@ class Folder implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
-     * Array of nullable field names deliberately set to null
-     *
-     * @return boolean[]
-     */
-    private function getOpenAPINullablesSetToNull(): array
-    {
-        return $this->openAPINullablesSetToNull;
-    }
-
-    /**
-     * Setter - Array of nullable field names deliberately set to null
-     *
-     * @param boolean[] $openAPINullablesSetToNull
-     */
-    private function setOpenAPINullablesSetToNull(array $openAPINullablesSetToNull): void
-    {
-        $this->openAPINullablesSetToNull = $openAPINullablesSetToNull;
-    }
-
-    /**
      * Checks if a property is nullable
-     *
-     * @param string $property
-     * @return bool
      */
     public static function isNullable(string $property): bool
     {
@@ -157,13 +132,10 @@ class Folder implements ModelInterface, ArrayAccess, \JsonSerializable
 
     /**
      * Checks if a nullable property is set to null.
-     *
-     * @param string $property
-     * @return bool
      */
     public function isNullableSetToNull(string $property): bool
     {
-        return in_array($property, $this->getOpenAPINullablesSetToNull(), true);
+        return in_array($property, $this->openAPINullablesSetToNull, true);
     }
 
     /**
@@ -263,15 +235,11 @@ class Folder implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
-    * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
-    * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
-    * $this->openAPINullablesSetToNull array
-    *
-    * @param string $variableName
-    * @param array  $fields
-    * @param mixed  $defaultValue
-    */
-    private function setIfExists(string $variableName, array $fields, $defaultValue): void
+     * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
+     * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
+     * $this->openAPINullablesSetToNull array
+     */
+    private function setIfExists(string $variableName, array $fields, mixed $defaultValue): void
     {
         if (self::isNullable($variableName) && array_key_exists($variableName, $fields) && is_null($fields[$variableName])) {
             $this->openAPINullablesSetToNull[] = $variableName;
@@ -285,11 +253,9 @@ class Folder implements ModelInterface, ArrayAccess, \JsonSerializable
      *
      * @return array invalid properties with reasons
      */
-    public function listInvalidProperties()
+    public function listInvalidProperties(): array
     {
-        $invalidProperties = [];
-
-        return $invalidProperties;
+        return [];
     }
 
     /**
@@ -298,9 +264,9 @@ class Folder implements ModelInterface, ArrayAccess, \JsonSerializable
      *
      * @return bool True if all properties are valid
      */
-    public function valid()
+    public function valid(): bool
     {
-        return count($this->listInvalidProperties()) === 0;
+        return $this->listInvalidProperties() === [];
     }
 
 
@@ -318,14 +284,13 @@ class Folder implements ModelInterface, ArrayAccess, \JsonSerializable
      * Sets id
      *
      * @param int|null $id id
-     *
-     * @return self
      */
-    public function setId($id)
+    public function setId($id): self
     {
         if (is_null($id)) {
             throw new \InvalidArgumentException('non-nullable id cannot be null');
         }
+
         $this->container['id'] = $id;
 
         return $this;
@@ -345,14 +310,13 @@ class Folder implements ModelInterface, ArrayAccess, \JsonSerializable
      * Sets name
      *
      * @param string|null $name name
-     *
-     * @return self
      */
-    public function setName($name)
+    public function setName($name): self
     {
         if (is_null($name)) {
             throw new \InvalidArgumentException('non-nullable name cannot be null');
         }
+
         $this->container['name'] = $name;
 
         return $this;
@@ -372,24 +336,22 @@ class Folder implements ModelInterface, ArrayAccess, \JsonSerializable
      * Sets folders
      *
      * @param \OpenAPI\Client\Docbox\Model\Folder[]|null $folders folders
-     *
-     * @return self
      */
-    public function setFolders($folders)
+    public function setFolders($folders): self
     {
         if (is_null($folders)) {
             throw new \InvalidArgumentException('non-nullable folders cannot be null');
         }
+
         $this->container['folders'] = $folders;
 
         return $this;
     }
+
     /**
      * Returns true if offset exists. False otherwise.
      *
      * @param integer $offset Offset
-     *
-     * @return boolean
      */
     public function offsetExists($offset): bool
     {
@@ -414,10 +376,8 @@ class Folder implements ModelInterface, ArrayAccess, \JsonSerializable
      *
      * @param int|null $offset Offset
      * @param mixed    $value  Value to be set
-     *
-     * @return void
      */
-    public function offsetSet($offset, $value): void
+    public function offsetSet($offset, mixed $value): void
     {
         if (is_null($offset)) {
             $this->container[] = $value;
@@ -430,8 +390,6 @@ class Folder implements ModelInterface, ArrayAccess, \JsonSerializable
      * Unsets offset.
      *
      * @param integer $offset Offset
-     *
-     * @return void
      */
     public function offsetUnset($offset): void
     {
@@ -453,12 +411,10 @@ class Folder implements ModelInterface, ArrayAccess, \JsonSerializable
 
     /**
      * Gets the string presentation of the object
-     *
-     * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
-        return json_encode(
+        return (string) json_encode(
             ObjectSerializer::sanitizeForSerialization($this),
             JSON_PRETTY_PRINT
         );
